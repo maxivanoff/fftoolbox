@@ -1,0 +1,21 @@
+@<TRIPOS>MOLECULE
+/Volumes/HDD/Maxim/work/devel/fftoolbox2/data/xyz/cis-mesno_pbe_def2svp_tmp.xyz
+ 7 6 0 0 0
+SMALL
+GASTEIGER
+
+@<TRIPOS>ATOM
+      1 O          -0.7770   -1.4766    0.0000 O.2     1  LIG1       -0.1041
+      2 N          -1.2032   -0.3746    0.0000 N.2     1  LIG1       -0.0303
+      3 S           0.0000    0.9369    0.0000 S.3     1  LIG1       -0.0313
+      4 C           1.5201   -0.0001    0.0000 C.3     1  LIG1       -0.0777
+      5 H           2.3538    0.7204    0.0000 H       1  LIG1        0.0887
+      6 H           1.5819   -0.6379    0.8977 H       1  LIG1        0.0787
+      7 H           1.5819   -0.6379   -0.8977 H       1  LIG1        0.0787
+@<TRIPOS>BOND
+     1     7     4    1
+     2     2     3    1
+     3     2     1    2
+     4     3     4    1
+     5     5     4    1
+     6     4     6    1

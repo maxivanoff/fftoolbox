@@ -1,0 +1,19 @@
+@<TRIPOS>MOLECULE
+/Volumes/HDD/Maxim/work/devel/fftoolbox2/data/xyz/truncate-2/methanol_pbe_def2svp_tmp.xyz
+ 8 3 0 0 0
+SMALL
+GASTEIGER
+
+@<TRIPOS>ATOM
+      1 O          -0.0465   -0.7485    0.0000 O.3     1  HOH1        0.1000
+      2 XX         -0.3386   -0.9581    0.5630 EP_O    2  LIG2       -0.2313
+      3 XX         -0.3386   -0.9581   -0.5630 EP_O    3  LIG3       -0.2313
+      4 H           0.8698   -1.0585    0.0000 H       4  UNK4        0.2650
+      5 C          -0.0465    0.6498    0.0000 C.3     5  LIG5        0.0243
+      6 H          -1.0989    0.9777    0.0000 H       3  LIG3        0.0689
+      7 H           0.4398    1.0852    0.8988 H       3  LIG3        0.0022
+      8 H           0.4398    1.0852   -0.8988 H       3  LIG3        0.0022
+@<TRIPOS>BOND
+     1     8     5    1
+     2     6     5    1
+     3     5     7    1

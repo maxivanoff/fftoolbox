@@ -1,0 +1,16 @@
+@<TRIPOS>MOLECULE
+/Volumes/HDD/Maxim/work/devel/fftoolbox2/data/xyz/truncate-2/formaldehyde_pbe_def2svp_tmp.xyz
+ 6 2 0 0 0
+SMALL
+GASTEIGER
+
+@<TRIPOS>ATOM
+      1 C           0.0000    0.0000   -0.5226 C.3     1  LIG1        0.2217
+      2 O           0.0000    0.0000    0.6729 O.3     2  HOH2       -0.1732
+      3 XX         -0.0000   -0.7791    1.2667 EP_O    3  LIG3       -0.0576
+      4 XX          0.0000    0.7791    1.2667 EP_O    4  LIG4       -0.0576
+      5 H           0.0000    0.9469   -1.1239 H       1  LIG1        0.0336
+      6 H           0.0000   -0.9469   -1.1239 H       1  LIG1        0.0336
+@<TRIPOS>BOND
+     1     5     1    1
+     2     6     1    1
