@@ -1,6 +1,6 @@
 from pymol.cgo import *
 from pymol import cmd
-cmd.load("/Users/maxim/work/devel/fftoolbox/data/xyz/methanol_b3lyp_augccpvdz.xyz")
+cmd.load("/Volumes/HDD/Maxim/work/devel/fftoolbox/data/xyz/methanol_b3lyp_augccpvdz.xyz")
 obj = [ BEGIN, LINES, ]
 x = 9.589210
 color = [COLOR, 1, 1-x, 1-x]

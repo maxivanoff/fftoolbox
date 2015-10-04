@@ -1,5 +1,5 @@
-from fftoolbox2.atom import Site
-from fftoolbox2.constrained import ConstrainedLeastSquaresCharges
+from fftoolbox.atom import Site
+from fftoolbox.constrained import ConstrainedLeastSquaresCharges
 import numpy as np
 
 import logging

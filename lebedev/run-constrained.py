@@ -3,8 +3,8 @@ from grid import LebedevGrid
 from constrained import LebedevConstrained
 from charges import LebedevLeastSquares
 from molecule import LebedevMolecule
-from fftoolbox2.results import Results
-import fftoolbox2.visual as vis
+from fftoolbox.results import Results
+import fftoolbox.visual as vis
 import numpy as np
 
 import logging, sys
