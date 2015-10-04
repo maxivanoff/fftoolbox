@@ -1,5 +1,5 @@
-from fftoolbox2.atom import Site
-from fftoolbox2.multipole import Multipole
+from fftoolbox.atom import Site
+from fftoolbox.multipole import Multipole
 import lebedev_write
 import numpy as np
 import logging

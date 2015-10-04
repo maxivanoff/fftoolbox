@@ -1,4 +1,4 @@
-from fftoolbox2.grid import GridPoint, Grid
+from fftoolbox.grid import GridPoint, Grid
 import numpy as np
 import logging
 import os

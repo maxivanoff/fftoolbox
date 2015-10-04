@@ -1,5 +1,5 @@
-from fftoolbox2.atom import Site
-from fftoolbox2.charges import LeastSquaresCharges
+from fftoolbox.atom import Site
+from fftoolbox.charges import LeastSquaresCharges
 import numpy as np
 import visual
 import logging

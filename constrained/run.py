@@ -1,9 +1,9 @@
-from fftoolbox2.parser import GaussianCube, QChem, Gaussian
-from fftoolbox2.grid import vdwGrid
-from fftoolbox2.constrained import ConstrainedLeastSquaresCharges, LagrangeConstraint, TrivialConstraint, SVDConstraint
-from fftoolbox2.charges import LeastSquaresCharges
-from fftoolbox2.molecule import Molecule
-from fftoolbox2.results import Results
+from fftoolbox.parser import GaussianCube, QChem, Gaussian
+from fftoolbox.grid import vdwGrid
+from fftoolbox.constrained import ConstrainedLeastSquaresCharges, LagrangeConstraint, TrivialConstraint, SVDConstraint
+from fftoolbox.charges import LeastSquaresCharges
+from fftoolbox.molecule import Molecule
+from fftoolbox.results import Results
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np

@@ -1,5 +1,5 @@
 import numpy as np
-from fftoolbox2.charges import LeastSquaresCharges
+from fftoolbox.charges import LeastSquaresCharges
 import logging
 logger = logging.getLogger(__name__)
 

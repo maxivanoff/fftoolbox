@@ -2,7 +2,7 @@ from parser import Sphere
 from grid import LebedevGrid
 from charges import LebedevLeastSquares
 from molecule import LebedevMolecule
-from fftoolbox2.results import Results
+from fftoolbox.results import Results
 
 import logging, sys
 
