@@ -8,7 +8,7 @@ import logging, sys
 
 logger = logging.getLogger(__name__)
 lf = '%(levelname)s: %(funcName)s at %(filename)s +%(lineno)s\n%(message)s\n'
-logging.basicConfig(level=logging.INFO, format=lf)
+logging.basicConfig(level=logging.DEBUG, format=lf)
 
 data = {
         'name': 'methanol',
