@@ -3,6 +3,9 @@ import logging, sys
 import numpy
 import units
 
+__author__ = "Maxim Ivanov"
+__email__ = "maxim.ivanov@marquette.edu"
+
 logger = logging.getLogger(__name__)
 
 class LeastSquaresBasic(object):

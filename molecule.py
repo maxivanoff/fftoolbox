@@ -1,11 +1,14 @@
+import numpy as np
+import logging
+import os
+
 from atom import Atom, Site
 from groups import BuriedGroup, CarbonylGroup
 from multipole import Multipole
 from multipole import GroupOfAtoms
 
-import numpy as np
-import logging
-import os
+__author__ = "Maxim Ivanov"
+__email__ = "maxim.ivanov@marquette.edu"
 
 molLogger = logging.getLogger('molecule')
 WORKDIR = os.path.dirname(__file__)
@@ -15,7 +18,7 @@ class Molecule(Multipole):
     def __init__(self, data):
         self.data = data
         try:
-            self.mults = data['multipoles']
+            self.mults = data['representation']
         except KeyError:
             self.mults = ('cartesian', 0)
         try:
@@ -26,6 +29,10 @@ class Molecule(Multipole):
             self.hybrids = data['hybridizations']
         except KeyError:
             self.hybrids = []
+        try:
+            self.energy = data['energy']
+        except KeyError:
+            self.energy = None
         molLogger.info('Start assembling %s Molecule\nsymmetry: %r\nmultipoles: %r\nhybridizations: %r' % (data['name'], self.sym, self.mults, self.hybrids))
         Multipole.__init__(self, name=data['name'], multipoles=self.mults)
         self.set_atoms(data['atoms'])
@@ -35,11 +42,13 @@ class Molecule(Multipole):
         molLogger.info('%s Molecule is created' % (self.name))
 
     def copy(self):
+        data = self.data.copy()
+        data['atoms'] = []
         for i, a in enumerate(self.atoms):
             element, crds, charge = self.data['atoms'][i]
             a_updated = (element, a.coordinates, charge)
-            self.data['atoms'][i] = a_updated
-        molecule = Molecule(data=self.data)
+            self.data['atoms'].append(a_updated)
+        molecule = Molecule(data=data)
         return molecule
 
     def get_ep_data(self):
@@ -107,10 +116,10 @@ class Molecule(Multipole):
         molLogger.info("Names of non-equivalent sites: %s" % self.sites_names_noneq)
 
     def __add__(self, molecule):
-        complex = Complex()
-        complex.add_molecule(self.copy())
-        complex.add_molecule(molecule.copy())
-        return complex
+        c = Complex()
+        c.add_molecule(self.copy())
+        c.add_molecule(molecule.copy())
+        return c
 
 class Complex(GroupOfAtoms):
 

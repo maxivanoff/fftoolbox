@@ -1,12 +1,15 @@
 from __future__ import division
 import numpy as np
 from numpy.linalg import norm
-import time
+import logging
+
 from frame import Frame
 import units
-import logging
-atom_logger = logging.getLogger('atom')
 
+__author__ = "Maxim Ivanov"
+__email__ = "maxim.ivanov@marquette.edu"
+
+atom_logger = logging.getLogger('atom')
 
 class Site(object):
 

@@ -1,12 +1,15 @@
-from fftoolbox2.parser import GaussianCube, QChem, Gaussian
-from fftoolbox2.grid import Grid
-from fftoolbox2.units import au_to_kcal
-from fftoolbox2.molecule import Molecule
-from fftoolbox2.charges import LeastSquaresCharges
 import logging, sys
 import numpy as np
 import cma
 
+from parser import GaussianCube, QChem, Gaussian
+from grid import Grid
+from units import au_to_kcal
+from molecule import Molecule
+from charges import LeastSquaresCharges
+
+__author__ = "Maxim Ivanov"
+__email__ = "maxim.ivanov@marquette.edu"
 
 class NLLSCharges(LeastSquaresCharges):
     """

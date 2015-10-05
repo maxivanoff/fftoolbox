@@ -1,6 +1,11 @@
-from multipole import Multipole
 import numpy as np
 import logging
+
+from multipole import Multipole
+
+__author__ = "Maxim Ivanov"
+__email__ = "maxim.ivanov@marquette.edu"
+
 logger = logging.getLogger(__name__)
 
 class CarbonylGroup(Multipole):
@@ -50,7 +55,7 @@ class BuriedGroup(Multipole):
         elif [neighbor_name]*4 == [a.element for a in neighbors]:
             self.name = cname + neighbor_name+'4'
             self.type = cname + neighbor_name+'4'
-            self.center.name = cname
+            self.center.name = '%s%i_%s%s4'% (cname, count, cname, neighbor_name)
         else:
             raise ValueError('Not a buired group')
         for i,a in enumerate(neighbors):

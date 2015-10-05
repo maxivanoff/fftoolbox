@@ -3,6 +3,9 @@ import numpy as np
 cimport numpy as np
 cimport cython
 
+__author__ = "Maxim Ivanov"
+__email__ = "maxim.ivanov@marquette.edu"
+
 @cython.boundscheck(False)
 def set_inversed(np.ndarray[np.float64_t, ndim=2] grid, np.ndarray[np.float64_t, ndim=2] sites,\
         int n_red_sites, np.ndarray[np.int_t, ndim=1] sym_sites_ind):

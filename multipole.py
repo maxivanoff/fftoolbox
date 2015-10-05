@@ -1,12 +1,15 @@
-import logging
 import numpy as np
-from copy import deepcopy
 from numpy.linalg import norm
 from scipy.special import sph_harm as Y
-from units import au_to_angst
 import openbabel
-
+import logging
 import os
+
+from units import au_to_angst
+
+__author__ = "Maxim Ivanov"
+__email__ = "maxim.ivanov@marquette.edu"
+
 WORKDIR = os.path.dirname(__file__)
 logger = logging.getLogger('multipole')
 
@@ -126,7 +129,11 @@ class GroupOfAtoms(object):
         return atoms
 
     def write_xyz(self, filename, here=False):
-        out = '%i\n\n' % len(self.sites)
+        out = '%i\n' % len(self.sites)
+        try:
+            out += 'e = %s\n' % self.energy
+        except AttributeError:
+            out += '\n'
         for s in self.sites:
             out += '%s %.10f %.10f %.10f\n' % (s.element, s.x*au_to_angst, s.y*au_to_angst, s.z*au_to_angst)
         if here:

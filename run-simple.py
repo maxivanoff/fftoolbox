@@ -15,7 +15,7 @@ data = {
         'theory': 'pbe_def2svp',
         'density': 1.5,
         'symmetry': False,
-        'multipoles': ('cartesian', 2)
+        'representation': ('cartesian', 2)
         }
 
 results = Results(Gaussian(data=data).data['multipoles'])

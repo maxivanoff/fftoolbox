@@ -1,8 +1,12 @@
-from fftoolbox.atom import Site
-from fftoolbox.charges import LeastSquaresCharges
 import numpy as np
-import visual
 import logging
+
+from atom import Site
+from charges import LeastSquaresCharges
+import visual
+
+__author__ = "Maxim Ivanov"
+__email__ = "maxim.ivanov@marquette.edu"
 
 logger = logging.getLogger(__name__)
 

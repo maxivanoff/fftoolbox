@@ -1,13 +1,16 @@
-import units
+import numpy as np
+import logging
+
 from LeastSquares import LeastSquaresBasic
 from molecule import Molecule
 from grid import Grid
 from atom import Site
-import numpy as np
 import fast
-import time
+import units
 
-import logging
+__author__ = "Maxim Ivanov"
+__email__ = "maxim.ivanov@marquette.edu"
+
 
 logger = logging.getLogger(__name__)
 

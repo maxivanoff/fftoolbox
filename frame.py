@@ -1,8 +1,12 @@
 from __future__ import division
-import numpy as np
 from numpy.linalg import norm
+import numpy as np
 import logging
 import units
+
+__author__ = "Maxim Ivanov"
+__email__ = "maxim.ivanov@marquette.edu"
+
 logger = logging.getLogger(__name__)
 
 class Frame(object):

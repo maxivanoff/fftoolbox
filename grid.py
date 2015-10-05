@@ -2,9 +2,13 @@ import numpy as np
 import os
 import logging
 import parser
+
 import units
 
 grid_logger = logging.getLogger('grid')
+
+__author__ = "Maxim Ivanov"
+__email__ = "maxim.ivanov@marquette.edu"
 
 WORKDIR = os.path.dirname(__file__)
 
@@ -113,16 +117,33 @@ class Grid(object):
             self.include = data['include']
         except KeyError:
             self.include = []
-
-        self.atoms = data['atoms']
-        self.origin = data['origin']
-        self.num_points = data['num_points']
-        self.vectors = data['vectors']
+        try:
+            self.origin = data['origin']
+            self.num_points = data['num_points']
+            self.vectors = data['vectors']
+            grid_logger.info("Grid instance is to be created:\nNumber of points: %s\nvectors:\n%s\nOrigin: %s"\
+                    % (self.num_points, self.vectors, self.origin))
+        except KeyError:
+            self.origin = None
+            self.num_points = None
+            self.vectors = None
+        try:
+            self.atoms = data['atoms']
+        except KeyError:
+            self.atoms = []
 
         self.points = []
 
-        grid_logger.info("Grid instance is to be created:\nNumber of points: %s\nvectors:\n%s\nOrigin: %s"\
-                % (self.num_points, self.vectors, self.origin))
+    def create_from_list(self, coordinates=None, values=None):
+        self.points = []
+        nc = len(coordinates)
+        nv = len(values)
+        if not nc == nv:
+            raise ValueError('Number of grid points %i does not match number of values %i' % (nc, nv))
+        for xyz, value in zip(coordinates, values):
+            point = GridPoint(coordinates=xyz, value=value)
+            self.points.append(point)
+        grid_logger.info("grid is created: %i points" % len(self.points))
 
     def create_grid(self, values):
         self.points = []

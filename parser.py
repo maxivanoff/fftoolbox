@@ -2,9 +2,12 @@ from __future__ import division
 import os
 import re
 import numpy as np
-import xml.etree.ElementTree as ET
-import units
 import logging
+
+import units
+
+__author__ = "Maxim Ivanov"
+__email__ = "maxim.ivanov@marquette.edu"
 
 parserLogger = logging.getLogger('parser')
 
@@ -151,15 +154,21 @@ class QChem(object):
 class Gaussian(object):
     atom_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 0:'X'}
 
-    def __init__(self, filename=None, data=None):
+    def __init__(self, filename=None, data=None, here=False, orientation='standard'):
+        if here == True:
+            path2log = '.'
+        else:
+            path2log = '%s/data/log' % WORKDIR
+        if data:
+            filename = '%s/%s_%s.log' % (path2log, data['name'], data['theory'])
+        else:
+            filename = '%s/%s' % (path2log, filename)
         self.energy = None
         self.atoms = ()
         self.multipoles = {}
-        if data:
-            filename = '%s/data/log/%s_%s.log' % (WORKDIR, data['name'], data['theory'])
-        self.read_file(filename)
+        self.read_file(filename, orientation)
 
-    def read_file(self, filename):
+    def read_file(self, filename, orientation):
         self.geometries_input = []
         self.geometries_standard = []
         self.energies = []
@@ -187,7 +196,8 @@ class Gaussian(object):
                     y = float(m.group(5))
                     z = float(m.group(6))
                     crds = np.array([x, y, z])*units.angst_to_au
-                    atoms.append((atomic_num, crds))
+                    element = self.atom_name[atomic_num]
+                    atoms.append((element, crds, None))
                 self.geometries_input.append(atoms)
             # electronic energy
             scf = re.search(r'SCF Done:  E\(.*\) = *(-?\d*\.\d*)', line)
@@ -259,7 +269,10 @@ class Gaussian(object):
                 self.multipoles['XYZ'] = O3[1]
             """
 
-        self.atoms = self.geometries_standard[-1]
+        if orientation == 'standard':
+            self.atoms = self.geometries_standard[-1]
+        if orientation == 'input':
+            self.atoms = self.geometries_input[-1]
         if self.pcm_energy:
             self.energy = self.pcm_energy
         elif self.E2:
@@ -324,7 +337,7 @@ class XYZ(object):
         xyzfile = open(filename, 'r')
         s = xyzfile.readline().split()
         num_atoms = int(s[0])
-        xyzfile.readline()
+        comment = xyzfile.readline()
         atoms = []
         for i in xrange(num_atoms):
             tmp = xyzfile.readline().split()
@@ -332,7 +345,9 @@ class XYZ(object):
             crds = np.array([float(t)*units.angst_to_au for t in tmp[1:4]])
             atoms.append((atom_name, crds, None))
         xyzfile.close()
-        self.data = {'atoms': atoms}
+        self.data = {'atoms': atoms,
+                     'comment': comment,
+                     }
 
     def __str__(self):
         return 'xyz parser'
