@@ -1,4 +1,4 @@
-from parser import GaussianCube, QChem, Gaussian
+from parser import GaussianCube, QChem, Gaussian, ForceFieldXML
 from grid import vdwGrid
 from charges import LeastSquaresCharges
 from molecule import Molecule
@@ -28,7 +28,17 @@ molecule = Molecule(data)
 
 ls = LeastSquaresCharges(grid=grid, molecule=molecule) 
 ls.solve()
+ls.charges2sites()
 results.add(ls)
 
 print results
+
+# save
+molecule.write_xyz(filename='%s_%s.xyz' % (data['name'], data['name']))
+molecule.write_mol2(filename='%s_%s.mol2' % (data['name'], data['name']))
+
+ff = ForceFieldXML()
+ff.write_file(molecule=molecule)
+ff.load_forcefields(filename='%s_%s.xml' % (data['name'], data['theory']), molecule=molecule)
+
 

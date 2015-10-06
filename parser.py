@@ -1,4 +1,7 @@
 from __future__ import division
+from xml.etree.ElementTree import Element, SubElement, Comment
+from xml.etree import ElementTree
+from xml.dom import minidom
 import os
 import re
 import numpy as np
@@ -152,7 +155,7 @@ class QChem(object):
         return 'QChem parser'
 
 class Gaussian(object):
-    atom_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 0:'X'}
+    atom_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 0:'X', 16:'S'}
 
     def __init__(self, filename=None, data=None, here=False, orientation='standard'):
         if here == True:
@@ -177,8 +180,9 @@ class Gaussian(object):
         logfile = open('%s' % (filename), 'r')
         while True:
             line = logfile.readline()
+            if line == '': break
             # end of file
-            if re.search(r'Normal termination',line) or re.search(r'Error termination',line): break
+            # if re.search(r'Normal termination',line) or re.search(r'Error termination',line): break
             # level of theory
             m = re.search(r' \#P (\w+\/.+)', line)
             if m:
@@ -189,7 +193,7 @@ class Gaussian(object):
                 for i in range(4): logfile.readline()
                 while True:
                     line = logfile.readline()
-                    m = re.search(r'(\d) *(\d) *(\d) *(-?\d*\.\d*) *(-?\d*\.\d*) *(-?\d*\.\d*)', line)
+                    m = re.search(r'(\d+) *(\d+) *(\d+) *(-?\d*\.\d*) *(-?\d*\.\d*) *(-?\d*\.\d*)', line)
                     if m is None: break
                     atomic_num = int(m.group(2))
                     x = float(m.group(4))
@@ -351,4 +355,86 @@ class XYZ(object):
 
     def __str__(self):
         return 'xyz parser'
+
+class ForceFieldXML(object):
+
+    LJ = {
+            'CT': (1.9080, 0.1094), # methyl carbon
+            'C' : (1.9080, 0.0860), # sp2
+            'HC': (1.4870, 0.0157), # connected to CT / methyl hydrogen,
+            'H' : (0.6000, 0.0157), # connected to N
+            'HO': (0.0000, 0.0000), # connected to OH / hydroxyl
+            'N' : (1.8240, 0.1700), # sp2
+            'N3': (1.8750, 0.1700), # sp3
+            'OH': (1.7210, 0.2104),
+            'O' : (1.6612, 0.2100), # C=O
+            'O2': (1.6612, 0.2100), # CO2
+            'S' : (2.0000, 0.2500),
+            }
+
+    # not all atoms names are presented yet
+    amber = {
+            'C0_CH3': 'CT',
+            'H0_CH3_0': 'HC',
+            'H0_CH3_1': 'HC',
+            'H0_CH3_2': 'HC',
+            'N': 'N',
+            'S': 'S',
+            'O': 'O',
+            'H': 'HO',
+            }
+
+    def __init__(self):
+        pass
+
+    def load_forcefields(self, filename=None, here=False, molecule=None):
+        if here is True:
+            path2 = '.'
+        else:
+            path2 = WORKDIR
+        filename = '%s/data/forcefields/%s' % (path2, filename)
+        tree = ElementTree.parse(filename)
+        root = tree.getroot()
+        for site in root.findall('site'):
+            element = site.get('element')
+            name = site.get('name')
+            charge = float(site.find('charge').text)
+            r0 = float(site.find('r0').text)
+            epsilon = float(site.find('epsilon').text)
+            for s in molecule.get_sites_by_name(name):
+                s.charge = charge
+                s.r0 = r0
+                s.epsilon = epsilon
+        
+    def write_file(self, molecule=None, xmlfilename=None):
+        top = Element('forcefield', name=molecule.name)
+        comment = Comment('r0 is in Angst, epsilon is in kcal/mol')
+        top.append(comment)
+
+        for site in molecule.sites_noneq:
+            try:
+                amber_name = self.amber[site.name]
+                r0, e = self.LJ[amber_name]
+            except KeyError:
+                r0, e = 0., 0.
+                amber_name = site.name
+            siteElem = SubElement(top, 'site', name=site.name, element=site.element, amber=amber_name)
+            SubElement(siteElem, 'charge').text = '%.4f' % site.charge
+            SubElement(siteElem, 'r0').text = str(r0)
+            SubElement(siteElem, 'epsilon').text = str(e)
+
+        s = prettify(top)
+        if xmlfilename is None:
+            xmlfilename = '%s/data/forcefields/%s_%s.xml' % (WORKDIR, molecule.name, molecule.theory)
+        with open(xmlfilename, 'w') as f:
+            f.write(s)
+
+def prettify(elem):
+    """Return a pretty-printed XML string for the Element.
+    """
+    rough_string = ElementTree.tostring(elem, 'utf-8')
+    reparsed = minidom.parseString(rough_string)
+    return reparsed.toprettyxml(indent="  ")
+
+
 

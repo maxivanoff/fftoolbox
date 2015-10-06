@@ -18,6 +18,10 @@ class Molecule(Multipole):
     def __init__(self, data):
         self.data = data
         try:
+            self.theory = data['theory']
+        except KeyError:
+            self.theory = None
+        try:
             self.mults = data['representation']
         except KeyError:
             self.mults = ('cartesian', 0)
@@ -124,8 +128,30 @@ class Molecule(Multipole):
 class Complex(GroupOfAtoms):
 
     def __init__(self):
-        GroupOfAtoms.__init__(self)
+        GroupOfAtoms.__init__(self, data=None, molecules=None)
+        self.qm_energy = None
         self.molecules = []
+        if data and molecules:
+            x = 0
+            for mol_name, natoms in molecules.items():
+                atoms = data['atoms'][x:x+natoms]
+                x += natoms
+                d = {
+                        'name': mol_name,
+                        'atoms':atoms,
+                    }
+                m = Molecule(data=data)
+                self.add_molecule(molecule)
+
+    def ff_energy(self):
+        try:
+            m1, m2 = self.molecules
+            e = 0.
+            for s1 in m1.sites:
+                for s2 in m2.sites:
+                     e += self.energy_between_sites(s1, s2)
+        except ValueError:
+            raise ValueError('got %i molecules instead of 2' % len(self.molecules))
 
     def add_molecule(self, molecule):
         self.molecules.append(molecule)

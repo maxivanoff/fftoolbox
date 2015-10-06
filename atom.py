@@ -19,6 +19,8 @@ class Site(object):
         self.name = name
         self.element = name
         self.charge = charge
+        self.r0 = None
+        self.epsilon = None
         self.sites = [self]
         self.i = -1
         if not self.name == 'H+':
