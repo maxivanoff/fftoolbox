@@ -3,14 +3,16 @@ import logging
 import os
 
 from atom import Atom, Site
-from groups import BuriedGroup, CarbonylGroup
+from groups import BuriedGroup, CarbonOxygenGroup
 from multipole import Multipole
 from multipole import GroupOfAtoms
+from parser import ForceFieldXML
+import units
 
 __author__ = "Maxim Ivanov"
 __email__ = "maxim.ivanov@marquette.edu"
 
-molLogger = logging.getLogger('molecule')
+logger = logging.getLogger('molecule')
 WORKDIR = os.path.dirname(__file__)
 
 class Molecule(Multipole):
@@ -37,13 +39,14 @@ class Molecule(Multipole):
             self.energy = data['energy']
         except KeyError:
             self.energy = None
-        molLogger.info('Start assembling %s Molecule\nsymmetry: %r\nmultipoles: %r\nhybridizations: %r' % (data['name'], self.sym, self.mults, self.hybrids))
+        logger.info('Start assembling %s Molecule\nsymmetry: %r\nmultipoles: %r\nhybridizations: %r' % (data['name'], self.sym, self.mults, self.hybrids))
         Multipole.__init__(self, name=data['name'], multipoles=self.mults)
         self.set_atoms(data['atoms'])
         self.set_groups()
+        self.set_frames() # in case extra points are loaded from the file
         self.set_sym_sites()
         self.set_multipole_matrix()
-        molLogger.info('%s Molecule is created' % (self.name))
+        logger.info('%s Molecule is created' % (self.name))
 
     def copy(self):
         data = self.data.copy()
@@ -69,6 +72,7 @@ class Molecule(Multipole):
             if element[0] == 'X' or element[0] == 'E': # extra point connected to previous atom
                 s = Site(coordinates=crds, name='EP_%s' % atom.element, charge=charge)
                 atom.sites.append(s)
+                logger.debug('Site %s is appended to sites of atom %s' % (s.name, aton.name))
             else: # regular atom
                 atom = Atom(name=element, element=element, coordinates=crds, index=i+1, charge=charge)
                 self.atoms.append(atom)
@@ -81,14 +85,14 @@ class Molecule(Multipole):
         """
         # identify functional groups
         buried_atoms = []
-        carbonyl_carbons = []
+        carbons_with_oxygen = []
         for atom in self:
             atom.neighbors = filter(atom.bonded_to, self.atoms)
             if len(filter(lambda a: a.element=='H', atom.neighbors))>1:
                 buried_atoms.append(atom)
-            if len(filter(lambda a: a.element=='O', atom.neighbors))==1 and len(atom.neighbors)==3:
-                carbonyl_carbons.append(atom)
-            molLogger.debug("Neighbors are assigned to %s:\n%s" % (atom.name, atom.neighbors))
+            if not len(filter(lambda a: a.element=='O', atom.neighbors))==0 and atom.element=='C':
+                carbons_with_oxygen.append(atom)
+            logger.debug("Neighbors are assigned to %s:\n%s" % (atom.name, atom.neighbors))
 
         # set extra points
         for atom in self.atoms:
@@ -97,12 +101,14 @@ class Molecule(Multipole):
         
         # create groups
         exclude = ['methane', 'benzene', 'methane', 'tip5p', 'tip3p', 'ammonia', 'water']
-        groups = []
+        self.groups = []
         if not self.name in exclude:
-            for count, atom in enumerate(carbonyl_carbons):
-                groups.append(CarbonylGroup(center=atom, count=count, sym=self.sym))
+            for count, atom in enumerate(carbons_with_oxygen):
+                g = CarbonOxygenGroup(center=atom, count=count, sym=self.sym)
+                self.groups.append(g)
             for count, atom in enumerate(buried_atoms):
-                groups.append(BuriedGroup(center=atom, count=count, sym=self.sym))
+                g = BuriedGroup(center=atom, count=count, sym=self.sym)
+                self.groups.append(g)
 
         
         # symmetrical atoms have identical names
@@ -116,8 +122,12 @@ class Molecule(Multipole):
         except TypeError:
             pass
 
-        molLogger.info("Names of equivalent sites: %s" % self.sites_names_eq)
-        molLogger.info("Names of non-equivalent sites: %s" % self.sites_names_noneq)
+        logger.info("Names of equivalent sites: %s" % self.sites_names_eq)
+        logger.info("Names of non-equivalent sites: %s" % self.sites_names_noneq)
+
+    def set_frames(self):
+        for a in self.atoms:
+            a.set_frame()
 
     def __add__(self, molecule):
         c = Complex()
@@ -125,33 +135,54 @@ class Molecule(Multipole):
         c.add_molecule(molecule.copy())
         return c
 
+    def __repr__(self):
+        o = '%s\n' % self.name
+        for s in self.sites:
+            o += '%s %s xyz = %.3f %.3f %.3f charge=%s r0=%s epsilon=%s\n' % (s.element, s.name, s.x, s.y, s.z, s.charge, s.r0, s.epsilon)
+        return o
+
 class Complex(GroupOfAtoms):
 
-    def __init__(self):
-        GroupOfAtoms.__init__(self, data=None, molecules=None)
+    def __init__(self, data=None, molecules_data=None):
+        GroupOfAtoms.__init__(self)
         self.qm_energy = None
         self.molecules = []
-        if data and molecules:
-            x = 0
-            for mol_name, natoms in molecules.items():
-                atoms = data['atoms'][x:x+natoms]
-                x += natoms
-                d = {
-                        'name': mol_name,
-                        'atoms':atoms,
-                    }
-                m = Molecule(data=data)
-                self.add_molecule(molecule)
+        # load molecules
+        x = 0
+        for mol_data in molecules_data:
+            natoms = mol_data['num atoms']
+            ffname = mol_data['xml']
+            mol_name = mol_data['name']
+            sym = mol_data['symmetry']
+
+            atoms = data['atoms'][x:x+natoms]
+            x += natoms
+            d = {
+                    'name': mol_name,
+                    'atoms':atoms,
+                    'symmetry': sym,
+                }
+
+            m = Molecule(data=d)
+            ff = ForceFieldXML()
+            ff.load_forcefields(filename=ffname, molecule=m, here=True)
+            self.add_molecule(m)
 
     def ff_energy(self):
-        try:
-            m1, m2 = self.molecules
-            e = 0.
-            for s1 in m1.sites:
-                for s2 in m2.sites:
-                     e += self.energy_between_sites(s1, s2)
-        except ValueError:
-            raise ValueError('got %i molecules instead of 2' % len(self.molecules))
+        m1, m2 = self.molecules
+        e = 0.
+        for s1 in m1.sites:
+            for s2 in m2.sites:
+                # electrostatic
+                r = s1.distance_to(s2)
+                e += s1.charge*s2.charge/r*units.au_to_kcal
+                # Lennard-Jones
+                eps = np.sqrt(s1.epsilon*s2.epsilon)
+                r0 = (s1.r0 + s2.r0)*units.angst_to_au
+                r6 = pow(r0/r, 6)
+                r12 = pow(r6, 2)
+                e += eps*(r12 - 2*r6)
+        return e
 
     def add_molecule(self, molecule):
         self.molecules.append(molecule)

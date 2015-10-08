@@ -19,8 +19,8 @@ class Frame(object):
         if hybridization == 'sp3': self.offset = 0. # extra points are in yz plane
         if hybridization == 'sp2': self.offset = np.pi/2. # extra points are in xz plane
         
-        self.set_local_system()
         logger.info("Creating Frame instance for %s.\nHybridization: %s\nNumber of extra points: %i" % (atom.name, hybridization, self.num_ep))
+        self.set_local_system()
         logger.debug("Local coordinate system:\n%r" % self.local_system)
         
     def set_local_system(self):

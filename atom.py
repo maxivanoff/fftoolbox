@@ -100,7 +100,13 @@ class Atom(Site):
         for i, crds in enumerate(self.frame.ep_crds(distance, angle)):
             s = Site(crds, 'EP_' + self.name, None)
             self.sites += (s,)
-    
+
+    def set_frame(self):
+        if self.frame is None and len(self.sites) > 1:
+            num_domains = len(self.sites) + len(self.neighbors) - 1
+            h = 'sp%i' % (num_domains - 1)
+            self.frame = Frame(self, h)
+
     def get_ep_data(self):
         data = {}
         if len(self.sites) == 3:

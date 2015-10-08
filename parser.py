@@ -12,7 +12,7 @@ import units
 __author__ = "Maxim Ivanov"
 __email__ = "maxim.ivanov@marquette.edu"
 
-parserLogger = logging.getLogger('parser')
+logger = logging.getLogger('parser')
 
 WORKDIR = os.path.dirname(__file__)
 
@@ -296,11 +296,13 @@ class Gaussian(object):
 
 class Mol2(object):
 
-    def __init__(self, filename=None, data=None):
-        if data:
+    def __init__(self, filename=None, data=None, here=False):
+        if data and not here:
             filename = '%s/data/mol2/%s_%s.mol2' % (WORKDIR, data['name'], data['theory'])
-        if filename:
+        if filename and not here:
             filename = '%s/data/mol2/%s' % (WORKDIR, filename)
+        if filename and here:
+            filename = './%s' % filename
         self.atoms = ()
         self.read_file(filename)
 
@@ -326,7 +328,7 @@ class Mol2(object):
 
 class XYZ(object):
 
-    def __init__(self, filename=None, data=None, here=True):
+    def __init__(self, filename=None, data=None, here=False):
         if here == True:
             path2xyz = '.'
         else:
@@ -360,7 +362,7 @@ class ForceFieldXML(object):
 
     LJ = {
             'CT': (1.9080, 0.1094), # methyl carbon
-            'C' : (1.9080, 0.0860), # sp2
+            'C' : (1.9080, 0.0860), # sp2: CO2, C=O
             'HC': (1.4870, 0.0157), # connected to CT / methyl hydrogen,
             'H' : (0.6000, 0.0157), # connected to N
             'HO': (0.0000, 0.0000), # connected to OH / hydroxyl
@@ -372,12 +374,13 @@ class ForceFieldXML(object):
             'S' : (2.0000, 0.2500),
             }
 
-    # not all atoms names are presented yet
     amber = {
-            'C0_CH3': 'CT',
-            'H0_CH3_0': 'HC',
-            'H0_CH3_1': 'HC',
-            'H0_CH3_2': 'HC',
+            'C_CH3': 'CT',
+            'H_CH3': 'HC',
+            'O_CO2': 'O2',
+            'C_CO2': 'C',
+            'N_NH4': 'N3',
+            'H_NH4': 'H',
             'N': 'N',
             'S': 'S',
             'O': 'O',
@@ -388,41 +391,67 @@ class ForceFieldXML(object):
         pass
 
     def load_forcefields(self, filename=None, here=False, molecule=None):
-        if here is True:
-            path2 = '.'
-        else:
-            path2 = WORKDIR
-        filename = '%s/data/forcefields/%s' % (path2, filename)
+        if here is False:
+            filename = '%s/data/forcefields/%s' % (WORKDIR, filename)
         tree = ElementTree.parse(filename)
         root = tree.getroot()
-        for site in root.findall('site'):
-            element = site.get('element')
-            name = site.get('name')
-            charge = float(site.find('charge').text)
-            r0 = float(site.find('r0').text)
-            epsilon = float(site.find('epsilon').text)
-            for s in molecule.get_sites_by_name(name):
-                s.charge = charge
-                s.r0 = r0
-                s.epsilon = epsilon
+        for atom in root.findall('atom'):
+            element = atom.get('element')
+            name = atom.get('name')
+            charge = float(atom.find('charge').text)
+            r0 = float(atom.find('r0').text)
+            epsilon = float(atom.find('epsilon').text)
+            # get extra points data
+            try:
+                h = atom.find('hybridization').text
+                site = atom.find('site')
+                distance = float(site.find('distance').text)
+                angle = float(site.find('angle').text)
+                charge = float(site.find('charge').text)
+                extra_exists = True
+            except AttributeError:
+                extra_exists = False
+            # load force fields to atoms
+            for a in molecule.get_sites_by_name(name):
+                a.charge = charge
+                a.r0 = r0
+                a.epsilon = epsilon
+                logger.debug('Load forcefields to %s: charge = %.4f; epsilon = %.4f; r0 = %.4f' % (a.name, a.charge, a.epsilon, a.r0))
+                # load force fields to extra points
+                if extra_exists:
+                    ep = (h, distance, angle)
+                    a.set_hybridization(ep)
+                    for s in a.sites[1:]:
+                        s.charge = charge
+                        s.r0 = 0.0
+                        s.epsilon = 0.0
+                    logger.debug('Force fields for extra points are loaded at %s %s\nNumber of extra points: %i\nCharge: %.3f\nDistance: %.3f\nAngle: %.3f' % (h, a.name, len(a.sites)-1, charge, distance, angle))
         
     def write_file(self, molecule=None, xmlfilename=None):
         top = Element('forcefield', name=molecule.name)
-        comment = Comment('r0 is in Angst, epsilon is in kcal/mol')
+        comment = Comment('distances in Angstroms, energies in kcal/mol, angles in degrees')
         top.append(comment)
-
-        for site in molecule.sites_noneq:
+        for atom in molecule.atoms_noneq:
+            trunc_name = atom.name.split('-')[0]
+            amber_name = self.amber[trunc_name]
+            r0, e = self.LJ[amber_name]
+            atomElem = SubElement(top, 'atom', name=atom.name, element=atom.element, amber=amber_name)
+            SubElement(atomElem, 'charge').text = '%.4f' % atom.charge
+            SubElement(atomElem, 'r0').text = str(r0)
+            SubElement(atomElem, 'epsilon').text = str(e)
             try:
-                amber_name = self.amber[site.name]
-                r0, e = self.LJ[amber_name]
-            except KeyError:
-                r0, e = 0., 0.
-                amber_name = site.name
-            siteElem = SubElement(top, 'site', name=site.name, element=site.element, amber=amber_name)
-            SubElement(siteElem, 'charge').text = '%.4f' % site.charge
-            SubElement(siteElem, 'r0').text = str(r0)
-            SubElement(siteElem, 'epsilon').text = str(e)
-
+                SubElement(atomElem, 'hybridization').text = atom.frame.hybridization
+            except AttributeError:
+                pass
+            # extra points
+            ep_data = atom.get_ep_data()
+            for site in atom.sites[1:2]: # extra points are symmetrical
+                siteElem = SubElement(atomElem, 'site', name=site.name)
+                SubElement(siteElem, 'charge').text = '%.4f' % site.charge
+                SubElement(siteElem, 'r0').text = '0.0'
+                SubElement(siteElem, 'epsilon').text = '0.0'
+                SubElement(siteElem, 'distance').text = '%.4f' % ep_data['distance']
+                SubElement(siteElem, 'angle').text = '%.4f' % ep_data['angle']
         s = prettify(top)
         if xmlfilename is None:
             xmlfilename = '%s/data/forcefields/%s_%s.xml' % (WORKDIR, molecule.name, molecule.theory)

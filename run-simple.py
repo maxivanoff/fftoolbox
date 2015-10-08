@@ -11,10 +11,10 @@ lf = '%(levelname)s: %(funcName)s at %(filename)s +%(lineno)s\n%(message)s\n'
 logging.basicConfig(level=logging.DEBUG, format=lf)
 
 data = {
-        'name': 'methanol',
+        'name': 'acetate',
         'theory': 'pbe_def2svp',
         'density': 1.5,
-        'symmetry': False,
+        'symmetry': True,
         'representation': ('cartesian', 2)
         }
 
@@ -34,8 +34,8 @@ results.add(ls)
 print results
 
 # save
-molecule.write_xyz(filename='%s_%s.xyz' % (data['name'], data['name']))
-molecule.write_mol2(filename='%s_%s.mol2' % (data['name'], data['name']))
+molecule.write_xyz(filename='%s_%s.xyz' % (data['name'], data['theory']))
+molecule.write_mol2(filename='%s_%s.mol2' % (data['name'], data['theory']))
 
 ff = ForceFieldXML()
 ff.write_file(molecule=molecule)
