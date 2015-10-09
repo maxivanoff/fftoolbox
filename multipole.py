@@ -6,6 +6,7 @@ import logging
 import os
 
 from units import au_to_angst
+import parser
 
 __author__ = "Maxim Ivanov"
 __email__ = "maxim.ivanov@marquette.edu"
@@ -143,10 +144,13 @@ class GroupOfAtoms(object):
         file.write(out)
         file.close()
 
-    def write_mol2(self, filename):
+    def write_mol2(self, filename, here=False):
+        mol2 = parser.Mol2()
+        mol2.write_file(filename, here, self)
+        """
         xyzname = '%s_tmp.xyz' % filename.split('.mol2')[0] 
-        self.write_xyz(xyzname)
-        fullxyzname = '%s/data/xyz/%s' % (WORKDIR, xyzname)
+        fullxyzname = '%s/%s' % (path2xyz, xyzname)
+        self.write_xyz(xyzname, here=here)
         obmol = openbabel.OBMol()
         conv = openbabel.OBConversion()
         conv.SetInAndOutFormats("xyz", "mol2")
@@ -155,9 +159,11 @@ class GroupOfAtoms(object):
         a.GetPartialCharge()
         for i, site in enumerate(self.sites):
             a = obmol.GetAtom(i+1)
+            print a.GetType(), site.charge
             a.SetPartialCharge(site.charge)
-        conv.WriteFile(obmol, '%s/data/mol2/%s' % (WORKDIR, filename))
+        conv.WriteFile(obmol, '%s/%s' % (path2mol2, filename))
         os.system('rm %s' % (fullxyzname))
+        """
         
 
     def __iter__(self):

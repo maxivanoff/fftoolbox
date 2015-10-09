@@ -307,21 +307,37 @@ class Mol2(object):
         self.read_file(filename)
 
     def read_file(self, filename):
-        mol2file = open(filename, 'r')
-        s = mol2file.read()
-        s = s.split('@<TRIPOS>')
-        self.num_atoms = int(s[1].split()[2])
-        geom = s[2].split('\n')
-        atoms = []
-        for line in geom[1:self.num_atoms+1]:
-            tmp = line.split()
-            atom_name = tmp[1]
-            charge = float(tmp[8])
-            crds = np.array([float(t)*units.angst_to_au for t in tmp[2:5]])
-            atoms.append((atom_name, crds, charge))
-        self.atoms = (atoms)
-        mol2file.close()
-        self.data = {'atoms': self.atoms}
+        if filename:
+            mol2file = open(filename, 'r')
+            s = mol2file.read()
+            s = s.split('@<TRIPOS>')
+            self.num_atoms = int(s[1].split()[2])
+            geom = s[2].split('\n')
+            atoms = []
+            for line in geom[1:self.num_atoms+1]:
+                tmp = line.split()
+                atom_name = tmp[1]
+                charge = float(tmp[8])
+                crds = np.array([float(t)*units.angst_to_au for t in tmp[2:5]])
+                atoms.append((atom_name, crds, charge))
+            self.atoms = (atoms)
+            mol2file.close()
+            self.data = {'atoms': self.atoms}
+
+    def write_file(self, filename, here=False, molecule=None):
+        if here:
+            path2mol2 = '.'
+        else:
+            path2mol2 = '%s/data/mol2' % WORKDIR
+        s = '@<TRIPOS>MOLECULE\n%s\n%i %i 0 0 0\nSMALL\nUSER_CHARGES\n\n@<TRIPOS>ATOM\n' % (molecule.name, len(molecule.sites), len(molecule.bonds))
+        for i, site in enumerate(molecule.sites):
+            sid = '%i' % i
+            name = '%s' % site.element
+            xyz = '%.3f %.3f %.3f' % (site.x, site.y, site.z)
+            charge = '%.4f' % site.charge
+            mname = molecule.name
+            s += '%s %s %s %s 1 %s %s\n' %(sid.ljust(3), name.ljust(4), xyz.ljust(5), name, mname, charge)
+            print s
 
     def __str__(self):
         return 'mol2 parser'
@@ -398,7 +414,7 @@ class ForceFieldXML(object):
         for atom in root.findall('atom'):
             element = atom.get('element')
             name = atom.get('name')
-            charge = float(atom.find('charge').text)
+            a_charge = float(atom.find('charge').text)
             r0 = float(atom.find('r0').text)
             epsilon = float(atom.find('epsilon').text)
             # get extra points data
@@ -407,13 +423,13 @@ class ForceFieldXML(object):
                 site = atom.find('site')
                 distance = float(site.find('distance').text)
                 angle = float(site.find('angle').text)
-                charge = float(site.find('charge').text)
+                e_charge = float(site.find('charge').text)
                 extra_exists = True
             except AttributeError:
                 extra_exists = False
             # load force fields to atoms
             for a in molecule.get_sites_by_name(name):
-                a.charge = charge
+                a.charge = a_charge
                 a.r0 = r0
                 a.epsilon = epsilon
                 logger.debug('Load forcefields to %s: charge = %.4f; epsilon = %.4f; r0 = %.4f' % (a.name, a.charge, a.epsilon, a.r0))
@@ -422,10 +438,10 @@ class ForceFieldXML(object):
                     ep = (h, distance, angle)
                     a.set_hybridization(ep)
                     for s in a.sites[1:]:
-                        s.charge = charge
+                        s.charge = e_charge
                         s.r0 = 0.0
                         s.epsilon = 0.0
-                    logger.debug('Force fields for extra points are loaded at %s %s\nNumber of extra points: %i\nCharge: %.3f\nDistance: %.3f\nAngle: %.3f' % (h, a.name, len(a.sites)-1, charge, distance, angle))
+                    logger.debug('Force fields for extra points are loaded at %s %s\nNumber of extra points: %i\nCharge: %.3f\nDistance: %.3f\nAngle: %.3f' % (h, a.name, len(a.sites)-1, s.charge, distance, angle))
         
     def write_file(self, molecule=None, xmlfilename=None):
         top = Element('forcefield', name=molecule.name)

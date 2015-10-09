@@ -3,6 +3,7 @@ import logging
 import os
 
 from atom import Atom, Site
+from bonds import Bond
 from groups import BuriedGroup, CarbonOxygenGroup
 from multipole import Multipole
 from multipole import GroupOfAtoms
@@ -43,7 +44,7 @@ class Molecule(Multipole):
         Multipole.__init__(self, name=data['name'], multipoles=self.mults)
         self.set_atoms(data['atoms'])
         self.set_groups()
-        self.set_frames() # in case extra points are loaded from the file
+        self.set_frames_from_sites() # in case extra points are loaded from the file
         self.set_sym_sites()
         self.set_multipole_matrix()
         logger.info('%s Molecule is created' % (self.name))
@@ -72,10 +73,24 @@ class Molecule(Multipole):
             if element[0] == 'X' or element[0] == 'E': # extra point connected to previous atom
                 s = Site(coordinates=crds, name='EP_%s' % atom.element, charge=charge)
                 atom.sites.append(s)
-                logger.debug('Site %s is appended to sites of atom %s' % (s.name, aton.name))
+                logger.debug('Site %s is appended to sites of atom %s' % (s.name, atom.name))
             else: # regular atom
                 atom = Atom(name=element, element=element, coordinates=crds, index=i+1, charge=charge)
                 self.atoms.append(atom)
+
+    def set_bonds(self):
+        self.bonds = []
+        for atom in self.atoms:
+            for nghbr in atom.neighbors:
+                bond = Bond(atom, nghbr)
+                if not bond in self.bonds:
+                    self.bonds.append(bond)
+            for s in atom.sites[1:]:
+                bond = Bond(atom, s)
+                if not bond in self.bonds:
+                    self.bonds.append(bond)
+
+        print self.bonds
 
     def set_groups(self):
         """
@@ -125,9 +140,9 @@ class Molecule(Multipole):
         logger.info("Names of equivalent sites: %s" % self.sites_names_eq)
         logger.info("Names of non-equivalent sites: %s" % self.sites_names_noneq)
 
-    def set_frames(self):
+    def set_frames_from_sites(self):
         for a in self.atoms:
-            a.set_frame()
+            a.set_frame_from_sites()
 
     def __add__(self, molecule):
         c = Complex()
@@ -186,6 +201,14 @@ class Complex(GroupOfAtoms):
 
     def add_molecule(self, molecule):
         self.molecules.append(molecule)
+
+    @property
+    def bonds(self):
+        bonds = []
+        for m in self.molecules:
+            m.set_bonds()
+            bonds += m.bonds
+        return bonds
 
     @property
     def atoms(self):

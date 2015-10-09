@@ -47,7 +47,7 @@ class Frame(object):
                 x1, x2 = [atom.coordinates for atom in X.neighbors if not atom.name == self.center.name]
                 a = (x1 + b)/2.
                 c = (x2 + b)/2.
-            if len(X.neighbors) == 2:
+            if len(X.neighbors) == 2: # e.g. O=N-S-
                 x1 = [atom.coordinates for atom in X.neighbors if not atom.name == self.center.name][0]
                 c = (x1 - X.coordinates)/norm(x1 - X.coordinates) + X.coordinates
                 v1 = X.coordinates - X.neighbors[0].coordinates

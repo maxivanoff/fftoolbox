@@ -75,6 +75,12 @@ class Site(object):
     def distance_to(self, site):
         d = self.coordinates - site.coordinates
         return np.linalg.norm(d)
+
+    def __eq__(self, a):
+        for i in xrange(3):
+            if not self.coordinates[i] == a.coordinates[i]:
+                return False
+        return True
     
     def __repr__(self):
         return '%s %f %f %f %s' % (self.name, self.coordinates[0], self.coordinates[1], self.coordinates[2], self.charge)
@@ -101,7 +107,7 @@ class Atom(Site):
             s = Site(crds, 'EP_' + self.name, None)
             self.sites += (s,)
 
-    def set_frame(self):
+    def set_frame_from_sites(self):
         if self.frame is None and len(self.sites) > 1:
             num_domains = len(self.sites) + len(self.neighbors) - 1
             h = 'sp%i' % (num_domains - 1)
