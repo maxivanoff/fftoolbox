@@ -16,6 +16,7 @@ logger = logging.getLogger('parser')
 
 WORKDIR = os.path.dirname(__file__)
 
+
 class GaussianCube(object):
     
     number_to_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 16:'S', 0:'X'}
@@ -56,14 +57,13 @@ class GaussianCube(object):
             self.vectors[i][:] = np.array(tmp[1:4])
 
         #Read atoms coordinates
-        atoms = list()
+        self.atoms = []
         for ati in xrange(self.num_atoms):
             line = cubefile.readline().split()
             crds = np.array([float(t) for t in line[2:]])
             atomic_n = int(line[0])
             element = self.number_to_name[atomic_n]
-            atoms.append((element, crds, None))
-        self.atoms = tuple(atoms)
+            self.atoms.append((ati+1, element, crds, None))
 
         # Read values
         self.values = []
@@ -104,12 +104,14 @@ class QChem(object):
         # coordinates
         s_coords = txt.split('Orientation (Angstroms)')[-1].split('Nuclear Repulsion Energy')[0]
         atoms = []
+        index=1
         for s_xyz in s_coords.split('\n')[2:-1]:
             try:
                 tmp = s_xyz.split()
                 element = tmp[1]
                 crds = np.array([float(t) for t in tmp[2:5]])*units.angst_to_au
-                atoms.append((element, crds, None))
+                atoms.append((index, element, crds, None))
+                index+=1
             except IndexError:
                 pass
         self.atoms = (atoms)
@@ -191,6 +193,7 @@ class Gaussian(object):
             if re.search(r'Input orientation:', line):
                 atoms = list()
                 for i in range(4): logfile.readline()
+                index=1
                 while True:
                     line = logfile.readline()
                     m = re.search(r'(\d+) *(\d+) *(\d+) *(-?\d*\.\d*) *(-?\d*\.\d*) *(-?\d*\.\d*)', line)
@@ -201,7 +204,8 @@ class Gaussian(object):
                     z = float(m.group(6))
                     crds = np.array([x, y, z])*units.angst_to_au
                     element = self.atom_name[atomic_num]
-                    atoms.append((element, crds, None))
+                    atoms.append((index, element, crds, None))
+                    index+=1
                 self.geometries_input.append(atoms)
             # electronic energy
             scf = re.search(r'SCF Done:  E\(.*\) = *(-?\d*\.\d*)', line)
@@ -217,6 +221,7 @@ class Gaussian(object):
             if re.search(r'Standard orientation:', line):
                 atoms = list()
                 for i in range(4): logfile.readline()
+                index=1
                 while True:
                     line = logfile.readline()
                     m = re.search(r'(\d) *(\d) *(\d) *(-?\d*\.\d*) *(-?\d*\.\d*) *(-?\d*\.\d*)', line)
@@ -227,7 +232,8 @@ class Gaussian(object):
                     z = float(m.group(6))
                     crds = np.array([x, y, z])*units.angst_to_au
                     element = self.atom_name[atomic_num]
-                    atoms.append((element, crds, None))
+                    atoms.append((index, element, crds, None))
+                    index+=1
                 self.geometries_standard.append(atoms)
 
             monopole = re.search(r'Charge= *(-?\d\.\d*) electrons', line)
@@ -314,12 +320,14 @@ class Mol2(object):
             self.num_atoms = int(s[1].split()[2])
             geom = s[2].split('\n')
             atoms = []
+            index = 1
             for line in geom[1:self.num_atoms+1]:
                 tmp = line.split()
                 atom_name = tmp[1]
                 charge = float(tmp[8])
                 crds = np.array([float(t)*units.angst_to_au for t in tmp[2:5]])
-                atoms.append((atom_name, crds, charge))
+                atoms.append((index, atom_name, crds, charge))
+                index += 1
             self.atoms = (atoms)
             mol2file.close()
             self.data = {'atoms': self.atoms}
@@ -330,14 +338,30 @@ class Mol2(object):
         else:
             path2mol2 = '%s/data/mol2' % WORKDIR
         s = '@<TRIPOS>MOLECULE\n%s\n%i %i 0 0 0\nSMALL\nUSER_CHARGES\n\n@<TRIPOS>ATOM\n' % (molecule.name, len(molecule.sites), len(molecule.bonds))
-        for i, site in enumerate(molecule.sites):
-            sid = '%i' % i
-            name = '%s' % site.element
-            xyz = '%.3f %.3f %.3f' % (site.x, site.y, site.z)
-            charge = '%.4f' % site.charge
-            mname = molecule.name
-            s += '%s %s %s %s 1 %s %s\n' %(sid.ljust(3), name.ljust(4), xyz.ljust(5), name, mname, charge)
-            print s
+        try:
+            molecules = molecule.molecules
+        except:
+            molecules = [molecule]
+        for mi, mol in enumerate(molecules):
+            for site in mol.sites:
+                sid = '%i' % site.index
+                aname = '%s' % amberType[site.name.split('-')[0]]
+                x = '% .3f' % site.x
+                y = '% .3f' % site.y
+                z = '% .3f' % site.z
+                smi = '%i' % (mi+1)
+                myname = '%s' % site.name
+                charge = '% .4f' % site.charge
+                mname = '%-3.3s' % mol.name
+                s += ' %s %s %s %s %s %s %s %s %s\n' %(sid.ljust(3), aname.ljust(3), x.ljust(8), y.ljust(8), z.ljust(8), myname.ljust(9), smi.ljust(2), mname, charge.ljust(7))
+        s += '@<TRIPOS>BOND\n'
+        for i, bond in enumerate(molecule.bonds):
+            bid = '%i' % (i+1)
+            a1 = '%i' % bond.a1.index
+            a2 = '%i' % bond.a2.index
+            s += ' %s %s %s 1\n' % (bid.ljust(3), a1.ljust(3), a2.ljust(3))
+        with open('%s/%s' % (path2mol2, filename), 'w') as f:
+            f.write(s)
 
     def __str__(self):
         return 'mol2 parser'
@@ -365,7 +389,7 @@ class XYZ(object):
             tmp = xyzfile.readline().split()
             atom_name = tmp[0]
             crds = np.array([float(t)*units.angst_to_au for t in tmp[1:4]])
-            atoms.append((atom_name, crds, None))
+            atoms.append((i+1, atom_name, crds, None))
         xyzfile.close()
         self.data = {'atoms': atoms,
                      'comment': comment,
@@ -390,18 +414,6 @@ class ForceFieldXML(object):
             'S' : (2.0000, 0.2500),
             }
 
-    amber = {
-            'C_CH3': 'CT',
-            'H_CH3': 'HC',
-            'O_CO2': 'O2',
-            'C_CO2': 'C',
-            'N_NH4': 'N3',
-            'H_NH4': 'H',
-            'N': 'N',
-            'S': 'S',
-            'O': 'O',
-            'H': 'HO',
-            }
 
     def __init__(self):
         pass
@@ -435,7 +447,8 @@ class ForceFieldXML(object):
                 logger.debug('Load forcefields to %s: charge = %.4f; epsilon = %.4f; r0 = %.4f' % (a.name, a.charge, a.epsilon, a.r0))
                 # load force fields to extra points
                 if extra_exists:
-                    ep = (h, distance, angle)
+                    index = molecule.get_max_index()
+                    ep = (index+1, h, distance, angle)
                     a.set_hybridization(ep)
                     for s in a.sites[1:]:
                         s.charge = e_charge
@@ -449,7 +462,7 @@ class ForceFieldXML(object):
         top.append(comment)
         for atom in molecule.atoms_noneq:
             trunc_name = atom.name.split('-')[0]
-            amber_name = self.amber[trunc_name]
+            amber_name = amberType[trunc_name]
             r0, e = self.LJ[amber_name]
             atomElem = SubElement(top, 'atom', name=atom.name, element=atom.element, amber=amber_name)
             SubElement(atomElem, 'charge').text = '%.4f' % atom.charge
@@ -481,5 +494,20 @@ def prettify(elem):
     reparsed = minidom.parseString(rough_string)
     return reparsed.toprettyxml(indent="  ")
 
+amberType = {
+        'C_CH3': 'CT',
+        'H_CH3': 'HC',
+        'O_CO2': 'O2',
+        'C_CO2': 'C',
+        'N_NH4': 'N3',
+        'H_NH4': 'H',
+        'N': 'N',
+        'S': 'S',
+        'O': 'O',
+        'H': 'HO',
+        'EP_S':'EP',
+        'EP_N':'EP',
+        'EP_O':'EP',
+        }
 
 

@@ -70,6 +70,10 @@ class GroupOfAtoms(object):
         for i, s in enumerate(self.sites):
             crds[i][:] = s.coordinates[:]
         return crds
+
+    def get_max_index(self):
+        i = [s.index for s in self.sites]
+        return max(i)
     
     def get_sites(self, name):
         return filter(lambda s: s.name==name, self.sites)
@@ -111,7 +115,7 @@ class GroupOfAtoms(object):
         sites = []
         for atom in self:
             sites += atom.sites
-        return sites
+        return sorted(sites, key=lambda s: s.index)
 
     @property
     def sites_noneq(self):

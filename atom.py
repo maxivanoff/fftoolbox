@@ -13,11 +13,12 @@ atom_logger = logging.getLogger('atom')
 
 class Site(object):
 
-    def __init__(self, coordinates=None, name=None, charge=None):
+    def __init__(self, coordinates=None, name=None, index=None, charge=None):
         self.coordinates = np.float64(coordinates)
         self.spherical = self.cart_to_sphere()
         self.name = name
         self.element = name
+        self.index = index
         self.charge = charge
         self.r0 = None
         self.epsilon = None
@@ -83,7 +84,7 @@ class Site(object):
         return True
     
     def __repr__(self):
-        return '%s %f %f %f %s' % (self.name, self.coordinates[0], self.coordinates[1], self.coordinates[2], self.charge)
+        return '%s %i %f %f %f %s' % (self.name, self.index, self.coordinates[0], self.coordinates[1], self.coordinates[2], self.charge)
 
 
 class Atom(Site):
@@ -93,18 +94,17 @@ class Atom(Site):
     
     def __init__(self, name=None, element=None, coordinates=None, index=None, charge=None):
         if not name: name = element
-        Site.__init__(self, coordinates=coordinates, name=name, charge=charge)
+        Site.__init__(self, coordinates=coordinates, name=name, index=index, charge=charge)
         self.element = element
-        self.index = index
         self.neighbors = None
         self.frame = None
 
     def set_hybridization(self, ep_property):
-        hybridization, distance, angle = ep_property
+        index, hybridization, distance, angle = ep_property
         if not self.frame: self.frame = Frame(self, hybridization)
         self.sites = (self,)
         for i, crds in enumerate(self.frame.ep_crds(distance, angle)):
-            s = Site(crds, 'EP_' + self.name, None)
+            s = Site(coordinates=crds, name = 'EP_%s' % self.name, index=index+i)
             self.sites += (s,)
 
     def set_frame_from_sites(self):

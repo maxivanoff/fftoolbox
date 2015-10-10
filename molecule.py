@@ -68,29 +68,36 @@ class Molecule(Multipole):
     
     def set_atoms(self, atoms):
         self.atoms = []
+        extra_points = []
         for i, a in enumerate(atoms):
-            element, crds, charge = a
-            if element[0] == 'X' or element[0] == 'E': # extra point connected to previous atom
-                s = Site(coordinates=crds, name='EP_%s' % atom.element, charge=charge)
-                atom.sites.append(s)
-                logger.debug('Site %s is appended to sites of atom %s' % (s.name, atom.name))
+            index, element, crds, charge = a
+            if element[0] == 'X' or element[0] == 'E': 
+                s = Site(coordinates=crds, name='EP', index=index, charge=charge)
+                extra_points.append(s)
             else: # regular atom
-                atom = Atom(name=element, element=element, coordinates=crds, index=i+1, charge=charge)
+                atom = Atom(name=element, element=element, coordinates=crds, index=index, charge=charge)
                 self.atoms.append(atom)
+        # find atom the extra point is connected to
+        for s in extra_points:
+            closest = sorted(self.atoms, key=lambda a: a.distance_to(s))
+            atom = closest[0]
+            atom.sites.append(s)
+            s.name = 'EP_%s' % atom.element
+            logger.debug('Site %s is appended to sites of atom %s' % (s.name, atom.name))
 
-    def set_bonds(self):
-        self.bonds = []
+    @property
+    def bonds(self):
+        bonds = []
         for atom in self.atoms:
             for nghbr in atom.neighbors:
                 bond = Bond(atom, nghbr)
-                if not bond in self.bonds:
-                    self.bonds.append(bond)
+                if not bond in bonds:
+                    bonds.append(bond)
             for s in atom.sites[1:]:
                 bond = Bond(atom, s)
-                if not bond in self.bonds:
-                    self.bonds.append(bond)
-
-        print self.bonds
+                if not bond in bonds:
+                    bonds.append(bond)
+        return bonds
 
     def set_groups(self):
         """
@@ -105,14 +112,17 @@ class Molecule(Multipole):
             atom.neighbors = filter(atom.bonded_to, self.atoms)
             if len(filter(lambda a: a.element=='H', atom.neighbors))>1:
                 buried_atoms.append(atom)
-            if not len(filter(lambda a: a.element=='O', atom.neighbors))==0 and atom.element=='C':
+            if not len(filter(lambda a: a.element=='O', atom.neighbors))==0 and atom.element=='C' and len(atom.neighbors)==3:
                 carbons_with_oxygen.append(atom)
             logger.debug("Neighbors are assigned to %s:\n%s" % (atom.name, atom.neighbors))
 
         # set extra points
         for atom in self.atoms:
             if atom.element in self.hybrids:
-                atom.set_hybridization(self.hybrids[atom.element])
+                h, d, a = self.hybrids[atom.element]
+                index = self.get_max_index()
+                ep = (index+1, h, d, a)
+                atom.set_hybridization(ep)
         
         # create groups
         exclude = ['methane', 'benzene', 'methane', 'tip5p', 'tip3p', 'ammonia', 'water']
@@ -159,29 +169,39 @@ class Molecule(Multipole):
 class Complex(GroupOfAtoms):
 
     def __init__(self, data=None, molecules_data=None):
-        GroupOfAtoms.__init__(self)
+        GroupOfAtoms.__init__(self, name=data['name'])
         self.qm_energy = None
         self.molecules = []
         # load molecules
         x = 0
+        nsites = 0
         for mol_data in molecules_data:
             natoms = mol_data['num atoms']
-            ffname = mol_data['xml']
             mol_name = mol_data['name']
             sym = mol_data['symmetry']
 
             atoms = data['atoms'][x:x+natoms]
             x += natoms
+
+            iatoms = []
+            for j, a in enumerate(atoms):
+                i, e, crds, q = a
+                ia = (nsites+j+1, e, crds, q)
+                iatoms.append(ia)
+
             d = {
                     'name': mol_name,
-                    'atoms':atoms,
+                    'atoms': iatoms,
                     'symmetry': sym,
                 }
 
             m = Molecule(data=d)
+            self.add_molecule(m)
+
+            ffname = mol_data['xml']
             ff = ForceFieldXML()
             ff.load_forcefields(filename=ffname, molecule=m, here=True)
-            self.add_molecule(m)
+            nsites = len(m.sites)
 
     def ff_energy(self):
         m1, m2 = self.molecules
@@ -206,7 +226,6 @@ class Complex(GroupOfAtoms):
     def bonds(self):
         bonds = []
         for m in self.molecules:
-            m.set_bonds()
             bonds += m.bonds
         return bonds
 

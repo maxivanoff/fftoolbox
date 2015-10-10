@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<forcefield name="methanol">
+  <!--distances in Angstroms, energies in kcal/mol, angles in degrees-->
+  <atom amber="O" element="O" name="O">
+    <charge>0.2681</charge>
+    <r0>1.6612</r0>
+    <epsilon>0.21</epsilon>
+    <hybridization>sp3</hybridization>
+    <site name="EP_O">
+      <charge>-0.3354</charge>
+      <r0>0.0</r0>
+      <epsilon>0.0</epsilon>
+      <distance>0.3500</distance>
+      <angle>54.7500</angle>
+    </site>
+  </atom>
+  <atom amber="HO" element="H" name="H">
+    <charge>0.3023</charge>
+    <r0>0.0</r0>
+    <epsilon>0.0</epsilon>
+  </atom>
+  <atom amber="CT" element="C" name="C_CH3">
+    <charge>-0.0422</charge>
+    <r0>1.908</r0>
+    <epsilon>0.1094</epsilon>
+  </atom>
+  <atom amber="HC" element="H" name="H_CH3-0">
+    <charge>0.0966</charge>
+    <r0>1.487</r0>
+    <epsilon>0.0157</epsilon>
+  </atom>
+  <atom amber="HC" element="H" name="H_CH3-1">
+    <charge>0.0232</charge>
+    <r0>1.487</r0>
+    <epsilon>0.0157</epsilon>
+  </atom>
+  <atom amber="HC" element="H" name="H_CH3-2">
+    <charge>0.0232</charge>
+    <r0>1.487</r0>
+    <epsilon>0.0157</epsilon>
+  </atom>
+</forcefield>
