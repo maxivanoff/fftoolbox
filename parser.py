@@ -353,7 +353,7 @@ class Mol2(object):
                 myname = '%s' % site.name
                 charge = '% .4f' % site.charge
                 mname = '%-3.3s' % mol.name
-                s += ' %s %s %s %s %s %s %s %s %s\n' %(sid.ljust(3), aname.ljust(3), x.ljust(8), y.ljust(8), z.ljust(8), myname.ljust(9), smi.ljust(2), mname, charge.ljust(7))
+                s += ' %s %s %s %s %s %s %s %s %s\n' %(sid.ljust(3), aname.ljust(3), x.ljust(8), y.ljust(8), z.ljust(8), aname.ljust(3), smi.ljust(2), mname, charge.ljust(7))
         s += '@<TRIPOS>BOND\n'
         for i, bond in enumerate(molecule.bonds):
             bid = '%i' % (i+1)
