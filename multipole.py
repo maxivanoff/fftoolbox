@@ -118,6 +118,13 @@ class GroupOfAtoms(object):
         return sorted(sites, key=lambda s: s.index)
 
     @property
+    def extra_sites(self):
+        sites = []
+        for atom in self:
+            sites += atom.sites[1:]
+        return sorted(sites, key=lambda s: s.index)
+
+    @property
     def sites_noneq(self):
         sites = []
         for s in self.sites:

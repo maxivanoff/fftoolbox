@@ -168,55 +168,67 @@ class Molecule(Multipole):
 
 class Complex(GroupOfAtoms):
 
-    def __init__(self, data=None, molecules_data=None):
-        GroupOfAtoms.__init__(self, name=data['name'])
+    def __init__(self, complex_data=None, molecules_data=None):
+        GroupOfAtoms.__init__(self, name=complex_data['name'])
         self.qm_energy = None
         self.molecules = []
         # load molecules
-        x = 0
-        nsites = 0
+        num_extra = 0
         for mol_data in molecules_data:
             natoms = mol_data['num atoms']
             mol_name = mol_data['name']
             sym = mol_data['symmetry']
 
-            atoms = data['atoms'][x:x+natoms]
-            x += natoms
-
-            iatoms = []
-            for j, a in enumerate(atoms):
-                i, e, crds, q = a
-                ia = (nsites+j+1, e, crds, q)
-                iatoms.append(ia)
+            atoms = []
+            for i in mol_data['indices']:
+                index, elem, crds, q = complex_data['atoms'][i-1] # indices start with 1
+                index += num_extra
+                atom = (index, elem, crds, q)
+                atoms.append(atom)
 
             d = {
                     'name': mol_name,
-                    'atoms': iatoms,
+                    'atoms': atoms,
                     'symmetry': sym,
                 }
 
             m = Molecule(data=d)
             self.add_molecule(m)
+            num_extra = len(m.extra_sites)
 
-            ffname = mol_data['xml']
+        self.decomposition = {
+                'electrostatic': None,
+                'dispersion': None,
+                'exchange': None,
+                }
+
+    def load_forcefields(self, ffnames):
+        for m, ffname in zip(self.molecules, ffnames):
             ff = ForceFieldXML()
             ff.load_forcefields(filename=ffname, molecule=m, here=True)
-            nsites = len(m.sites)
 
     def ff_energy(self):
         m1, m2 = self.molecules
-        e = 0.
+        elec, disp, exch = [0.]*3
         for s1 in m1.sites:
             for s2 in m2.sites:
                 # electrostatic
                 r = s1.distance_to(s2)
-                e += s1.charge*s2.charge/r*units.au_to_kcal
+                elec += s1.charge*s2.charge/r*units.au_to_kcal
                 # Lennard-Jones
                 eps = np.sqrt(s1.epsilon*s2.epsilon)
                 r0 = (s1.r0 + s2.r0)*units.angst_to_au
                 r6 = pow(r0/r, 6)
                 r12 = pow(r6, 2)
-                e += eps*(r12 - 2*r6)
+                disp += -eps*2*r6
+                exch += eps*r12
+        e = elec + disp + exch
+        self.decomposition = {
+                'electrostatic': elec,
+                'dispersion': disp,
+                'exchange': exch,
+                'total': e,
+                }
         return e
 
     def add_molecule(self, molecule):
