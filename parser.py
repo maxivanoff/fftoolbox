@@ -16,12 +16,27 @@ logger = logging.getLogger('parser')
 
 WORKDIR = os.path.dirname(__file__)
 
+class Parser(object):
 
-class GaussianCube(object):
+    def __init__(self, filename=None, data=None, here=False, dname=None, suffix=None):
+        if here == True:
+            path2xyz = '.'
+        else:
+            path2xyz = '%s/data/%s' % (WORKDIR, dname)
+        if data:
+            self.filename = '%s/%s_%s%s' % (path2xyz, data['name'], data['theory'], suffix)
+        else:
+            self.filename = '%s/%s' % (path2xyz, filename)
+
+    def read_file(self, filename):
+        pass
+
+
+class GaussianCube(Parser):
     
     number_to_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 16:'S', 0:'X'}
         
-    def __init__(self, cubefile=None, filename=None, data=None):
+    def __init__(self, filename=None, data=None, here=False):
         "Cubefile is in atomic units"
         self.property = 'esp'
         self.origin = None
@@ -30,18 +45,15 @@ class GaussianCube(object):
         self.values = ()
         self.atoms = ()
         self.density = None
-        if data:
-            filename = '%s/data/cub/%s_%s_d%s.cub' % (WORKDIR, data['name'], data['theory'], data['density'])
-        self.read_file(filename=filename, cubefile=cubefile)
+        Parser.__init__(self, filename=filename, data=data, dname='cub', suffix='_d%s.cub' % data['density'], here=here)
+        self.read_file(filename=self.filename)
 
     def set_grids_density(self):
         cube_sides = np.array([np.linalg.norm(v) for v in self.vectors])
         self.density = np.prod(self.num_points)/np.prod((self.num_points - 1)*cube_sides)
 
-
-    def read_file(self, filename=None, cubefile=None):
-        if filename:
-            cubefile = open(filename, 'r')
+    def read_file(self, filename=None):
+        cubefile = open(filename, 'r')
         cubefile.readline()
         cubefile.readline()
 
@@ -89,14 +101,13 @@ class GaussianCube(object):
     def __str__(self):
         return 'Gaussian cube parser'
 
-class QChem(object):
+class QChem(Parser):
 
-    def __init__(self, filename=None, data=None):
+    def __init__(self, filename=None, data=None, here=False):
         self.atoms = ()
         self.multipoles = {}
-        if data:
-            filename = '%s/data/qcout/%s_%s.qcout' % (WORKDIR, data['name'], data['theory'])
-        self.read_file(filename)
+        Parser.__init__(self, filename=filename, data=data, dname='qcout', suffix='.qcout', here=here)
+        self.read_file(filename=self.filename)
 
     def read_file(self, filename):
         txt = open(filename, 'r').read()
@@ -156,24 +167,20 @@ class QChem(object):
     def __str__(self):
         return 'QChem parser'
 
-class Gaussian(object):
+class Gaussian(Parser):
     atom_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 0:'X', 16:'S'}
 
     def __init__(self, filename=None, data=None, here=False, orientation='standard'):
-        if here == True:
-            path2log = '.'
-        else:
-            path2log = '%s/data/log' % WORKDIR
-        if data:
-            filename = '%s/%s_%s.log' % (path2log, data['name'], data['theory'])
-        else:
-            filename = '%s/%s' % (path2log, filename)
         self.energy = None
         self.atoms = ()
         self.multipoles = {}
-        self.read_file(filename, orientation)
+        self.orientation=orientation
+        Parser.__init__(self, filename=filename, data=data, dname='log', suffix='.log', here=here)
+        self.read_file(filename=self.filename)
 
-    def read_file(self, filename, orientation):
+    def read_file(self, filename, orientation=None):
+        if orientation is None:
+            orientation = self.orientation
         self.geometries_input = []
         self.geometries_standard = []
         self.energies = []
@@ -224,7 +231,7 @@ class Gaussian(object):
                 index=1
                 while True:
                     line = logfile.readline()
-                    m = re.search(r'(\d) *(\d) *(\d) *(-?\d*\.\d*) *(-?\d*\.\d*) *(-?\d*\.\d*)', line)
+                    m = re.search(r'(\d+) *(\d+) *(\d+) *(-?\d*\.\d*) *(-?\d*\.\d*) *(-?\d*\.\d*)', line)
                     if m is None: break
                     atomic_num = int(m.group(2))
                     x = float(m.group(4))
@@ -300,17 +307,11 @@ class Gaussian(object):
     def __str__(self):
         return 'Gaussian log parser'
 
-class Mol2(object):
+class Mol2(Parser):
 
     def __init__(self, filename=None, data=None, here=False):
-        if data and not here:
-            filename = '%s/data/mol2/%s_%s.mol2' % (WORKDIR, data['name'], data['theory'])
-        if filename and not here:
-            filename = '%s/data/mol2/%s' % (WORKDIR, filename)
-        if filename and here:
-            filename = './%s' % filename
         self.atoms = ()
-        self.read_file(filename)
+        Parser.__init__(self, filename=filename, data=data, dname='mol2', suffix='.mol2', here=here)
 
     def read_file(self, filename):
         if filename:
@@ -346,9 +347,9 @@ class Mol2(object):
             for site in mol.sites:
                 sid = '%i' % site.index
                 aname = '%s' % amberType[site.name.split('-')[0]]
-                x = '% .3f' % site.x
-                y = '% .3f' % site.y
-                z = '% .3f' % site.z
+                x = '% .3f' % (site.x*units.au_to_angst)
+                y = '% .3f' % (site.y*units.au_to_angst)
+                z = '% .3f' % (site.z*units.au_to_angst)
                 smi = '%i' % (mi+1)
                 myname = '%s' % site.name
                 charge = '% .4f' % site.charge
@@ -366,18 +367,10 @@ class Mol2(object):
     def __str__(self):
         return 'mol2 parser'
 
-class XYZ(object):
+class XYZ(Parser):
 
     def __init__(self, filename=None, data=None, here=False):
-        if here == True:
-            path2xyz = '.'
-        else:
-            path2xyz = '%s/data/xyz' % WORKDIR
-        if data:
-            filename = '%s/%s_%s.xyz' % (path2xyz, data['name'], data['theory'])
-        else:
-            filename = '%s/%s' % (path2xyz, filename)
-        self.read_file(filename)
+        Parser.__init__(self, filename=filename, data=data, dname='xyz', suffix='.xyz')
 
     def read_file(self, filename):
         xyzfile = open(filename, 'r')
@@ -397,6 +390,12 @@ class XYZ(object):
 
     def __str__(self):
         return 'xyz parser'
+
+class GDMA(Parser):
+
+    def __init__(self, filename=None, data=None, here=False):
+        Parser.__init__(self, filename=filename, data=data, here=here, dname='gdma', suffix='.out')
+        self.read_file(filename=self.filename)
 
 class ForceFieldXML(object):
 

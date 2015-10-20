@@ -11,7 +11,7 @@ lf = '%(levelname)s: %(funcName)s at %(filename)s +%(lineno)s\n%(message)s\n'
 logging.basicConfig(level=logging.DEBUG, format=lf)
 
 data = {
-        'name': 'methanol',
+        'name': 'trans-mesno',
         'theory': 'pbe_def2svp',
         'density': 1.5,
         'symmetry': True,

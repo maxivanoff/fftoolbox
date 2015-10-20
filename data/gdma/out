@@ -1,0 +1,97 @@
+                                     G D M A
+
+                                 by Anthony Stone
+
+                         version 2.2.11, 04 February 2015
+
+               Distributed Multipoles from Gaussian wavefunctions
+
+
+Starting at 20:44:24 on 19 Oct 2015 
+
+cis-mesno b3lyp aug-cc-pvdz
+
+WARNING: string truncated
+
+
+Using SCF density matrix from file cis-mesno_b3lyp_augccpvdz.fchk
+
+
+                         Distributed Multipole Analysis
+
+Standard DMA for products of primitives with exponent greater than 4.00000
+Using 80-point Euler-MacLaurin radial quadrature
+Using 590-point Lebedev quadrature
+Becke smoothing parameter = 3
+
+Positions and radii in bohr
+Multipole moments in atomic units, ea_0^k for rank k
+
+O          x = -1.479913  y = -2.855442  z =  0.000000 bohr
+           Maximum rank =  4   Radius =  1.228 bohr
+                   Q00  =  -0.238675
+|Q1| =   0.388687  Q11c =  -0.248114  Q11s =   0.299193
+|Q2| =   0.917314  Q20  =  -0.082527  Q22c =  -0.759417  Q22s =  -0.507878
+|Q3| =   0.659040  Q31c =  -0.092444  Q31s =  -0.522027  Q33c =  -0.385868
+                   Q33s =   0.066194
+|Q4| =   1.411437  Q40  =   0.744559  Q42c =  -0.714819  Q42s =  -0.694495
+                   Q44c =  -0.344141  Q44s =   0.571019
+
+N          x = -2.331265  y = -0.777068  z = -0.000000 bohr
+           Maximum rank =  4   Radius =  1.228 bohr
+                   Q00  =  -0.229302
+|Q1| =   0.757748  Q11c =   0.127316  Q11s =  -0.746975
+|Q2| =   0.517125  Q20  =  -0.147782  Q22c =  -0.344754  Q22s =  -0.355983
+|Q3| =   1.369353  Q31c =  -1.005231  Q31s =  -0.927564  Q33c =   0.008199
+                   Q33s =   0.064777
+|Q4| =   3.921477  Q40  =   1.903544  Q42c =   1.332181  Q42s =  -2.420639
+                   Q44c =  -1.994064  Q44s =   0.379497
+
+S          x =  0.000000  y =  1.817686  z =  0.000000 bohr
+           Maximum rank =  4   Radius =  1.228 bohr
+                   Q00  =   0.552172
+|Q1| =   0.940956  Q11c =   0.089189  Q11s =  -0.936719
+|Q2| =   2.196745  Q20  =  -1.975814  Q22c =   0.928383  Q22s =   0.244847
+|Q3| =   0.885472  Q31c =   0.492259  Q31s =  -0.590175  Q33c =   0.394698
+                   Q33s =  -0.194033
+|Q4| =   4.232684  Q40  =  -3.402524  Q42c =   1.839771  Q42s =   1.616823
+                   Q44c =   0.419375  Q44s =  -0.404591
+
+C          x =  2.932288  y =  0.022600  z =  0.000000 bohr
+           Maximum rank =  4   Radius =  1.228 bohr
+                   Q00  =  -0.362930
+|Q1| =   0.409970  Q11c =   0.313410  Q11s =  -0.264290
+|Q2| =   0.813101  Q20  =   0.133944  Q22c =  -0.048536  Q22s =   0.800523
+|Q3| =   5.771007  Q31c =  -0.012518  Q31s =  -5.130774  Q33c =  -1.375206
+                   Q33s =   2.255732
+|Q4| =  11.669900  Q40  =   1.361150  Q42c =  -8.886713  Q42s =  -4.458955
+                   Q44c =  -5.930509  Q44s =   0.554040
+
+H          x =  4.484271  y =  1.394699  z =  0.000000 bohr
+           Maximum rank =  1   Radius =  0.614 bohr
+                   Q00  =   0.079222
+|Q1| =   0.123894  Q11c =  -0.100458  Q11s =  -0.072511
+
+H          x =  3.040080  y = -1.165135  z =  1.695006 bohr
+           Maximum rank =  1   Radius =  0.614 bohr
+                   Q00  =   0.099757
+|Q1| =   0.125620  Q10  =  -0.098247  Q11c =  -0.057943  Q11s =   0.052636
+
+H          x =  3.040080  y = -1.165135  z = -1.695006 bohr
+           Maximum rank =  1   Radius =  0.614 bohr
+                   Q00  =   0.099757
+|Q1| =   0.125620  Q10  =   0.098247  Q11c =  -0.057943  Q11s =   0.052636
+
+Total multipoles referred to origin at
+           x =   0.000000,  y =    0.000000,  z =    0.000000 bohr
+                   Q00  =   0.000000
+|Q1| =   0.858846  Q11c =   0.850815  Q11s =   0.117180
+|Q2| =   2.608514  Q20  =   0.498574  Q22c =   2.519796  Q22s =  -0.454312
+|Q3| =  16.904558  Q31c =  -7.351385  Q31s = -13.859304  Q33c =   0.690157
+                   Q33s =   6.258163
+|Q4| =  65.507915  Q40  =  -7.945684  Q42c =   2.857504  Q42s = -13.879487
+                   Q44c = -41.343596  Q44s =  48.146179
+
+CPU time used:      0m24.581s          Total:      0m24.581s
+
+Finished at 20:44:48 on 19 Oct 2015 

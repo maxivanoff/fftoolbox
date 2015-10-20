@@ -169,18 +169,25 @@ class Molecule(Multipole):
 class Complex(GroupOfAtoms):
 
     def __init__(self, complex_data=None, molecules_data=None):
+        if complex_data is None: complex_data = {'name': None}
+        if molecules_data is None: molecules_data = []
         GroupOfAtoms.__init__(self, name=complex_data['name'])
         self.qm_energy = None
         self.molecules = []
         # load molecules
         num_extra = 0
+        num_atoms = 0
         for mol_data in molecules_data:
             natoms = mol_data['num atoms']
             mol_name = mol_data['name']
             sym = mol_data['symmetry']
 
             atoms = []
-            for i in mol_data['indices']:
+            try:
+                atoms_order = mol_data['atoms order']
+            except KeyError:
+                atoms_order = [a+1+num_atoms for a in range(natoms)]
+            for i in atoms_order:
                 index, elem, crds, q = complex_data['atoms'][i-1] # indices start with 1
                 index += num_extra
                 atom = (index, elem, crds, q)
@@ -194,7 +201,8 @@ class Complex(GroupOfAtoms):
 
             m = Molecule(data=d)
             self.add_molecule(m)
-            num_extra = len(m.extra_sites)
+            num_extra += len(m.extra_sites)
+            num_atoms += len(m.atoms)
 
         self.decomposition = {
                 'electrostatic': None,
@@ -203,13 +211,22 @@ class Complex(GroupOfAtoms):
                 }
 
     def load_forcefields(self, ffnames):
+        num_extra = 0
         for m, ffname in zip(self.molecules, ffnames):
+            m.reindexate(shift=num_extra)
             ff = ForceFieldXML()
             ff.load_forcefields(filename=ffname, molecule=m, here=True)
+            num_extra += len(m.extra_sites)
+
+    def reindexate(self):
+        n = 0
+        for m in self.molecules:
+            m.reindexate(shift=n)
+            n += len(m.sites)
 
     def ff_energy(self):
         m1, m2 = self.molecules
-        elec, disp, exch = [0.]*3
+        elec, disp, rep = [0.]*3
         for s1 in m1.sites:
             for s2 in m2.sites:
                 # electrostatic
@@ -221,13 +238,14 @@ class Complex(GroupOfAtoms):
                 r6 = pow(r0/r, 6)
                 r12 = pow(r6, 2)
                 disp += -eps*2*r6
-                exch += eps*r12
-        e = elec + disp + exch
+                rep += eps*r12
+        e = elec + disp + rep
         self.decomposition = {
                 'electrostatic': elec,
                 'dispersion': disp,
-                'exchange': exch,
+                'repulsion': rep,
                 'total': e,
+                'vdw': disp+rep,
                 }
         return e
 

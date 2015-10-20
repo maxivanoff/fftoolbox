@@ -55,6 +55,10 @@ class GroupOfAtoms(object):
         self.name = name
         self.i = -1
 
+    def reindexate(self, shift):
+        for s in self.sites:
+            s.index += shift
+
     def set_sym_sites(self):
         sites = {}
         sym_sites = []

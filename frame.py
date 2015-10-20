@@ -39,14 +39,15 @@ class Frame(object):
         b = self.center.coordinates
         if len(self.center.neighbors) == 2: # e.g. OH2 or HN=CH2
             logger.debug('Frame center at %s has 2 neighbors and %i extra points' % (self.center.name, self.num_ep))
-            a, c = [atom.coordinates for atom in self.center.neighbors]
+            a = self.center.neighbors[0].coordinates
+            c = self.center.neighbors[1].coordinates
         if len(self.center.neighbors) == 1: # e.g. O=CH2
             logger.debug('Frame center at %s has 1 neighbors and %i extra points' % (self.center.name, self.num_ep))
             X = self.center.neighbors[0]
             if len(X.neighbors) == 3:
                 x1, x2 = [atom.coordinates for atom in X.neighbors if not atom.name == self.center.name]
-                a = (x1 + b)/2.
-                c = (x2 + b)/2.
+                a = (x1 + X.coordinates)*0.5
+                c = (x2 + X.coordinates)*0.5
             if len(X.neighbors) == 2: # e.g. O=N-S-
                 x1 = [atom.coordinates for atom in X.neighbors if not atom.name == self.center.name][0]
                 c = (x1 - X.coordinates)/norm(x1 - X.coordinates) + X.coordinates
