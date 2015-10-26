@@ -36,8 +36,10 @@ class LeastSquaresCharges(LeastSquaresBasic):
         grid_coordinates = self.grid.get_coordinates()
         sites_coordinates = self.molecule.get_coordinates()
         num_reduced_sites = len(self.molecule.sites_names_noneq) 
+        logger.debug('Number of coordinates in the grid: %i\nNumber of sites in molecule: %i\nNumber of sites with different names: %i' % (len(grid_coordinates), len(sites_coordinates), num_reduced_sites))
         self.A = fast.set_inversed(grid_coordinates, sites_coordinates, \
                 num_reduced_sites, self.molecule.sym_sites)
+        logger.info("Least squares matrix is set up with shape (%s, %s)" % (self.A.shape[0], self.A.shape[1]))
 
     @property
     def charges(self):

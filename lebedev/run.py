@@ -1,4 +1,5 @@
 from parser import Sphere
+from fftoolbox.parser import QChem
 from grid import LebedevGrid
 from charges import LebedevLeastSquares
 from molecule import LebedevMolecule
@@ -14,14 +15,14 @@ data = {
         'name': 'methanol',
         'theory': 'b3lyp_augccpvdz',
         'symmetry': False,
-        'multipoles': ('spherical', 3),
+        'representation': ('spherical', 3),
         'grid points': 194,
         'grid radius': 8.0,
-        'points': 6,
+        'points': 14,
         'radius': 2.0,
         }
 
-results = Results()
+results = Results(QChem(data=data).data['multipoles'])
 parser = Sphere(data=data)
 data.update(parser.data.copy())
 
@@ -34,4 +35,13 @@ ls.solve()
 results.add(ls)
 
 print results
+
+U = molecule.get_basis(molecule.sites, 3)
+s = ''
+for uu in U:
+    for uuu in uu:
+        s += '%.2f ' % uuu
+    s += '\n'
+print s
+
 

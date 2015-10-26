@@ -2,18 +2,17 @@ from __future__ import division
 from xml.etree.ElementTree import Element, SubElement, Comment
 from xml.etree import ElementTree
 from xml.dom import minidom
-import os
-import re
 import numpy as np
 import logging
+import os
+import re
 
 import units
 
 __author__ = "Maxim Ivanov"
 __email__ = "maxim.ivanov@marquette.edu"
 
-logger = logging.getLogger('parser')
-
+logger = logging.getLogger(__name__)
 WORKDIR = os.path.dirname(__file__)
 
 class Parser(object):
@@ -27,14 +26,21 @@ class Parser(object):
             self.filename = '%s/%s_%s%s' % (path2xyz, data['name'], data['theory'], suffix)
         else:
             self.filename = '%s/%s' % (path2xyz, filename)
+        self.atoms = []
+
+    def add_atom(self, index=None, element=None, crds=None, charge=None, multipoles=None):
+        if multipoles is None:
+            multipoles = {}
+            multipoles['charge'] = charge
+        atom = (index, element, crds, multipoles)
+        self.atoms.append(atom)
 
     def read_file(self, filename):
         pass
 
-
 class GaussianCube(Parser):
     
-    number_to_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 16:'S', 0:'X'}
+    number_to_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 16:'S'}
         
     def __init__(self, filename=None, data=None, here=False):
         "Cubefile is in atomic units"
@@ -56,27 +62,23 @@ class GaussianCube(Parser):
         cubefile = open(filename, 'r')
         cubefile.readline()
         cubefile.readline()
-
         # Read number of atoms and origin coordinate
         tmp = np.array([float(t) for t in cubefile.readline().split()])
         self.num_atoms = int(tmp[0])
         self.origin = np.array(tmp[1:4])
-
         # Read cell geometry
         for i in xrange(3):
             tmp = np.array([float(t) for t in cubefile.readline().split()])
             self.num_points[i] = tmp[0]
             self.vectors[i][:] = np.array(tmp[1:4])
-
         #Read atoms coordinates
-        self.atoms = []
         for ati in xrange(self.num_atoms):
             line = cubefile.readline().split()
             crds = np.array([float(t) for t in line[2:]])
             atomic_n = int(line[0])
             element = self.number_to_name[atomic_n]
-            self.atoms.append((ati+1, element, crds, None))
-
+            index = ati + 1
+            self.add_atom(index, element, crds)
         # Read values
         self.values = []
         while True:
@@ -86,9 +88,7 @@ class GaussianCube(Parser):
             else:
                 tmp = [float(t) for t in line.split()]
                 self.values += tmp
-        if filename:
-            cubefile.close()
-
+        cubefile.close()
         self.data = {
                 'origin': self.origin,
                 'vectors': self.vectors,
@@ -121,7 +121,7 @@ class QChem(Parser):
                 tmp = s_xyz.split()
                 element = tmp[1]
                 crds = np.array([float(t) for t in tmp[2:5]])*units.angst_to_au
-                atoms.append((index, element, crds, None))
+                self.add_atom(index, element, crds)
                 index+=1
             except IndexError:
                 pass
@@ -211,7 +211,7 @@ class Gaussian(Parser):
                     z = float(m.group(6))
                     crds = np.array([x, y, z])*units.angst_to_au
                     element = self.atom_name[atomic_num]
-                    atoms.append((index, element, crds, None))
+                    self.add_atom(index, element, crds)
                     index+=1
                 self.geometries_input.append(atoms)
             # electronic energy
@@ -239,7 +239,7 @@ class Gaussian(Parser):
                     z = float(m.group(6))
                     crds = np.array([x, y, z])*units.angst_to_au
                     element = self.atom_name[atomic_num]
-                    atoms.append((index, element, crds, None))
+                    self.add_atom(index, element, crds)
                     index+=1
                 self.geometries_standard.append(atoms)
 
@@ -313,25 +313,26 @@ class Mol2(Parser):
         self.atoms = ()
         Parser.__init__(self, filename=filename, data=data, dname='mol2', suffix='.mol2', here=here)
 
-    def read_file(self, filename):
-        if filename:
-            mol2file = open(filename, 'r')
-            s = mol2file.read()
-            s = s.split('@<TRIPOS>')
-            self.num_atoms = int(s[1].split()[2])
-            geom = s[2].split('\n')
-            atoms = []
-            index = 1
-            for line in geom[1:self.num_atoms+1]:
-                tmp = line.split()
-                atom_name = tmp[1]
-                charge = float(tmp[8])
-                crds = np.array([float(t)*units.angst_to_au for t in tmp[2:5]])
-                atoms.append((index, atom_name, crds, charge))
-                index += 1
-            self.atoms = (atoms)
-            mol2file.close()
-            self.data = {'atoms': self.atoms}
+    def read_file(self, filename=None):
+        if filename is None:
+            filename = self.filename
+        mol2file = open(filename, 'r')
+        s = mol2file.read()
+        s = s.split('@<TRIPOS>')
+        self.num_atoms = int(s[1].split()[2])
+        geom = s[2].split('\n')
+        atoms = []
+        index = 1
+        for line in geom[1:self.num_atoms+1]:
+            tmp = line.split()
+            element = tmp[1]
+            charge = float(tmp[8])
+            crds = np.array([float(t)*units.angst_to_au for t in tmp[2:5]])
+            self.add_atom(index, element, crds, charge=charge)
+            index += 1
+        self.atoms = (atoms)
+        mol2file.close()
+        self.data = {'atoms': self.atoms}
 
     def write_file(self, filename, here=False, molecule=None):
         if here:
@@ -380,9 +381,10 @@ class XYZ(Parser):
         atoms = []
         for i in xrange(num_atoms):
             tmp = xyzfile.readline().split()
-            atom_name = tmp[0]
+            element = tmp[0]
             crds = np.array([float(t)*units.angst_to_au for t in tmp[1:4]])
-            atoms.append((i+1, atom_name, crds, None))
+            index = i + 1
+            self.add_atom(index, element, crds)
         xyzfile.close()
         self.data = {'atoms': atoms,
                      'comment': comment,
@@ -396,6 +398,59 @@ class GDMA(Parser):
     def __init__(self, filename=None, data=None, here=False):
         Parser.__init__(self, filename=filename, data=data, here=here, dname='gdma', suffix='.out')
         self.read_file(filename=self.filename)
+
+    def read_file(self, filename):
+        with open(filename, 'r') as f:
+            i=1
+            atoms = []
+            multipoles = {}
+            while True:
+                line = f.readline()
+                if line == '': break
+                m = re.search(r'([A-Z]\d*) *x = +(-?\d*\.\d*) *y = +(-?\d*\.\d*) *z = +(-?\d*\.\d*)', line)
+                if m:
+                    # add atom
+                    elem =  m.group(1)
+                    x, y, z = map(lambda v: float(v), [m.group(2), m.group(3), m.group(4)])
+                    crds = np.array([x, y, z])
+                    multipoles = {}
+                    self.add_atom(i, elem, crds, multipoles=multipoles)
+                    i+=1
+                m = re.search(r'Maximum rank = +(\d+)', line)
+                if m:
+                    rank = int(m.group(1))
+                    multipoles['rank'] = rank
+                    while True:
+                        tmp = f.readline().split()
+                        if len(tmp) == 0: 
+                            break
+                        if tmp[0].startswith('|'):
+                            shift = 3
+                        else:
+                            shift = 0
+                        keys = tmp[shift:][::3]
+                        values = tmp[shift+2:][::3]
+                        for key, value in zip(keys, values):
+                            multipoles[key[1:]] = float(value)
+                m = re.search(r' *x = +0.0+, *y = +0.0+, *z = +0.0+', line)
+                if m:
+                    total_multipoles = {}
+                    while True:
+                        tmp = f.readline().split()
+                        if len(tmp) == 0: break
+                        if tmp[0].startswith('|'):
+                            shift = 3
+                        else:
+                            shift = 0
+                        keys = tmp[shift:][::3]
+                        values = tmp[shift+2:][::3]
+                        for key, value in zip(keys, values):
+                            total_multipoles[key[1:]] = float(value)
+            self.data = {'atoms': atoms,
+                         'multipoles': total_multipoles,
+                         }
+           
+            
 
 class ForceFieldXML(object):
 
@@ -464,7 +519,7 @@ class ForceFieldXML(object):
             amber_name = amberType[trunc_name]
             r0, e = self.LJ[amber_name]
             atomElem = SubElement(top, 'atom', name=atom.name, element=atom.element, amber=amber_name)
-            SubElement(atomElem, 'charge').text = '%.4f' % atom.charge
+            SubElement(atomElem, 'charge').text = '%.4f' % atom.center.charge
             SubElement(atomElem, 'r0').text = str(r0)
             SubElement(atomElem, 'epsilon').text = str(e)
             try:
@@ -473,13 +528,14 @@ class ForceFieldXML(object):
                 pass
             # extra points
             ep_data = atom.get_ep_data()
-            for site in atom.sites[1:2]: # extra points are symmetrical
+            for site in atom.extra_sites: 
                 siteElem = SubElement(atomElem, 'site', name=site.name)
                 SubElement(siteElem, 'charge').text = '%.4f' % site.charge
                 SubElement(siteElem, 'r0').text = '0.0'
                 SubElement(siteElem, 'epsilon').text = '0.0'
                 SubElement(siteElem, 'distance').text = '%.4f' % ep_data['distance']
                 SubElement(siteElem, 'angle').text = '%.4f' % ep_data['angle']
+                break # extra points are symmetrical
         s = prettify(top)
         if xmlfilename is None:
             xmlfilename = '%s/data/forcefields/%s_%s.xml' % (WORKDIR, molecule.name, molecule.theory)

@@ -1,0 +1,72 @@
+                                     G D M A
+
+                                 by Anthony Stone
+
+                         version 2.2.11, 04 February 2015
+
+               Distributed Multipoles from Gaussian wavefunctions
+
+
+Starting at 10:44:53 on 22 Oct 2015 
+
+hno b3lyp aug-cc-pvdz
+
+WARNING: string truncated
+
+
+Using SCF density matrix from file hno_b3lyp_augccpvdz.fchk
+
+
+                         Distributed Multipole Analysis
+
+Standard DMA for products of primitives with exponent greater than 4.00000
+Using 80-point Euler-MacLaurin radial quadrature
+Using 590-point Lebedev quadrature
+Becke smoothing parameter = 3
+
+Positions and radii in bohr
+Multipole moments in atomic units, ea_0^k for rank k
+
+H          x = -1.791119  y =  1.741965  z =  0.000000 bohr
+           Maximum rank =  4   Radius =  0.614 bohr
+                   Q00  =   0.153698
+|Q1| =   0.124231  Q11c =   0.103507  Q11s =  -0.068699
+|Q2| =   0.072577  Q20  =  -0.057824  Q22c =   0.031027  Q22s =  -0.031001
+|Q3| =   0.067716  Q31c =   0.057611  Q31s =  -0.013824  Q33c =   0.030939
+                   Q33s =   0.010868
+|Q4| =   0.097838  Q40  =  -0.005438  Q42c =  -0.035625  Q42s =  -0.001344
+                   Q44c =  -0.017522  Q44s =   0.089245
+
+N          x =  0.119408  y =  1.098538  z =  0.000000 bohr
+           Maximum rank =  4   Radius =  1.228 bohr
+                   Q00  =   0.035774
+|Q1| =   0.581823  Q11c =  -0.387964  Q11s =  -0.433592
+|Q2| =   0.766931  Q20  =  -0.069518  Q22c =  -0.267509  Q22s =  -0.715395
+|Q3| =   0.616348  Q31c =   0.420653  Q31s =   0.385386  Q33c =   0.120611
+                   Q33s =   0.199665
+|Q4| =   1.526736  Q40  =   0.253043  Q42c =  -0.424149  Q42s =   0.027840
+                   Q44c =   1.126878  Q44s =  -0.903525
+
+O          x =  0.119408  y = -1.178966  z = -0.000000 bohr
+           Maximum rank =  4   Radius =  1.228 bohr
+                   Q00  =  -0.189472
+|Q1| =   0.330526  Q11c =   0.030393  Q11s =   0.329125
+|Q2| =   0.822541  Q20  =   0.065747  Q22c =  -0.819461  Q22s =  -0.027119
+|Q3| =   0.628988  Q31c =   0.040488  Q31s =  -0.594246  Q33c =   0.021938
+                   Q33s =   0.200939
+|Q4| =   0.568588  Q40  =  -0.099726  Q42c =  -0.055313  Q42s =  -0.073458
+                   Q44c =   0.514859  Q44s =   0.199528
+
+Total multipoles referred to origin at
+           x =   0.000000,  y =    0.000000,  z =    0.000000 bohr
+                   Q00  =  -0.000000
+|Q1| =   0.653921  Q11c =  -0.547708  Q11s =   0.357252
+|Q2| =   2.058273  Q20  =   0.781966  Q22c =   0.465268  Q22s =  -1.846224
+|Q3| =   4.558959  Q31c =   1.874054  Q31s =  -0.451524  Q33c =   3.737175
+                   Q33s =   1.761157
+|Q4| =  11.767390  Q40  =  -2.596458  Q42c =  -3.446725  Q42s =   4.415189
+                   Q44c =   7.032842  Q44s =   7.134088
+
+CPU time used:      0m 2.389s          Total:      0m 2.389s
+
+Finished at 10:44:55 on 22 Oct 2015 

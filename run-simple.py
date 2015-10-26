@@ -11,11 +11,11 @@ lf = '%(levelname)s: %(funcName)s at %(filename)s +%(lineno)s\n%(message)s\n'
 logging.basicConfig(level=logging.DEBUG, format=lf)
 
 data = {
-        'name': 'trans-mesno',
-        'theory': 'pbe_def2svp',
+        'name': 'cis-mesno',
+        'theory': 'b3lyp_augccpvdz',
         'density': 1.5,
-        'symmetry': True,
-        'representation': ('cartesian', 2)
+        'symmetry': False,
+        'representation': ('cartesian', 1)
         }
 
 results = Results(Gaussian(data=data).data['multipoles'])

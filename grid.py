@@ -5,7 +5,7 @@ import parser
 
 import units
 
-grid_logger = logging.getLogger('grid')
+logger = logging.getLogger(__name__)
 
 __author__ = "Maxim Ivanov"
 __email__ = "maxim.ivanov@marquette.edu"
@@ -121,7 +121,7 @@ class Grid(object):
             self.origin = data['origin']
             self.num_points = data['num_points']
             self.vectors = data['vectors']
-            grid_logger.info("Grid instance is to be created:\nNumber of points: %s\nvectors:\n%s\nOrigin: %s"\
+            logger.info("Grid instance is to be created:\nNumber of points: %s\nvectors:\n%s\nOrigin: %s"\
                     % (self.num_points, self.vectors, self.origin))
         except KeyError:
             self.origin = None
@@ -131,6 +131,7 @@ class Grid(object):
             self.atoms = data['atoms']
         except KeyError:
             self.atoms = []
+
 
         self.points = []
 
@@ -143,7 +144,7 @@ class Grid(object):
         for xyz, value in zip(coordinates, values):
             point = GridPoint(coordinates=xyz, value=value)
             self.points.append(point)
-        grid_logger.info("grid is created: %i points" % len(self.points))
+        logger.info("grid is created: %i points" % len(self.points))
 
     def create_grid(self, values):
         self.points = []
@@ -155,7 +156,7 @@ class Grid(object):
                     point = GridPoint(coordinates=xyz, value=values[count])
                     self.points.append(point)
                     count += 1
-        grid_logger.info("grid is created: %i points" % len(self.points))
+        logger.info("grid is created: %i points" % len(self.points))
 
     def proper(self, point):
         for label in self.exclude:
@@ -222,34 +223,34 @@ class vdwGrid(Grid):
     
     def __init__(self, data):
         Grid.__init__(self, data)
-
         self.scale = [1.4, 2.]
+        try:
+            self.vdw_atoms = data['vdw atoms']
+        except KeyError:
+            self.vdw_atoms = [a[0] for a in self.atoms]
+        atoms = filter(lambda a: a[0] in self.vdw_atoms, self.atoms)
+        elems = [a[1] for a in atoms]
+        logger.info('vdW grid is based on %i atoms: %r' % (len(elems), elems))
         self.create_vdw_grid(values=data['values'])        
-
-    def set_vdw_labels(self, atoms=None):
-        if atoms is None or len(atoms)==0:
-            return
-        if self.vdw_range is not None:
-            grid_logger.info('Setting vdW labels: vdW ranges are user-defined')
-        else:
-            grid_logger.info('Setting vdW labels: vdW ranges are default, scale=%s' % self.scale)
-        grid_logger.debug("vdW surface is built based on %i atoms:\n%r" % (len(atoms), atoms))
-        for p in self.points:
-            if inside_range(atoms, p.coordinates): p.add_label('inside')
-            else: p.add_label('outside')
 
     def inside_range(self, xyz):
         inside_small = False
         inside_large = False
+        closest_to = (100, 1) # distance, atom's index
         for index, atom_name, atom_crds, mass in self.atoms:
             d = np.linalg.norm(atom_crds - xyz)
+            cd, _ = closest_to
+            if d < cd:
+                closest_to = (d, index)
             low_lim = self.vdw_radius_bohr[atom_name]*self.scale[0]
             high_lim = self.vdw_radius_bohr[atom_name]*self.scale[1]
             if d < low_lim: inside_small = True
             if d < high_lim: inside_large = True
-        if not inside_small and inside_large: return True
-        else: return False
-
+        d, i = closest_to
+        if not inside_small and inside_large and i in self.vdw_atoms: 
+            return True
+        else: 
+            return False
 
     def create_vdw_grid(self, values):
         self.points = []
@@ -262,7 +263,7 @@ class vdwGrid(Grid):
                     if self.inside_range(xyz) and self.proper(point):
                         self.points.append(point)
                     count += 1
-        grid_logger.info("vdW grid is created: %i points" % len(self.points))
+        logger.info("vdW grid is created: %i points" % len(self.points))
 
 
     

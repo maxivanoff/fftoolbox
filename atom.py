@@ -1,31 +1,30 @@
 from __future__ import division
-import numpy as np
 from numpy.linalg import norm
+import numpy as np
 import logging
 
-from frame import Frame
 import units
+from frame import Frame
+from multipole import Multipole
 
 __author__ = "Maxim Ivanov"
 __email__ = "maxim.ivanov@marquette.edu"
 
-atom_logger = logging.getLogger('atom')
+logger = logging.getLogger(__name__)
 
 class Site(object):
 
-    def __init__(self, coordinates=None, name=None, index=None, charge=None):
+    def __init__(self, coordinates=None, name=None, element=None, index=None, charge=None):
         self.coordinates = np.float64(coordinates)
         self.spherical = self.cart_to_sphere()
         self.name = name
-        self.element = name
+        self.element = element
         self.index = index
         self.charge = charge
         self.r0 = None
         self.epsilon = None
-        self.sites = [self]
-        self.i = -1
         if not self.name == 'H+':
-            atom_logger.debug("Creating Site instance: %s" % self)
+            logger.debug("Creating Site instance: %s" % self)
     
     def cart_to_sphere(self):
         spherical = np.zeros(3)
@@ -37,6 +36,8 @@ class Site(object):
      
     def set_coordinates(self, new_crds):
         self.coordinates = np.copy(new_crds)
+        self.spherical = self.cart_to_sphere()
+        #logger.debug("%s site's coordinates are changed to %r" % (self.name, new_crds))
 
     @property
     def x(self):
@@ -62,16 +63,6 @@ class Site(object):
     def phi(self):
         return self.spherical[2]
     
-    def __iter__(self):
-        return self
-    
-    def next(self):
-        if self.i < len(self.sites)-1:
-            self.i += 1
-            return self.sites[self.i]
-        else:
-            self.i = -1
-            raise StopIteration
     
     def distance_to(self, site):
         d = self.coordinates - site.coordinates
@@ -84,50 +75,83 @@ class Site(object):
         return True
     
     def __repr__(self):
-        return '%s %i %f %f %f %s' % (self.name, self.index, self.coordinates[0], self.coordinates[1], self.coordinates[2], self.charge)
+        return '%s %s %f %f %f %s' % (self.name, self.index, self.coordinates[0], self.coordinates[1], self.coordinates[2], self.charge)
 
 
-class Atom(Site):
-    vdw_radius_angst = {'O':1.52, 'N':1.55, 'S':1.8, 'C':1.7, 'H':1.2, 'Na': 2.27, 'F':1.47, 'Cl':1.88, 'CL':1.88, 'K': 2.75 , 'XX':0.0 }#taken from wikipedia
+class Atom(Multipole):
+
+    # vdW radii are taken from wikipedia:
+    vdw_radius_angst = {'O':1.52, 'N':1.55, 'S':1.8, 'C':1.7, 'H':1.2, 'Na': 2.27, 'F':1.47, 'Cl':1.88, 'CL':1.88, 'K': 2.75}
     vdw_radius_bohr = dict((name, radius/0.52917721092) for name, radius in vdw_radius_angst.iteritems())
- 
     
-    def __init__(self, name=None, element=None, coordinates=None, index=None, charge=None):
-        if not name: name = element
-        Site.__init__(self, coordinates=coordinates, name=name, index=index, charge=charge)
+    def __init__(self, name=None, element=None, coordinates=None, index=None, multipoles=None, representation=None):
+        charge = multipoles['charge']
+        if name is None: name = element
+        Multipole.__init__(self, name=name, origin=coordinates, representation=representation)
+        self.center = Site(coordinates=coordinates, name=name, element=element, index=index, charge=charge)
+        self._extra = []
+        self.index = index
         self.element = element
         self.neighbors = None
         self.frame = None
 
+    def set_name(self, name):
+        self.name = name
+        self.center.name = name
+
+    @property
+    def sites(self):
+        sites = [self.center] + self._extra
+        return iter(sites)
+
+    @property
+    def extra_sites(self):
+        return iter(self._extra)
+
+    @property
+    def num_sites(self):
+        return len(self._extra) + 1 
+
+    def add_extra_site(self, site):
+        self._extra.append(site)
+
+    def free_extra(self):
+        self._extra = []
+
     def set_hybridization(self, ep_property):
         index, hybridization, distance, angle = ep_property
         if not self.frame: self.frame = Frame(self, hybridization)
-        self.sites = (self,)
-        for i, crds in enumerate(self.frame.ep_crds(distance, angle)):
-            s = Site(coordinates=crds, name = 'EP_%s' % self.name, index=index+i)
-            self.sites += (s,)
+        self.free_extra()
+        ep_coordinates = self.frame.ep_crds(distance, angle)
+        for i, crds in enumerate(ep_coordinates):
+            s = Site(coordinates=crds, name = 'EP_%s' % self.element, index=index+i)
+            self.add_extra_site(s)
 
     def set_frame_from_sites(self):
-        if self.frame is None and len(self.sites) > 1:
+        if self.frame is None and len(self._extra) > 0:
             num_domains = len(self.sites) + len(self.neighbors) - 1
             h = 'sp%i' % (num_domains - 1)
             self.frame = Frame(self, h)
 
     def get_ep_data(self):
         data = {}
-        if len(self.sites) == 3:
-            v1 = self.sites[1].coordinates - self.sites[0].coordinates
-            v2 = self.sites[2].coordinates - self.sites[0].coordinates
+        if self.num_sites == 3:
+            a, b = self._extra
+            v1 = a.coordinates - self.center.coordinates
+            v2 = b.coordinates - self.center.coordinates
             data['distance'] = norm(v1)*units.au_to_angst
             v1 = v1/norm(v1)
             v2 = v2/norm(v2)
             cosa = np.dot(v2, v1)
             data['angle'] = np.arccos(cosa)/np.pi*180./2.
-        if len(self.sites) == 2:
-            n1 = self.coordinates - self.neighbors[0].coordinates
-            n2 = self.coordinates - self.neighbors[1].coordinates
+        if self.num_sites == 2:
+            # from EP to atom
+            a = self._extra[0]
+            v = self.a.coordinates - self.center.coordinates
+            # sum of two neighbors
+            n1 = self.center.coordinates - self.neighbors[0].coordinates
+            n2 = self.center.coordinates - self.neighbors[1].coordinates
             n = n1/norm(n1) + n2/norm(n2)
-            v = self.sites[1].coordinates - self.sites[0].coordinates
             cosa = np.dot(v, n)/norm(v)/norm(n)
             if abs(abs(cosa) - 1.0) < 0.00001: cosa = 1.0*np.sign(cosa)
             data['angle'] = np.arccos(cosa)/np.pi*180
@@ -135,13 +159,32 @@ class Atom(Site):
         return data
     
     def bonded_to(self, atom):
-        d = self.distance_to(atom)
+        d = self.center.distance_to(atom)
         radius = atom.radius + self.radius
         if d <= radius*0.65 and d > 1e-4:
             return True
         else: return False
+
+    @property
+    def coordinates(self):
+        return self.center.coordinates
+
+    @property
+    def x(self):
+        return self.center.x
+    
+    @property
+    def y(self):
+        return self.center.y
+    
+    @property
+    def z(self):
+        return self.center.z
     
     @property
     def radius(self):
         return self.vdw_radius_bohr[self.element]
+    
+    def __repr__(self):
+        return self.center.__repr__()
 

@@ -12,58 +12,46 @@ class CarbonOxygenGroup(Multipole):
 
     def __init__(self, center, count, name=None, sym=False):
         if count == 0: count = ''
-        self.carbon = center
-        self.oxygens = filter(lambda a: a.element=='O', center.neighbors)
-        if len(self.oxygens) == 1:
+        oxygens = filter(lambda a: a.element=='O', center.neighbors)
+        if len(oxygens) == 1:
             self.name = 'CO'
-        if len(self.oxygens) == 2:
+        if len(oxygens) == 2:
             self.name = 'CO2'
-        self.carbon.name = 'C%s_%s' % (count, self.name)
-        for i, oxygen in enumerate(self.oxygens):
+        name = 'C%s_%s' % (count, self.name)
+        center.set_name(name)
+        for i, oxygen in enumerate(oxygens):
             if sym is False:
-                oxygen.name = 'O%s_%s-%i' % (count, self.name, i)
+                name = 'O%s_%s-%i' % (count, self.name, i)
+                oxygen.set_name(name)
             else:
-                oxygen.name = 'O%s_%s' % (count, self.name)
-        self.atoms = self.oxygens + [self.carbon]
-        Multipole.__init__(self, name=self.name)
-        self.hydrogens = filter(lambda a: a.element=='H', center.neighbors)
-        logger.debug('%s group identified with carbon %s, %i oxygens and %i hydrogens' % (self.name, self.carbon.name, len(self.oxygens), len(self.hydrogens)))
-
+                name = 'O%s_%s' % (count, self.name)
+                oxygen.set_name(name)
+        #self.atoms = oxygens + [center]
+        #Multipole.__init__(self, name=self.name)
+        #self.hydrogens = filter(lambda a: a.element=='H', center.neighbors)
+        logger.debug('%s group identified with center %s, %i oxygens' % (self.name, center.name, len(oxygens)))
 
 class BuriedGroup(Multipole):
+    """
+    Methyl or methylene group
+    """
 
     def __init__(self, center, count, name=None, sym=False):
         if count == 0: count = ''
-        self.center = center
-        self.nonhydrogens = filter(lambda a: not a.element=='H', center.neighbors)
-        self.hydrogens = filter(lambda a: a.element=='H', center.neighbors)
-        self.atoms = [center] + self.hydrogens
-        cname = self.center.element
-        if self.hydrogens:
-            neighbor_name = 'H'
-            neighbors = self.hydrogens
-        else:
-            neighbor_name = self.nonhydrogens[0].element
-            neighbors = self.nonhydrogens
-        if [neighbor_name]*3==[a.element for a in neighbors]:
-            self.name = cname + neighbor_name + '3'
-            self.center.name = '%s%s_%s%s3' % (cname, count, cname, neighbor_name)
-        elif [neighbor_name]*2==[a.element for a in neighbors]:
-            self.name = cname + neighbor_name + '2'
-            self.center.name = '%s%s_%s%s2'% (cname, count, cname, neighbor_name)
-        elif [neighbor_name]*1==[a.element for a in neighbors]:
-            self.name = cname + neighbor_name + '1'
-            self.center.name = '%s%s_%s%s1'% (cname, count, cname, neighbor_name)
-        elif [neighbor_name]*4 == [a.element for a in neighbors]:
-            self.name = cname + neighbor_name+'4'
-            self.center.name = '%s%s_%s%s4'% (cname, count, cname, neighbor_name)
-        else:
-            raise ValueError('Not a buired group')
-        for i,a in enumerate(neighbors):
+        if not center.element == 'C':
+            raise ValueError('Should be a buried carbon group')
+        hydrogens = filter(lambda a: a.element=='H', center.neighbors)
+        num_h = len(hydrogens)
+        name = 'C%s_CH%i' % (count, num_h)
+        center.set_name(name)
+        # set hydrogens names
+        for i, a in enumerate(hydrogens):
             if sym is True:
-                a.name = neighbor_name + center.name[1:]
+                name = 'H%s' % center.name[1:]
+                a.set_name(name)
             else:
-                a.name = neighbor_name + center.name[1:] + '-' + str(i)
-        Multipole.__init__(self, name=self.name)
-        logger.debug('Buried atom created with center @ %s and %i hydrogen atoms: %r' %(self.center.name, len(self.hydrogens), [a.name for a in self.hydrogens]))
+                name = 'H%s-%i' % (center.name[1:], i)
+                a.set_name(name)
+        #Multipole.__init__(self, name=self.name)
+        logger.debug('Buried atom created with center @ %s and %i hydrogen atoms: %r' %(center.name, len(hydrogens), [a.name for a in hydrogens]))
 
