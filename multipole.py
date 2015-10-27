@@ -52,12 +52,26 @@ def Ylms(m, l, theta, phi):
 class GroupOfSites(object):
 
     def __init__(self, name=None):
-        self.name = name
+        self._name = name
         self._sites = []
+
+    @property
+    def name(self):
+        return self._name
+
+    def set_name(self, name):
+        self._name = name
 
     @property
     def sites(self):
         return iter(self._sites)
+    
+    def add_site(self, site):
+        self._sites.append(site)
+
+    @property
+    def num_sites(self):
+        return len(self._sites)
 
     def reindexate(self, shift):
         for s in self.sites:
@@ -74,7 +88,7 @@ class GroupOfSites(object):
         logger.debug("Symmetry indeces in %s:\n%r" % (self.name, self.sym_sites))
                 
     def get_coordinates(self):
-        crds = np.zeros((len(self.sites), 3))
+        crds = np.zeros((self.num_sites, 3))
         for i, s in enumerate(self.sites):
             crds[i][:] = s.coordinates[:]
         return crds
@@ -107,7 +121,7 @@ class GroupOfSites(object):
         return sites
 
     def write_xyz(self, filename, here=False):
-        out = '%i\n' % len(self.sites)
+        out = '%i\n' % self.num_sites
         try:
             out += 'e = %s\n' % self.energy
         except AttributeError:
@@ -129,7 +143,7 @@ class Multipole(GroupOfSites):
     """
     This is Multipole
     """
-    def __init__(self, name=None, origin=None, representation=('cartesian', 0)):
+    def __init__(self, name=None, origin=None, representation=None):
         GroupOfSites.__init__(self, name)
         self.origin = origin
         self.representation = representation

@@ -339,7 +339,7 @@ class Mol2(Parser):
             path2mol2 = '.'
         else:
             path2mol2 = '%s/data/mol2' % WORKDIR
-        s = '@<TRIPOS>MOLECULE\n%s\n%i %i 0 0 0\nSMALL\nUSER_CHARGES\n\n@<TRIPOS>ATOM\n' % (molecule.name, len(molecule.sites), len(molecule.bonds))
+        s = '@<TRIPOS>MOLECULE\n%s\n%i %i 0 0 0\nSMALL\nUSER_CHARGES\n\n@<TRIPOS>ATOM\n' % (molecule.name, molecule.num_sites, len(molecule.bonds))
         try:
             molecules = molecule.molecules
         except:
@@ -494,7 +494,7 @@ class ForceFieldXML(object):
             except AttributeError:
                 extra_exists = False
             # load force fields to atoms
-            for a in molecule.get_sites_by_name(name):
+            for a in molecule.get_atoms_by_name(name):
                 a.charge = a_charge
                 a.r0 = r0
                 a.epsilon = epsilon
@@ -504,11 +504,11 @@ class ForceFieldXML(object):
                     index = molecule.get_max_index()
                     ep = (index+1, h, distance, angle)
                     a.set_hybridization(ep)
-                    for s in a.sites[1:]:
+                    for s in a.extra_sites:
                         s.charge = e_charge
                         s.r0 = 0.0
                         s.epsilon = 0.0
-                    logger.debug('Force fields for extra points are loaded at %s %s\nNumber of extra points: %i\nCharge: %.3f\nDistance: %.3f\nAngle: %.3f' % (h, a.name, len(a.sites)-1, s.charge, distance, angle))
+                    logger.debug('Force fields for extra points are loaded at %s %s\nNumber of extra points: %i\nCharge: %.3f\nDistance: %.3f\nAngle: %.3f' % (h, a.name, a.num_sites-1, s.charge, distance, angle))
         
     def write_file(self, molecule=None, xmlfilename=None):
         top = Element('forcefield', name=molecule.name)

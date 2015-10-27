@@ -4,7 +4,7 @@ import logging
 from LeastSquares import LeastSquaresBasic
 from molecule import Molecule
 from grid import Grid
-from atom import Site
+from atom import Coordinates
 import fast
 import units
 
@@ -27,7 +27,7 @@ class LeastSquaresCharges(LeastSquaresBasic):
         n_s = len(self.molecule.sites_noneq)
         self.A =  np.zeros((n_p, n_s))
         for i in xrange(n_p):
-            proton = Site(coordinates=self.grid.points[i].coordinates, name='H+')
+            proton = Coordinates(coordinates=self.grid.points[i].coordinates)
             for j, name in enumerate(self.molecule.sites_names_noneq):
                 for site in self.molecule.get_sites(name=name):
                     self.A[i,j] += 1/site.distance_to(proton)
@@ -44,7 +44,10 @@ class LeastSquaresCharges(LeastSquaresBasic):
     @property
     def charges(self):
         charges = {}
-        for q, name in zip(self.solution, self.molecule.sites_names):
+        if not len(self.solution) == len(self.molecule.sites_names_noneq):
+            raise ValueError('Number of charges in solution (%i) does not match number of sites (%i):\n%r' % 
+                    (len(self.solution), len(self.molecule.sites_names_noneq), self.molecule.sites_names_noneq))
+        for q, name in zip(self.solution, self.molecule.sites_names_noneq):
             charges[name] = q
         return charges
 

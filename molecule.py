@@ -4,7 +4,7 @@ import os
 
 import units
 from bonds import Bond
-from atom import Atom, Site
+from atom import HybridAtom, FFSite
 from multipole import Multipole
 from parser import ForceFieldXML
 from multipole import GroupOfSites
@@ -60,11 +60,22 @@ class Molecule(Multipole):
         for atom in self.atoms:
             for site in atom.sites:
                 sites.append(site)
-        return sites
+        return iter(sorted(sites, key=lambda s: s.index))
+
+    @property
+    def num_sites(self):
+        sites = []
+        for atom in self.atoms:
+            for site in atom.sites:
+                sites.append(site)
+        return len(sites)
 
     @property
     def atoms(self):
         return iter(sorted(self._atoms, key=lambda a: a.index))
+
+    def get_atoms_by_name(self, name):
+        return iter(filter(lambda s: s.name == name, self.atoms))
 
     @property
     def atoms_noneq(self):
@@ -110,18 +121,18 @@ class Molecule(Multipole):
             index, element, crds, multipoles = a
             if element.startswith('EP'):
                 charge = multipoles['charge']
-                s = Site(coordinates=crds, name='EP', element='EP', index=index, charge=charge)
+                s = FFSite(element='EP', coordinates=crds, index=index, charge=charge)
                 extra_points.append(s)
             else: # regular atom
-                atom = Atom(name=element, element=element, coordinates=crds, 
-                        index=index, multipoles=multipoles, representation=self.representation)
+                atom = HybridAtom(index=index, element=element, coordinates=crds, 
+                        multipoles=multipoles, representation=self.representation)
                 self.add_atom(atom)
         # find atom the extra point is connected to
         for s in extra_points:
             closest = sorted(self.atoms, key=lambda a: a.distance_to(s))
             atom = closest[0]
-            atom.add_extra_site(s)
-            s.name = 'EP_%s' % atom.element
+            atom.add_site(s)
+            s.set_atom(atom)
             logger.debug('Site %s is appended to sites of atom %s' % (s.name, atom.name))
 
     def set_hybridizations(self):
@@ -142,7 +153,7 @@ class Molecule(Multipole):
         buried_atoms = []
         carbons_with_oxygen = []
         for atom in self.atoms:
-            atom.neighbors = filter(atom.bonded_to, self.atoms)
+            atom.set_neighbors(self.atoms)
             if len(filter(lambda a: a.element=='H', atom.neighbors))>1:
                 buried_atoms.append(atom)
             if not len(filter(lambda a: a.element=='O', atom.neighbors))==0 and atom.element=='C' and len(atom.neighbors)==3:
@@ -162,7 +173,7 @@ class Molecule(Multipole):
             t = self.get_atom_by_index(template)
             for i in symmetrical:
                a = self.get_atom_by_index(i)
-               a.name = t.name
+               a.set_name(t.name)
         except TypeError:
             pass
         logger.info("Names of equivalent sites: %s" % self.sites_names_eq)

@@ -2,28 +2,26 @@ import logging
 import numpy as np
 
 import lebedev_write
-from fftoolbox.atom import Site, Atom
+from fftoolbox.atom import Site, Atom, Coordinates
 from scipy.special import sph_harm as Y
 from fftoolbox.multipole import Ylmc, Ylms, Multipole
 
 logger = logging.getLogger(__name__)
 
-
-class LebedevAtom(Atom, Multipole):
+class LebedevAtom(Multipole, Coordinates):
 
     def __init__(self, name=None, element=None, coordinates=None, index=None, ref_multipoles=None, representation=None):
-        Atom.__init__(self, name=name, element=element, coordinates=coordinates, index=index, charge=0.0)
-        Multipole.__init__(self, name=name, representation=representation)
-        self.origin = coordinates
+        Coordinates.__init__(self, coordinates)
+        Multipole.__init__(self, name=name, origin=coordinates, representation=representation)
+        self.element = element
+        self.index= index
         self.ref_multipoles = ref_multipoles
         self.rank = ref_multipoles['rank']
-        self.atoms = [self]
 
     def set_sphere(self, rank=1, radius=1.0):
         if rank is None:
             rank = self.rank
         sites = lebedev_write.Lebedev(rank_to_num[rank])
-        self._extra_sites = []
         for i, site in enumerate(sites):
             # coordinates and weights
             xyz = np.array(site[0:3])*radius
@@ -35,7 +33,7 @@ class LebedevAtom(Atom, Multipole):
             # shift site relative to the atom center
             shifted = self.coordinates + s.coordinates
             s.set_coordinates(shifted)
-            self._extra_sites.append(s)
+            self.add_site(s)
         self.set_sym_sites()
         self.set_multipole_matrix()
 

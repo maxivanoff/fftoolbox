@@ -52,17 +52,18 @@ class DistributedLebedevMolecule(Molecule, Multipole):
 
     def __init__(self, data):
         try:
-            self.rep = data['representation']
+            representation = data['representation']
         except KeyError:
-            self.rep = ('spherical', 1)
+            representation = ('spherical', 1)
         try:
             self.sym = data['symmetry']
         except KeyError:
             self.sym = False
         self.distrib = data['distributions']
-        Multipole.__init__(self, data['name'], representation=self.rep)
+        Multipole.__init__(self, data['name'], representation=representation)
         # set atoms
-        self.set_atoms(data['atoms'])
+        self._atoms = []
+        self.add_atoms(data['atoms'])
         self.set_groups()
         # distribute point charges
         self.set_spheres()
@@ -75,7 +76,7 @@ class DistributedLebedevMolecule(Molecule, Multipole):
             rank, radius = self.distrib[a.element]
             a.set_sphere(rank, radius)
 
-    def set_atoms(self, atoms):
+    def add_atoms(self, atoms):
         self.atoms = []
         for a in atoms:
             index, elem, crds, multipoles = a
