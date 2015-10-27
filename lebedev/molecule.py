@@ -2,7 +2,7 @@ from atom import LebedevAtom
 from scipy.special import sph_harm as Y
 from fftoolbox.multipole import Ylmc, Ylms, Multipole
 from fftoolbox.molecule import Molecule
-from fftoolbox.atom import Site
+from fftoolbox.atom import FFSite
 import lebedev_write
 import numpy as np
 import logging
@@ -48,23 +48,11 @@ class LebedevMolecule(Multipole):
                 i += 1
         return B
 
-class DistributedLebedevMolecule(Molecule, Multipole):
+class DistributedLebedevMolecule(Molecule):
 
     def __init__(self, data):
-        try:
-            representation = data['representation']
-        except KeyError:
-            representation = ('spherical', 1)
-        try:
-            self.sym = data['symmetry']
-        except KeyError:
-            self.sym = False
+        Molecule.__init__(self, data)
         self.distrib = data['distributions']
-        Multipole.__init__(self, data['name'], representation=representation)
-        # set atoms
-        self._atoms = []
-        self.add_atoms(data['atoms'])
-        self.set_groups()
         # distribute point charges
         self.set_spheres()
         self.set_sym_sites()
@@ -77,9 +65,8 @@ class DistributedLebedevMolecule(Molecule, Multipole):
             a.set_sphere(rank, radius)
 
     def add_atoms(self, atoms):
-        self.atoms = []
         for a in atoms:
-            index, elem, crds, multipoles = a
-            atom = LebedevAtom(name=elem, element=elem, coordinates=crds, ref_multipoles=multipoles, index=index, representation=self.rep)
-            self.atoms.append(atom)
+            index, element, crds, multipoles = a
+            atom = LebedevAtom(element=element, coordinates=crds, ref_multipoles=multipoles, index=index, representation=self.representation)
+            self.add_atom(atom)
 

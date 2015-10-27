@@ -2,21 +2,19 @@ import logging
 import numpy as np
 
 import lebedev_write
-from fftoolbox.atom import Site, Atom, Coordinates
+from fftoolbox.atom import Atom, FFSite
 from scipy.special import sph_harm as Y
-from fftoolbox.multipole import Ylmc, Ylms, Multipole
+from fftoolbox.multipole import Ylmc, Ylms
 
 logger = logging.getLogger(__name__)
 
-class LebedevAtom(Multipole, Coordinates):
+class LebedevAtom(Atom):
 
-    def __init__(self, name=None, element=None, coordinates=None, index=None, ref_multipoles=None, representation=None):
-        Coordinates.__init__(self, coordinates)
-        Multipole.__init__(self, name=name, origin=coordinates, representation=representation)
-        self.element = element
-        self.index= index
+    def __init__(self, element=None, coordinates=None, index=None, ref_multipoles=None, representation=None):
+        Atom.__init__(self, index=index, element=element, coordinates=coordinates, representation=representation)
         self.ref_multipoles = ref_multipoles
         self.rank = ref_multipoles['rank']
+        logger.info('LebedevAtom instance is created for %s' % self.name)
 
     def set_sphere(self, rank=1, radius=1.0):
         if rank is None:
@@ -27,9 +25,9 @@ class LebedevAtom(Multipole, Coordinates):
             xyz = np.array(site[0:3])*radius
             w = site[3]*4*np.pi
             # create site and compute charge
-            s = Site(name='%s-X%i' % (self.name,i), coordinates=xyz)
-            q = self.compute_charge(rank, s.r, s.theta, s.phi)
-            s.charge = q*w
+            s = FFSite(name='EP_%s-%i' % (self.name, i), element='EP', coordinates=xyz)
+            q = w*self.compute_charge(rank, s.r, s.theta, s.phi)
+            s.set_charge(q)
             # shift site relative to the atom center
             shifted = self.coordinates + s.coordinates
             s.set_coordinates(shifted)

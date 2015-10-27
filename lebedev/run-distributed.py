@@ -7,8 +7,9 @@ from charges import LebedevCharges
 
 import logging, sys
 
-#logger = logging.getLogger(__name__)
-#lf = '%(levelname)s: %(funcName)s at %(filename)s +%(lineno)s\n%(message)s\n'
+logger = logging.getLogger(__name__)
+lf = '%(levelname)s: %(funcName)s at %(filename)s +%(lineno)s\n%(message)s\n'
+logging.basicConfig(filename='./log', filemode='a', level=logging.DEBUG, format=lf)
 #logging.basicConfig(level=logging.DEBUG, format=lf)
 
 d = {
@@ -18,9 +19,9 @@ d = {
         }
 
 d = {
-        'O': (4, 1.),
-        'N': (4, 1.),
-        'S': (4, 1.),
+        'O': (1, 1.),
+        'N': (1, 1.),
+        'S': (1, 1.),
         'C': (1, 1.),
         'H': (1, 1.),
         }
@@ -29,9 +30,10 @@ d = {
 data = {
         'name': 'cis-mesno',
         'theory': 'b3lyp_augccpvdz',
-        'representation': ('spherical', 2),
+        'representation': ('spherical', 1),
         'symmetry': False,
         'distributions': d,
+        'exclude': ['<xy'],
         }
 
 parser = GDMA(data=data)
