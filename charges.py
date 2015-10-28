@@ -18,6 +18,10 @@ class LeastSquaresCharges(LeastSquaresBasic):
 
     def __init__(self, molecule=None, grid=None):
         self.molecule = molecule
+        self.update_grid(grid)
+        self._charges = {}
+
+    def update_grid(self, grid):
         self.grid = grid
         self.setA()
         LeastSquaresBasic.__init__(self, A=self.A, b=grid.get_values())
@@ -43,22 +47,34 @@ class LeastSquaresCharges(LeastSquaresBasic):
 
     @property
     def charges(self):
-        charges = {}
-        if not len(self.solution) == len(self.molecule.sites_names_noneq):
-            raise ValueError('Number of charges in solution (%i) does not match number of sites (%i):\n%r' % 
-                    (len(self.solution), len(self.molecule.sites_names_noneq), self.molecule.sites_names_noneq))
-        for q, name in zip(self.solution, self.molecule.sites_names_noneq):
-            charges[name] = q
-        return charges
+        return self._charges
 
     @property
     def multipoles(self):
         return self.molecule.charges_to_multipoles(self.charges)
 
-    def charges2sites(self):
-        current_charges = self.charges.copy()
-        for i, site in enumerate(self.molecule.sites):
-            site.charge = current_charges[site.name]
+    def solve(self, method='svd', truncate=0):
+        solution = LeastSquaresBasic.solve(self, method, truncate)
+        self._charges = {}
+        if not len(solution) == len(self.molecule.sites_names_noneq):
+            raise ValueError('Number of charges in solution (%i) does not match number of sites (%i):\n%r' % 
+                    (len(solution), len(self.molecule.sites_names_noneq), self.molecule.sites_names_noneq))
+        for q, name in zip(solution, self.molecule.sites_names_noneq):
+            self._charges[name] = q
+        self.charges_to_sites(self._charges)
+
+    def sites_to_solution(self):
+        self._solution = np.zeros(self.molecule.num_sites)
+        for i, s in enumerate(self.molecule.sites):
+            self._solution[i] = s.charge
+        logger.info('Charges were transfered from sites to _solution')
+
+
+
+    def charges_to_sites(self, charges):
+        for site in self.molecule.sites:
+            q = charges[site.name]
+            site.set_charge(q)
         logger.info('Charges were transfered to sites')
 
 

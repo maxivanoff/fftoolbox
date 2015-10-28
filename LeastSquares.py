@@ -1,3 +1,4 @@
+from scipy.optimize import curve_fit
 import numpy as np
 import logging, sys
 import numpy
@@ -26,12 +27,38 @@ class LeastSquaresBasic(object):
     @property
     def solution(self):
         return self._solution
+
+    @property
+    def residual(self):
+        return self.b - np.dot(self.A, self.solution)
     
     @property
-    def solution_rmsd(self):
-        if self.solution is None:
-            raise ValueError("self.solution should not be None")
-        return float(np.sqrt(self.cost_function(self.solution)))*units.au_to_kcal
+    def rmsd(self):
+        rmsd2 = np.average(self.residual**2)
+        return np.sqrt(rmsd2)*units.au_to_kcal
+
+    @property
+    def R2(self):
+        y = np.dot(self.A, self.solution)
+        correlation = np.corrcoef(self.b, y)[0,1]
+        return correlation**2
+
+    @property
+    def max_error(self):
+        return np.amax(self.residual)*units.au_to_kcal
+
+    @property
+    def rmad(self):
+        return np.sum(np.absolute(self.residual))/np.sum(np.absolute(self.b))
+
+    @property
+    def ab(self):
+        x = self.b
+        y = np.dot(self.A, self.solution)
+        popt, pcov = curve_fit(lambda xdata,m,n: m*xdata+n, x, y)
+        a, b = popt
+        da, db = np.sqrt(np.diag(pcov))
+        return a, da, b, db
 
     def cost_function(self, x):
         residual = self.b - np.dot(self.A, x)
@@ -39,8 +66,10 @@ class LeastSquaresBasic(object):
 
     def solve(self, method='svd', truncate=0):
         if method == 'normal':
+            logger.info('Solving least squares problem using normal equations')
             self._solution = self.solve_normal()
         if method == 'svd':
+            logger.info('Solving least squares problem using SVD and truncating %i terms' % truncate)
             self._solution = self.solve_svd(truncate)
         return self._solution
 

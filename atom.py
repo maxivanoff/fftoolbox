@@ -16,6 +16,7 @@ class Coordinates(object):
     def __init__(self, coordinates):
         self._coordinates = np.float64(coordinates)
         self._spherical = self.cartesian_to_spherical()
+        logger.info('Coordinates instance is created with coordinates:\nx = %.3f y = %.3f z = %.3f\nr = %.3f theta = %.3f phi = %.3f' % (self.x, self.y, self.z, self.r, self.theta, self.phi))
 
     def cartesian_to_spherical(self):
         spherical = np.zeros(3)
@@ -28,7 +29,7 @@ class Coordinates(object):
     def set_coordinates(self, new_crds):
         self._coordinates = np.copy(new_crds)
         self._spherical = self.cartesian_to_spherical()
-        logger.debug("Coordinates were changed to %r" % (new_crds))
+        #logger.debug("Coordinates were changed to %r" % (new_crds))
 
     @property
     def coordinates(self):
@@ -68,20 +69,33 @@ class Coordinates(object):
                 return False
         return True
 
+    def __repr__(self):
+        return "Coordinates x = %.3f y = %.3f z = %.3f" % (self.x, self.y, self.z)
+
 class FFSite(Coordinates):
 
-    def __init__(self, index=None, element=None, coordinates=None, charge=None, r0=None, epsilon=None, atom=None):
+    def __init__(self, index=None, element=None, name=None, coordinates=None, charge=None, r0=None, epsilon=None, atom=None):
         Coordinates.__init__(self, coordinates)
+        self._name = name
         self.index = index
         self.element = element
-        self.charge = charge
+        self._charge = charge
         self.r0 = r0
         self.epsilon = epsilon
         self.set_atom(atom)
-        logger.debug("Creating FFSite instance:\n%s" % self)
+        logger.info("FFSite instance is created:\n%s" % self.__repr__())
+
+    @property
+    def charge(self):
+        return self._charge
+
+    def set_charge(self, charge):
+        self._charge = charge
 
     @property
     def name(self):
+        if not self._name is None:
+            return self._name
         if self.element == 'EP':
             return 'EP_%s' % self._atom.element
         else:
@@ -89,9 +103,12 @@ class FFSite(Coordinates):
 
     def set_atom(self, atom):
         self._atom = atom
+
+    def get_atom(self):
+        return self._atom
     
     def __repr__(self):
-        return '%s %s %f %f %f %s' % (self.name, self.index, self.coordinates[0], self.coordinates[1], self.coordinates[2], self.charge)
+        return 'FFSite: %s %s %f %f %f %s' % (self.name, self.index, self.coordinates[0], self.coordinates[1], self.coordinates[2], self.charge)
 
 class Atom(Coordinates, Multipole):
 
@@ -110,6 +127,7 @@ class Atom(Coordinates, Multipole):
         self.index = index
         self.element = element
         self.neighbors = None
+        logger.info('Atom instance is created:\n%s' % self)
 
     def set_neighbors(self, atoms):
         self.neighbors = []
@@ -127,6 +145,9 @@ class Atom(Coordinates, Multipole):
         if d <= radius*0.65 and d > 1e-4:
             return True
         else: return False
+
+    def __repr__(self):
+        return 'Atom: %s %s %s %f %f %f' % (self.name, self.element, self.index, self.coordinates[0], self.coordinates[1], self.coordinates[2])
 
 class HybridAtom(Atom):
 

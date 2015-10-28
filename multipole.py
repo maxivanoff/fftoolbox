@@ -234,7 +234,7 @@ class Spherical(MultipoleMatrix):
     def __init__(self, l=None, coordinates=None, sym_sites=None, origin=None, name=None):
         try:
             self.names = []
-            for ll in xrange(l):
+            for ll in xrange(l+1):
                 for mm in xrange(ll+1):
                     if mm==0:
                         self.names.append('%i%i' % (ll, mm))

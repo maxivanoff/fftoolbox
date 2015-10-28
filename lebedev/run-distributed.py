@@ -19,9 +19,9 @@ d = {
         }
 
 d = {
-        'O': (1, 1.),
-        'N': (1, 1.),
-        'S': (1, 1.),
+        'O': (2, 1.),
+        'N': (2, 1.),
+        'S': (2, 1.),
         'C': (1, 1.),
         'H': (1, 1.),
         }
@@ -30,7 +30,7 @@ d = {
 data = {
         'name': 'cis-mesno',
         'theory': 'b3lyp_augccpvdz',
-        'representation': ('spherical', 1),
+        'representation': ('spherical', 2),
         'symmetry': False,
         'distributions': d,
         'exclude': ['<xy'],

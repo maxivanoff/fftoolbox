@@ -19,19 +19,24 @@ class LebedevAtom(Atom):
     def set_sphere(self, rank=1, radius=1.0):
         if rank is None:
             rank = self.rank
-        sites = lebedev_write.Lebedev(rank_to_num[rank])
-        for i, site in enumerate(sites):
-            # coordinates and weights
-            xyz = np.array(site[0:3])*radius
-            w = site[3]*4*np.pi
-            # create site and compute charge
-            s = FFSite(name='EP_%s-%i' % (self.name, i), element='EP', coordinates=xyz)
-            q = w*self.compute_charge(rank, s.r, s.theta, s.phi)
-            s.set_charge(q)
-            # shift site relative to the atom center
-            shifted = self.coordinates + s.coordinates
-            s.set_coordinates(shifted)
+        if rank == 0:
+            charge = self.ref_multipoles['00']
+            s = FFSite(index=self.index, element=self.element, name=self.name, coordinates=self.coordinates, charge=charge)
             self.add_site(s)
+        else:
+            sites = lebedev_write.Lebedev(rank_to_num[rank])
+            for i, site in enumerate(sites):
+                # coordinates and weights
+                xyz = np.array(site[0:3])*radius
+                w = site[3]*4*np.pi
+                # create site and compute charge
+                s = FFSite(name='EP_%s-%i' % (self.name, i), element='EP', coordinates=xyz)
+                q = w*self.compute_charge(rank, s.r, s.theta, s.phi)
+                s.set_charge(q)
+                # shift site relative to the atom center
+                shifted = self.coordinates + s.coordinates
+                s.set_coordinates(shifted)
+                self.add_site(s)
         self.set_sym_sites()
         self.set_multipole_matrix()
 

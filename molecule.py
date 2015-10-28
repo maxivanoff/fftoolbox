@@ -33,26 +33,25 @@ class Molecule(Multipole):
         except KeyError:
             self.sym = False
         try:
-            self.hybrid_atoms = data['hybridizations']
-        except KeyError:
-            self.hybrid_atoms = []
-        try:
             self.energy = data['energy']
         except KeyError:
             self.energy = None
-        logger.info('Start assembling %s Molecule\nsymmetry: %r\nmultipoles: %r\nhybridizations: %r' % (data['name'], self.sym, representation, self.hybrid_atoms))
+        logger.info('Start assembling %s Molecule\ntheory: %r\nsymmetry: %r\nrepresentation: %r' % (data['name'], self.theory, self.sym, representation))
         Multipole.__init__(self, name=data['name'], representation=representation)
         self._atoms = []
-        self.add_atoms(data['atoms'])
+        atoms = data['atoms']
+        report_atoms = ''
+        for a in atoms:
+            report_atoms += '%r\n' % (a,)
+        logger.info('Following atoms will be added to the %s Molecule:\n%s' % (self.name, report_atoms))
+        self.add_atoms(atoms)
         self.set_groups()
-        self.set_hybridizations()
-        self.set_frames_from_sites() # in case extra points are loaded from the file
-        self.set_sym_sites()
-        self.set_multipole_matrix()
-        logger.info('%s Molecule is created' % (self.name))
 
     def add_atom(self, atom):
         self._atoms.append(atom)
+
+    def add_atoms(self, atoms):
+        pass
 
     @property
     def sites(self):
@@ -96,6 +95,42 @@ class Molecule(Multipole):
     def atoms_names_eq(self):
         return [a.name for a in self.atoms]
 
+    def set_groups(self):
+        """
+        define bonded neighboring atoms for each atom
+        assign new names to atoms according to their functional group
+        """
+        # identify functional groups
+        buried_atoms = []
+        carbons_with_oxygen = []
+        for atom in self.atoms:
+            atom.set_neighbors(self.atoms)
+            if len(filter(lambda a: a.element=='H', atom.neighbors))>1:
+                buried_atoms.append(atom)
+            if not len(filter(lambda a: a.element=='O', atom.neighbors))==0 and atom.element=='C' and len(atom.neighbors)==3:
+                carbons_with_oxygen.append(atom)
+            logger.debug("Neighbors are assigned to %s:\n%s" % (atom.name, atom.neighbors))
+        # create groups
+        # group instances just change the atoms names
+        exclude = ['methane', 'benzene', 'methane', 'tip5p', 'tip3p', 'ammonia', 'water']
+        if not self.name in exclude:
+            for count, atom in enumerate(carbons_with_oxygen):
+                CarbonOxygenGroup(center=atom, count=count, sym=self.sym)
+            for count, atom in enumerate(buried_atoms):
+                BuriedGroup(center=atom, count=count, sym=self.sym)
+        # symmetrical atoms have identical names
+        try:
+            template, symmetrical = self.sym[0], self.sym[1:] 
+            t = self.get_atom_by_index(template)
+            for i in symmetrical:
+               a = self.get_atom_by_index(i)
+               a.set_name(t.name)
+        except TypeError:
+            pass
+        logger.info("Names of equivalent atoms: %s" % self.atoms_names_eq)
+        logger.info("Names of non-equivalent atoms: %s" % self.atoms_names_noneq)
+
+
     def copy(self):
         # take coordinates of the current molecule
         # and create a new one
@@ -107,6 +142,34 @@ class Molecule(Multipole):
             self.data['atoms'].append(a_updated)
         molecule = Molecule(data=data)
         return molecule
+
+    @property
+    def bonds(self):
+        bonds = []
+        for atom in self.atoms:
+            for nghbr in atom.neighbors:
+                bond = Bond(atom, nghbr)
+                if not bond in bonds:
+                    bonds.append(bond)
+            for s in atom.extra_sites:
+                bond = Bond(atom, s)
+                if not bond in bonds:
+                    bonds.append(bond)
+        return bonds
+
+class HybridMolecule(Molecule):
+    
+    def __init__(self, data):
+        Molecule.__init__(self, data)
+        try:
+            self.hybrid_atoms = data['hybridizations']
+        except KeyError:
+            self.hybrid_atoms = []
+        self.set_hybridizations()
+        self.set_frames_from_sites() # in case extra points are loaded from the file
+        self.set_sym_sites()
+        self.set_multipole_matrix()
+        logger.info('%s Molecule is created' % (self.name))
 
     def get_ep_data(self):
         data = {}
@@ -144,59 +207,10 @@ class Molecule(Multipole):
                 ep = (index+1, h, d, a)
                 atom.set_hybridization(ep)
 
-    def set_groups(self):
-        """
-        define bonded neighboring atoms for each atom
-        assign new names to atoms according to their functional group
-        """
-        # identify functional groups
-        buried_atoms = []
-        carbons_with_oxygen = []
-        for atom in self.atoms:
-            atom.set_neighbors(self.atoms)
-            if len(filter(lambda a: a.element=='H', atom.neighbors))>1:
-                buried_atoms.append(atom)
-            if not len(filter(lambda a: a.element=='O', atom.neighbors))==0 and atom.element=='C' and len(atom.neighbors)==3:
-                carbons_with_oxygen.append(atom)
-            logger.debug("Neighbors are assigned to %s:\n%s" % (atom.name, atom.neighbors))
-        # create groups
-        # group instances just change the atoms names
-        exclude = ['methane', 'benzene', 'methane', 'tip5p', 'tip3p', 'ammonia', 'water']
-        if not self.name in exclude:
-            for count, atom in enumerate(carbons_with_oxygen):
-                CarbonOxygenGroup(center=atom, count=count, sym=self.sym)
-            for count, atom in enumerate(buried_atoms):
-                BuriedGroup(center=atom, count=count, sym=self.sym)
-        # symmetrical atoms have identical names
-        try:
-            template, symmetrical = self.sym[0], self.sym[1:] 
-            t = self.get_atom_by_index(template)
-            for i in symmetrical:
-               a = self.get_atom_by_index(i)
-               a.set_name(t.name)
-        except TypeError:
-            pass
-        logger.info("Names of equivalent sites: %s" % self.sites_names_eq)
-        logger.info("Names of non-equivalent sites: %s" % self.sites_names_noneq)
-
     def set_frames_from_sites(self):
         for a in self.atoms:
             a.set_frame_from_sites()
 
-    @property
-    def bonds(self):
-        bonds = []
-        for atom in self.atoms:
-            for nghbr in atom.neighbors:
-                bond = Bond(atom, nghbr)
-                if not bond in bonds:
-                    bonds.append(bond)
-            for s in atom.extra_sites:
-                bond = Bond(atom, s)
-                if not bond in bonds:
-                    bonds.append(bond)
-        return bonds
-    
     def __add__(self, molecule):
         c = Complex()
         c.add_molecule(self.copy())

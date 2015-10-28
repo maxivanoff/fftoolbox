@@ -1,7 +1,7 @@
 from parser import GaussianCube, QChem, Gaussian, ForceFieldXML
 from grid import vdwGrid
 from charges import LeastSquaresCharges
-from molecule import Molecule
+from molecule import HybridMolecule
 from results import Results
 
 import logging, sys
@@ -32,7 +32,7 @@ parser = GaussianCube(data=data)
 data.update(parser.data.copy())
 
 grid = vdwGrid(data)
-molecule = Molecule(data)
+molecule = HybridMolecule(data)
 
 ls = LeastSquaresCharges(grid=grid, molecule=molecule) 
 ls.solve()

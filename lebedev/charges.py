@@ -8,7 +8,7 @@ class LebedevCharges(LeastSquaresCharges):
 
     @property
     def solution(self):
-        self._solution = np.zeros(len(self.molecule.sites))
+        self._solution = np.zeros(self.molecule.num_sites)
         for i, s in enumerate(self.molecule.sites):
             self._solution[i] = s.charge
         return self._solution

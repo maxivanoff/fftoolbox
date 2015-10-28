@@ -27,6 +27,7 @@ class Parser(object):
         else:
             self.filename = '%s/%s' % (path2xyz, filename)
         self.atoms = []
+        logger.info('%s will read data from %s' % (self, self.filename))
 
     def add_atom(self, index=None, element=None, crds=None, charge=None, multipoles=None):
         if multipoles is None:
@@ -37,6 +38,9 @@ class Parser(object):
 
     def read_file(self, filename):
         pass
+
+    def __repr__(self):
+        return 'Just Parser'
 
 class GaussianCube(Parser):
     
@@ -402,7 +406,6 @@ class GDMA(Parser):
     def read_file(self, filename):
         with open(filename, 'r') as f:
             i=1
-            atoms = []
             multipoles = {}
             while True:
                 line = f.readline()
@@ -446,9 +449,11 @@ class GDMA(Parser):
                         values = tmp[shift+2:][::3]
                         for key, value in zip(keys, values):
                             total_multipoles[key[1:]] = float(value)
-            self.data = {'atoms': atoms,
+            self.data = {'atoms': self.atoms,
                          'multipoles': total_multipoles,
                          }
+    def __repr__(self):
+        return "GDMA parser"
            
             
 
@@ -494,8 +499,8 @@ class ForceFieldXML(object):
             except AttributeError:
                 extra_exists = False
             # load force fields to atoms
-            for a in molecule.get_atoms_by_name(name):
-                a.charge = a_charge
+            for a in molecule.get_sites_by_name(name):
+                a.set_charge(a_charge)
                 a.r0 = r0
                 a.epsilon = epsilon
                 logger.debug('Load forcefields to %s: charge = %.4f; epsilon = %.4f; r0 = %.4f' % (a.name, a.charge, a.epsilon, a.r0))
@@ -503,12 +508,13 @@ class ForceFieldXML(object):
                 if extra_exists:
                     index = molecule.get_max_index()
                     ep = (index+1, h, distance, angle)
-                    a.set_hybridization(ep)
-                    for s in a.extra_sites:
-                        s.charge = e_charge
+                    atom = a.get_atom()
+                    atom.set_hybridization(ep)
+                    for s in atom.extra_sites:
+                        s.set_charge(e_charge)
                         s.r0 = 0.0
                         s.epsilon = 0.0
-                    logger.debug('Force fields for extra points are loaded at %s %s\nNumber of extra points: %i\nCharge: %.3f\nDistance: %.3f\nAngle: %.3f' % (h, a.name, a.num_sites-1, s.charge, distance, angle))
+                    logger.debug('Force fields for extra points are loaded at %s %s\nNumber of extra points: %i\nCharge: %.3f\nDistance: %.3f\nAngle: %.3f' % (h, atom.name, atom.num_extra_sites, s.charge, distance, angle))
         
     def write_file(self, molecule=None, xmlfilename=None):
         top = Element('forcefield', name=molecule.name)
