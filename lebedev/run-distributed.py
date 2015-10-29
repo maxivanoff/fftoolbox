@@ -69,7 +69,7 @@ data.update(parser.data.copy())
 grid = vdwGrid(data)
 grid.build_LEM('full-vdw.pymol')
 solution = LebedevCharges(molecule, grid)
-print 'full', solution.solution_rmsd
+print 'full', solution.rmsd
 
 atoms = [('O', [1]), 
          ('N', [2]),
@@ -80,6 +80,6 @@ for s, i in atoms:
     grid = vdwGrid(data)
     grid.build_LEM('atom-%s.pymol' % s)
     solution = LebedevCharges(molecule, grid)
-    print s, solution.solution_rmsd
+    print s, solution.rmsd
 
 
