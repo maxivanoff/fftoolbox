@@ -15,7 +15,7 @@ class Results(object):
     
     def add(self, o, name=None, qnames=None):
         try:
-            rmsd = o.solution_rmsd
+            rmsd = o.rmsd
         except:
             rmsd = 0.
         charges = o.charges.copy()

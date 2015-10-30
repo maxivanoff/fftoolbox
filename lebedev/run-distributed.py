@@ -9,7 +9,7 @@ import logging, sys
 
 logger = logging.getLogger(__name__)
 lf = '%(levelname)s: %(funcName)s at %(filename)s +%(lineno)s\n%(message)s\n'
-logging.basicConfig(filename='./log', filemode='a', level=logging.DEBUG, format=lf)
+logging.basicConfig(filename='./log', filemode='w', level=logging.DEBUG, format=lf)
 #logging.basicConfig(level=logging.DEBUG, format=lf)
 
 d = {
@@ -32,44 +32,25 @@ data = {
         'theory': 'b3lyp_augccpvdz',
         'representation': ('spherical', 2),
         'symmetry': False,
-        'distributions': d,
+        'sphere params': d,
         'exclude': ['<xy'],
         }
 
 parser = GDMA(data=data)
 #results = Results(parser.data['multipoles'])
-
 data.update(parser.data)
-
 molecule = DistributedLebedevMolecule(data=data)
 
-molecule.write_xyz('mesno-distr.xyz', here=True)
-
-for a in molecule.atoms:
-    multipoles = a.multipoles.copy()
-    for mname in sorted(multipoles.keys()):
-        try:
-            a.ref_multipoles[mname]
-            print a.name, mname, multipoles[mname], a.ref_multipoles[mname]
-        except KeyError:
-            print a.name, mname, multipoles[mname], 0.0
-
-multipoles = molecule.multipoles.copy()
-for mname in sorted(multipoles.keys()):
-    try:
-        parser.data['multipoles'][mname]
-    except KeyError:
-        parser.data['multipoles'][mname] = 0.0
-    print mname, multipoles[mname], parser.data['multipoles'][mname]
 
 data['density'] = 1.5
 parser = GaussianCube(data=data)
 data.update(parser.data.copy())
 
 grid = vdwGrid(data)
-grid.build_LEM('full-vdw.pymol')
-solution = LebedevCharges(molecule, grid)
-print 'full', solution.rmsd
+#grid.build_LEM('full-vdw.pymol')
+charges = LeastSquaresCharges(molecule, grid)
+charges.sites_to_solution()
+print 'full', charges.rmsd
 
 atoms = [('O', [1]), 
          ('N', [2]),
@@ -78,8 +59,9 @@ atoms = [('O', [1]),
 for s, i in atoms:
     data['vdw atoms'] = i
     grid = vdwGrid(data)
-    grid.build_LEM('atom-%s.pymol' % s)
-    solution = LebedevCharges(molecule, grid)
-    print s, solution.rmsd
+    #grid.build_LEM('atom-%s.pymol' % s)
+    charges = LeastSquaresCharges(molecule, grid)
+    charges.sites_to_solution()
+    print s, charges.rmsd
 
 

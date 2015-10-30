@@ -74,7 +74,7 @@ class Coordinates(object):
 
 class FFSite(Coordinates):
 
-    def __init__(self, index=None, element=None, name=None, coordinates=None, charge=None, r0=None, epsilon=None, atom=None):
+    def __init__(self, index=None, element=None, name=None, coordinates=None, charge=None, r0=None, epsilon=None, attachment=None):
         Coordinates.__init__(self, coordinates)
         self._name = name
         self.index = index
@@ -82,7 +82,7 @@ class FFSite(Coordinates):
         self._charge = charge
         self.r0 = r0
         self.epsilon = epsilon
-        self.set_atom(atom)
+        self.set_attachment(attachment)
         logger.info("FFSite instance is created:\n%s" % self.__repr__())
 
     @property
@@ -97,15 +97,18 @@ class FFSite(Coordinates):
         if not self._name is None:
             return self._name
         if self.element == 'EP':
-            return 'EP_%s' % self._atom.element
+            try:
+                return 'EP_%s' % self._attachment.name
+            except AttributeError:
+                return 'EP'
         else:
-            return self._atom.name
+            return self._attachment.name
 
-    def set_atom(self, atom):
-        self._atom = atom
+    def set_attachment(self, attachment):
+        self._attachment = attachment
 
-    def get_atom(self):
-        return self._atom
+    def get_attachment(self):
+        return self._attachment
     
     def __repr__(self):
         return 'FFSite: %s %s %f %f %f %s' % (self.name, self.index, self.coordinates[0], self.coordinates[1], self.coordinates[2], self.charge)
@@ -154,7 +157,7 @@ class HybridAtom(Atom):
     def __init__(self, element=None, coordinates=None, index=None, multipoles=None, representation=None):
         Atom.__init__(self, index=index, element=element, coordinates=coordinates, representation=representation)
         charge = multipoles['charge']
-        center = FFSite(index=index, element=element, coordinates=coordinates, charge=charge, atom=self)
+        center = FFSite(index=index, element=element, coordinates=coordinates, charge=charge, attachment=self)
         self.add_site(center)
         self.frame = None
 
@@ -179,12 +182,12 @@ class HybridAtom(Atom):
         self.free_extra()
         ep_coordinates = self.frame.ep_crds(distance, angle)
         for i, crds in enumerate(ep_coordinates):
-            s = FFSite(element='EP', coordinates=crds, index=index+i, atom=self)
+            s = FFSite(element='EP', coordinates=crds, index=index+i, attachment=self)
             self.add_site(s)
 
     def set_frame_from_sites(self):
         if self.frame is None and self.num_extra_sites > 0:
-            num_domains = len(self.sites) + len(self.neighbors) - 1
+            num_domains = self.num_extra_sites + len(self.neighbors)
             h = 'sp%i' % (num_domains - 1)
             self.frame = Frame(self, h)
 

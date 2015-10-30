@@ -64,8 +64,8 @@ class LeastSquaresCharges(LeastSquaresBasic):
         self.charges_to_sites(self._charges)
 
     def sites_to_solution(self):
-        self._solution = np.zeros(self.molecule.num_sites)
-        for i, s in enumerate(self.molecule.sites):
+        self._solution = np.zeros(self.molecule.num_sites_noneq)
+        for i, s in enumerate(self.molecule.sites_noneq):
             self._solution[i] = s.charge
         logger.info('Charges were transfered from sites to _solution')
 

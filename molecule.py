@@ -46,6 +46,12 @@ class Molecule(Multipole):
         logger.info('Following atoms will be added to the %s Molecule:\n%s' % (self.name, report_atoms))
         self.add_atoms(atoms)
         self.set_groups()
+        self.set_sym_sites()
+        self.set_multipole_matrix()
+        logger.info("Names of equivalent atoms: %s" % self.atoms_names_eq)
+        logger.info("Names of non-equivalent atoms: %s" % self.atoms_names_noneq)
+        logger.info("Names of equivalent sites: %s" % self.sites_names_eq)
+        logger.info("Names of non-equivalent sites: %s" % self.sites_names_noneq)
 
     def add_atom(self, atom):
         self._atoms.append(atom)
@@ -127,8 +133,6 @@ class Molecule(Multipole):
                a.set_name(t.name)
         except TypeError:
             pass
-        logger.info("Names of equivalent atoms: %s" % self.atoms_names_eq)
-        logger.info("Names of non-equivalent atoms: %s" % self.atoms_names_noneq)
 
 
     def copy(self):
@@ -195,7 +199,7 @@ class HybridMolecule(Molecule):
             closest = sorted(self.atoms, key=lambda a: a.distance_to(s))
             atom = closest[0]
             atom.add_site(s)
-            s.set_atom(atom)
+            s.set_attachment(atom)
             logger.debug('Site %s is appended to sites of atom %s' % (s.name, atom.name))
 
     def set_hybridizations(self):

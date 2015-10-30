@@ -36,7 +36,6 @@ molecule = HybridMolecule(data)
 
 ls = LeastSquaresCharges(grid=grid, molecule=molecule) 
 ls.solve()
-ls.charges2sites()
 results.add(ls)
 
 print results

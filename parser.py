@@ -27,7 +27,6 @@ class Parser(object):
         else:
             self.filename = '%s/%s' % (path2xyz, filename)
         self.atoms = []
-        logger.info('%s will read data from %s' % (self, self.filename))
 
     def add_atom(self, index=None, element=None, crds=None, charge=None, multipoles=None):
         if multipoles is None:
@@ -37,7 +36,7 @@ class Parser(object):
         self.atoms.append(atom)
 
     def read_file(self, filename):
-        pass
+        logger.info('%s will read data from %s' % (self, filename))
 
     def __repr__(self):
         return 'Just Parser'
@@ -63,6 +62,7 @@ class GaussianCube(Parser):
         self.density = np.prod(self.num_points)/np.prod((self.num_points - 1)*cube_sides)
 
     def read_file(self, filename=None):
+        Parser.read_file(self, filename)
         cubefile = open(filename, 'r')
         cubefile.readline()
         cubefile.readline()
@@ -114,6 +114,7 @@ class QChem(Parser):
         self.read_file(filename=self.filename)
 
     def read_file(self, filename):
+        Parser.read_file(self, filename)
         txt = open(filename, 'r').read()
 
         # coordinates
@@ -183,6 +184,7 @@ class Gaussian(Parser):
         self.read_file(filename=self.filename)
 
     def read_file(self, filename, orientation=None):
+        Parser.read_file(self, filename)
         if orientation is None:
             orientation = self.orientation
         self.geometries_input = []
@@ -314,12 +316,12 @@ class Gaussian(Parser):
 class Mol2(Parser):
 
     def __init__(self, filename=None, data=None, here=False):
-        self.atoms = ()
         Parser.__init__(self, filename=filename, data=data, dname='mol2', suffix='.mol2', here=here)
 
     def read_file(self, filename=None):
         if filename is None:
             filename = self.filename
+        Parser.read_file(self, filename)
         mol2file = open(filename, 'r')
         s = mol2file.read()
         s = s.split('@<TRIPOS>')
@@ -334,7 +336,6 @@ class Mol2(Parser):
             crds = np.array([float(t)*units.angst_to_au for t in tmp[2:5]])
             self.add_atom(index, element, crds, charge=charge)
             index += 1
-        self.atoms = (atoms)
         mol2file.close()
         self.data = {'atoms': self.atoms}
 
@@ -378,6 +379,7 @@ class XYZ(Parser):
         Parser.__init__(self, filename=filename, data=data, dname='xyz', suffix='.xyz')
 
     def read_file(self, filename):
+        Parser.read_file(self, filename)
         xyzfile = open(filename, 'r')
         s = xyzfile.readline().split()
         num_atoms = int(s[0])
@@ -404,6 +406,7 @@ class GDMA(Parser):
         self.read_file(filename=self.filename)
 
     def read_file(self, filename):
+        Parser.read_file(self, filename)
         with open(filename, 'r') as f:
             i=1
             multipoles = {}
@@ -508,7 +511,7 @@ class ForceFieldXML(object):
                 if extra_exists:
                     index = molecule.get_max_index()
                     ep = (index+1, h, distance, angle)
-                    atom = a.get_atom()
+                    atom = a.get_attachment()
                     atom.set_hybridization(ep)
                     for s in atom.extra_sites:
                         s.set_charge(e_charge)

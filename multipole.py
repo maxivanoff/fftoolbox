@@ -72,6 +72,14 @@ class GroupOfSites(object):
     @property
     def num_sites(self):
         return len(self._sites)
+    
+    @property
+    def num_sites_noneq(self):
+        sites = []
+        for s in self.sites:
+            if not s.name in [ss.name for ss in sites]:
+                sites.append(s)
+        return len(sites)
 
     def reindexate(self, shift):
         for s in self.sites:
@@ -94,8 +102,7 @@ class GroupOfSites(object):
         return crds
 
     def get_max_index(self):
-        i = [s.index for s in self.sites]
-        return max(i)
+        return max([s.index for s in self.sites])
     
     def get_sites_by_name(self, name):
         return iter(filter(lambda s: s.name == name, self.sites))
