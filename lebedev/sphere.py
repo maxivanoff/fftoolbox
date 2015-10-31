@@ -18,6 +18,8 @@ class LebedevSphere(Multipole):
                     2:14,
                     3:26,
                     4:38,
+                    5:50,
+                    6:74,
                     }
 
     def __init__(self, index=None, name=None, rank=None, radius=None, origin=None, ref_multipoles=None):

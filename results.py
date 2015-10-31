@@ -1,5 +1,20 @@
 import units
 
+class Report(object):
+
+    def __init__(self, name=None, charges=None):
+        self.name = name
+        self.rmsd = charges.rmsd
+        self.max_error = charges.max_error
+        self.rmad = charges.rmad
+        self.R2 = charges.R2
+        self.a, self.da, self.b, self.db = charges.ab
+
+    def __repr__(self):
+        s = '%s\nrmsd = %.3f kcal/mol\nmax error = %.3f kcal/mol\nrmad = %.3f\ny = (%.3f +/- %.3f) * b + %.3f +/- %.3f\nR2 = %.3f\n' \
+                % (self.name, self.rmsd, self.max_error, self.rmad, self.a, self.da, self.b, self.db, self.R2)
+        return s
+
 class Results(object):
 
     def __init__(self, ref_multipoles=None):

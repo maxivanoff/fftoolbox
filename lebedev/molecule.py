@@ -19,7 +19,7 @@ class LebedevAtom(Atom, LebedevSphere):
 class LebedevMolecule(LebedevSphere):
 
     def __init__(self, data):
-        rank, radis = data['sphere params']
+        rank, radius = data['sphere params']
         representation = ('spherical', rank)
         LebedevSphere.__init__(self, name=data['name'], rank=rank, radius=radius, \
                 origin=None, ref_multipoles=data['multipoles'])

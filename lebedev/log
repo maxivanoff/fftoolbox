@@ -1,934 +1,4 @@
 INFO: read_file at parser.py +39
-GDMA parser will read data from /Volumes/HDD/Maxim/work/devel/fftoolbox/data/gdma/cis-mesno_b3lyp_augccpvdz.out
-
-INFO: __init__ at molecule.py +39
-Start assembling cis-mesno Molecule
-theory: 'b3lyp_augccpvdz'
-symmetry: False
-representation: ('spherical', 2)
-
-INFO: __init__ at multipole.py +157
-cis-mesno Multipole is created.
-Multipoles representation: ('spherical', 2)
-
-INFO: __init__ at molecule.py +46
-Following atoms will be added to the cis-mesno Molecule:
-(1, 'O', array([-1.479913, -2.855442,  0.      ]), {'00': -0.238675, '20': -0.082527, '11c': -0.248114, '40': 0.744559, '31s': -0.522027, '42c': -0.714819, '22c': -0.759417, 'rank': 4, '44c': -0.344141, '33s': 0.066194, '11s': 0.299193, '31c': -0.092444, '44s': 0.571019, '42s': -0.694495, '22s': -0.507878, '33c': -0.385868})
-(2, 'N', array([-2.331265, -0.777068, -0.      ]), {'00': -0.229302, '20': -0.147782, '11c': 0.127316, '40': 1.903544, '31s': -0.927564, '42c': 1.332181, '22c': -0.344754, 'rank': 4, '44c': -1.994064, '33s': 0.064777, '11s': -0.746975, '31c': -1.005231, '44s': 0.379497, '42s': -2.420639, '22s': -0.355983, '33c': 0.008199})
-(3, 'S', array([ 0.      ,  1.817686,  0.      ]), {'00': 0.552172, '20': -1.975814, '11c': 0.089189, '40': -3.402524, '31s': -0.590175, '42c': 1.839771, '22c': 0.928383, 'rank': 4, '44c': 0.419375, '33s': -0.194033, '11s': -0.936719, '31c': 0.492259, '44s': -0.404591, '42s': 1.616823, '22s': 0.244847, '33c': 0.394698})
-(4, 'C', array([ 2.932288,  0.0226  ,  0.      ]), {'00': -0.36293, '20': 0.119871, '11c': 0.31341, '40': 1.840551, '31s': -2.488605, '42c': -1.500093, '22c': -0.021403, 'rank': 4, '44c': -1.299584, '33s': 1.121198, '11s': -0.26429, '31c': 0.444281, '44s': -0.603881, '42s': 0.715178, '22s': 0.57153, '33c': -1.008906})
-(5, 'H', array([ 4.484271,  1.394699,  0.      ]), {'00': 0.079222, '20': -0.106401, '11c': -0.100458, '40': -0.050126, '31s': -0.1025, '42c': 0.063598, '22c': 0.024681, 'rank': 4, '44c': -0.003921, '33s': 0.19123, '11s': -0.072511, '31c': -0.099725, '44s': -0.013143, '42s': 0.083248, '22s': 0.160953, '33c': -0.081665})
-(6, 'H', array([ 3.04008 , -1.165135,  1.695006]), {'44s': -0.011331, '22c': -0.025907, 'rank': 4, '44c': -0.045695, '22s': 0.03402, '00': 0.099757, '20': 0.060237, '41c': 0.09985, '43c': -0.098875, '40': 0.057349, '41s': 0.015239, '43s': -0.068429, '21s': -0.148249, '11c': -0.057943, '32c': -0.053238, '31s': -0.147867, '33s': -0.011077, '21c': -0.004248, '11s': 0.052636, '31c': 0.089247, '33c': 0.004624, '10': -0.098247, '42c': 0.132928, '30': 0.013247, '32s': -0.051163, '42s': -0.10237})
-(7, 'H', array([ 3.04008 , -1.165135, -1.695006]), {'44s': -0.011331, '22c': -0.025907, 'rank': 4, '44c': -0.045695, '22s': 0.03402, '00': 0.099757, '20': 0.060237, '41c': -0.09985, '43c': 0.098875, '40': 0.057349, '41s': -0.015239, '43s': 0.068429, '21s': 0.148249, '11c': -0.057943, '32c': 0.053238, '31s': -0.147867, '33s': -0.011077, '21c': 0.004248, '11s': 0.052636, '31c': 0.089247, '33c': 0.004624, '10': 0.098247, '42c': 0.132928, '30': -0.013247, '32s': 0.051163, '42s': -0.10237})
-
-
-INFO: __init__ at multipole.py +157
-O Multipole is created.
-Multipoles representation: None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -1.480 y = -2.855 z = 0.000
-r = 3.216 theta = -2.049 phi = 1.571
-
-INFO: __init__ at atom.py +143
-Atom instance is created:
-Atom: O O 1 -1.479913 -2.855442 0.000000
-
-INFO: __init__ at multipole.py +157
-O Multipole is created.
-Multipoles representation: ('spherical', 2)
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 0.000 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-1 None 1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 3.142 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-2 None -1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 1.000 z = 0.000
-r = 1.000 theta = 1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-3 None 0.000000 1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = -1.000 z = 0.000
-r = 1.000 theta = -1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-4 None 0.000000 -1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = 1.000
-r = 1.000 theta = 0.000 phi = 0.000
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-5 None 0.000000 0.000000 1.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = -1.000
-r = 1.000 theta = 0.000 phi = 3.142
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-6 None 0.000000 0.000000 -1.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.577 y = 0.577 z = 0.577
-r = 1.000 theta = 0.785 phi = 0.955
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-7 None 0.577350 0.577350 0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -0.577 y = 0.577 z = 0.577
-r = 1.000 theta = 2.356 phi = 0.955
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-8 None -0.577350 0.577350 0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.577 y = -0.577 z = 0.577
-r = 1.000 theta = -0.785 phi = 0.955
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-9 None 0.577350 -0.577350 0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -0.577 y = -0.577 z = 0.577
-r = 1.000 theta = -2.356 phi = 0.955
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-10 None -0.577350 -0.577350 0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.577 y = 0.577 z = -0.577
-r = 1.000 theta = 0.785 phi = 2.186
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-11 None 0.577350 0.577350 -0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -0.577 y = 0.577 z = -0.577
-r = 1.000 theta = 2.356 phi = 2.186
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-12 None -0.577350 0.577350 -0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.577 y = -0.577 z = -0.577
-r = 1.000 theta = -0.785 phi = 2.186
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-13 None 0.577350 -0.577350 -0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -0.577 y = -0.577 z = -0.577
-r = 1.000 theta = -2.356 phi = 2.186
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_O-14 None -0.577350 -0.577350 -0.577350 None
-
-DEBUG: set_sym_sites at multipole.py +96
-Symmetry indeces in O:
-array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13])
-
-DEBUG: __init__ at multipole.py +236
-Multipole conversion matrix is set up.
-multipoles = ['00', '10', '11c', '11s', '20', '21c', '21s', '22c', '22s']
-total number of components: 9 
-Q to M matrix: (9, 14)
-
-DEBUG: __init__ at multipole.py +276
-Spherical representation for O is set up.
-Origin = array([-1.479913, -2.855442,  0.      ])
-
-INFO: __init__ at sphere.py +51
-LebedevSphere O is created.
-Number of charged sites: 14
-Radius: 1.0
-
-INFO: __init__ at multipole.py +157
-N Multipole is created.
-Multipoles representation: None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -2.331 y = -0.777 z = -0.000
-r = 2.457 theta = -2.820 phi = 1.571
-
-INFO: __init__ at atom.py +143
-Atom instance is created:
-Atom: N N 2 -2.331265 -0.777068 -0.000000
-
-INFO: __init__ at multipole.py +157
-N Multipole is created.
-Multipoles representation: ('spherical', 2)
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 0.000 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-1 None 1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 3.142 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-2 None -1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 1.000 z = 0.000
-r = 1.000 theta = 1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-3 None 0.000000 1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = -1.000 z = 0.000
-r = 1.000 theta = -1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-4 None 0.000000 -1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = 1.000
-r = 1.000 theta = 0.000 phi = 0.000
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-5 None 0.000000 0.000000 1.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = -1.000
-r = 1.000 theta = 0.000 phi = 3.142
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-6 None 0.000000 0.000000 -1.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.577 y = 0.577 z = 0.577
-r = 1.000 theta = 0.785 phi = 0.955
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-7 None 0.577350 0.577350 0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -0.577 y = 0.577 z = 0.577
-r = 1.000 theta = 2.356 phi = 0.955
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-8 None -0.577350 0.577350 0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.577 y = -0.577 z = 0.577
-r = 1.000 theta = -0.785 phi = 0.955
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-9 None 0.577350 -0.577350 0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -0.577 y = -0.577 z = 0.577
-r = 1.000 theta = -2.356 phi = 0.955
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-10 None -0.577350 -0.577350 0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.577 y = 0.577 z = -0.577
-r = 1.000 theta = 0.785 phi = 2.186
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-11 None 0.577350 0.577350 -0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -0.577 y = 0.577 z = -0.577
-r = 1.000 theta = 2.356 phi = 2.186
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-12 None -0.577350 0.577350 -0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.577 y = -0.577 z = -0.577
-r = 1.000 theta = -0.785 phi = 2.186
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-13 None 0.577350 -0.577350 -0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -0.577 y = -0.577 z = -0.577
-r = 1.000 theta = -2.356 phi = 2.186
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_N-14 None -0.577350 -0.577350 -0.577350 None
-
-DEBUG: set_sym_sites at multipole.py +96
-Symmetry indeces in N:
-array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13])
-
-DEBUG: __init__ at multipole.py +236
-Multipole conversion matrix is set up.
-multipoles = ['00', '10', '11c', '11s', '20', '21c', '21s', '22c', '22s']
-total number of components: 9 
-Q to M matrix: (9, 14)
-
-DEBUG: __init__ at multipole.py +276
-Spherical representation for N is set up.
-Origin = array([-2.331265, -0.777068, -0.      ])
-
-INFO: __init__ at sphere.py +51
-LebedevSphere N is created.
-Number of charged sites: 14
-Radius: 1.0
-
-INFO: __init__ at multipole.py +157
-S Multipole is created.
-Multipoles representation: None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 1.818 z = 0.000
-r = 1.818 theta = 1.571 phi = 1.571
-
-INFO: __init__ at atom.py +143
-Atom instance is created:
-Atom: S S 3 0.000000 1.817686 0.000000
-
-INFO: __init__ at multipole.py +157
-S Multipole is created.
-Multipoles representation: ('spherical', 2)
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 0.000 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-1 None 1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 3.142 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-2 None -1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 1.000 z = 0.000
-r = 1.000 theta = 1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-3 None 0.000000 1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = -1.000 z = 0.000
-r = 1.000 theta = -1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-4 None 0.000000 -1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = 1.000
-r = 1.000 theta = 0.000 phi = 0.000
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-5 None 0.000000 0.000000 1.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = -1.000
-r = 1.000 theta = 0.000 phi = 3.142
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-6 None 0.000000 0.000000 -1.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.577 y = 0.577 z = 0.577
-r = 1.000 theta = 0.785 phi = 0.955
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-7 None 0.577350 0.577350 0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -0.577 y = 0.577 z = 0.577
-r = 1.000 theta = 2.356 phi = 0.955
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-8 None -0.577350 0.577350 0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.577 y = -0.577 z = 0.577
-r = 1.000 theta = -0.785 phi = 0.955
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-9 None 0.577350 -0.577350 0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -0.577 y = -0.577 z = 0.577
-r = 1.000 theta = -2.356 phi = 0.955
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-10 None -0.577350 -0.577350 0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.577 y = 0.577 z = -0.577
-r = 1.000 theta = 0.785 phi = 2.186
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-11 None 0.577350 0.577350 -0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -0.577 y = 0.577 z = -0.577
-r = 1.000 theta = 2.356 phi = 2.186
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-12 None -0.577350 0.577350 -0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.577 y = -0.577 z = -0.577
-r = 1.000 theta = -0.785 phi = 2.186
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-13 None 0.577350 -0.577350 -0.577350 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -0.577 y = -0.577 z = -0.577
-r = 1.000 theta = -2.356 phi = 2.186
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_S-14 None -0.577350 -0.577350 -0.577350 None
-
-DEBUG: set_sym_sites at multipole.py +96
-Symmetry indeces in S:
-array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13])
-
-DEBUG: __init__ at multipole.py +236
-Multipole conversion matrix is set up.
-multipoles = ['00', '10', '11c', '11s', '20', '21c', '21s', '22c', '22s']
-total number of components: 9 
-Q to M matrix: (9, 14)
-
-DEBUG: __init__ at multipole.py +276
-Spherical representation for S is set up.
-Origin = array([ 0.      ,  1.817686,  0.      ])
-
-INFO: __init__ at sphere.py +51
-LebedevSphere S is created.
-Number of charged sites: 14
-Radius: 1.0
-
-INFO: __init__ at multipole.py +157
-C Multipole is created.
-Multipoles representation: None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 2.932 y = 0.023 z = 0.000
-r = 2.932 theta = 0.008 phi = 1.571
-
-INFO: __init__ at atom.py +143
-Atom instance is created:
-Atom: C C 4 2.932288 0.022600 0.000000
-
-INFO: __init__ at multipole.py +157
-C Multipole is created.
-Multipoles representation: ('spherical', 1)
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 0.000 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_C-1 None 1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 3.142 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_C-2 None -1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 1.000 z = 0.000
-r = 1.000 theta = 1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_C-3 None 0.000000 1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = -1.000 z = 0.000
-r = 1.000 theta = -1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_C-4 None 0.000000 -1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = 1.000
-r = 1.000 theta = 0.000 phi = 0.000
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_C-5 None 0.000000 0.000000 1.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = -1.000
-r = 1.000 theta = 0.000 phi = 3.142
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_C-6 None 0.000000 0.000000 -1.000000 None
-
-DEBUG: set_sym_sites at multipole.py +96
-Symmetry indeces in C:
-array([0, 1, 2, 3, 4, 5])
-
-DEBUG: __init__ at multipole.py +236
-Multipole conversion matrix is set up.
-multipoles = ['00', '10', '11c', '11s']
-total number of components: 4 
-Q to M matrix: (4, 6)
-
-DEBUG: __init__ at multipole.py +276
-Spherical representation for C is set up.
-Origin = array([ 2.932288,  0.0226  ,  0.      ])
-
-INFO: __init__ at sphere.py +51
-LebedevSphere C is created.
-Number of charged sites: 6
-Radius: 1.0
-
-INFO: __init__ at multipole.py +157
-H Multipole is created.
-Multipoles representation: None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 4.484 y = 1.395 z = 0.000
-r = 4.696 theta = 0.302 phi = 1.571
-
-INFO: __init__ at atom.py +143
-Atom instance is created:
-Atom: H H 5 4.484271 1.394699 0.000000
-
-INFO: __init__ at multipole.py +157
-H Multipole is created.
-Multipoles representation: ('spherical', 1)
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 0.000 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-1 None 1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 3.142 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-2 None -1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 1.000 z = 0.000
-r = 1.000 theta = 1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-3 None 0.000000 1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = -1.000 z = 0.000
-r = 1.000 theta = -1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-4 None 0.000000 -1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = 1.000
-r = 1.000 theta = 0.000 phi = 0.000
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-5 None 0.000000 0.000000 1.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = -1.000
-r = 1.000 theta = 0.000 phi = 3.142
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-6 None 0.000000 0.000000 -1.000000 None
-
-DEBUG: set_sym_sites at multipole.py +96
-Symmetry indeces in H:
-array([0, 1, 2, 3, 4, 5])
-
-DEBUG: __init__ at multipole.py +236
-Multipole conversion matrix is set up.
-multipoles = ['00', '10', '11c', '11s']
-total number of components: 4 
-Q to M matrix: (4, 6)
-
-DEBUG: __init__ at multipole.py +276
-Spherical representation for H is set up.
-Origin = array([ 4.484271,  1.394699,  0.      ])
-
-INFO: __init__ at sphere.py +51
-LebedevSphere H is created.
-Number of charged sites: 6
-Radius: 1.0
-
-INFO: __init__ at multipole.py +157
-H Multipole is created.
-Multipoles representation: None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 3.040 y = -1.165 z = 1.695
-r = 3.671 theta = -0.366 phi = 1.091
-
-INFO: __init__ at atom.py +143
-Atom instance is created:
-Atom: H H 6 3.040080 -1.165135 1.695006
-
-INFO: __init__ at multipole.py +157
-H Multipole is created.
-Multipoles representation: ('spherical', 1)
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 0.000 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-1 None 1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 3.142 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-2 None -1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 1.000 z = 0.000
-r = 1.000 theta = 1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-3 None 0.000000 1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = -1.000 z = 0.000
-r = 1.000 theta = -1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-4 None 0.000000 -1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = 1.000
-r = 1.000 theta = 0.000 phi = 0.000
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-5 None 0.000000 0.000000 1.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = -1.000
-r = 1.000 theta = 0.000 phi = 3.142
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-6 None 0.000000 0.000000 -1.000000 None
-
-DEBUG: set_sym_sites at multipole.py +96
-Symmetry indeces in H:
-array([0, 1, 2, 3, 4, 5])
-
-DEBUG: __init__ at multipole.py +236
-Multipole conversion matrix is set up.
-multipoles = ['00', '10', '11c', '11s']
-total number of components: 4 
-Q to M matrix: (4, 6)
-
-DEBUG: __init__ at multipole.py +276
-Spherical representation for H is set up.
-Origin = array([ 3.04008 , -1.165135,  1.695006])
-
-INFO: __init__ at sphere.py +51
-LebedevSphere H is created.
-Number of charged sites: 6
-Radius: 1.0
-
-INFO: __init__ at multipole.py +157
-H Multipole is created.
-Multipoles representation: None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 3.040 y = -1.165 z = -1.695
-r = 3.671 theta = -0.366 phi = 2.051
-
-INFO: __init__ at atom.py +143
-Atom instance is created:
-Atom: H H 7 3.040080 -1.165135 -1.695006
-
-INFO: __init__ at multipole.py +157
-H Multipole is created.
-Multipoles representation: ('spherical', 1)
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 0.000 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-1 None 1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = -1.000 y = 0.000 z = 0.000
-r = 1.000 theta = 3.142 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-2 None -1.000000 0.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 1.000 z = 0.000
-r = 1.000 theta = 1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-3 None 0.000000 1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = -1.000 z = 0.000
-r = 1.000 theta = -1.571 phi = 1.571
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-4 None 0.000000 -1.000000 0.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = 1.000
-r = 1.000 theta = 0.000 phi = 0.000
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-5 None 0.000000 0.000000 1.000000 None
-
-INFO: __init__ at atom.py +19
-Coordinates instance is created with coordinates:
-x = 0.000 y = 0.000 z = -1.000
-r = 1.000 theta = 0.000 phi = 3.142
-
-INFO: __init__ at atom.py +87
-FFSite instance is created:
-FFSite: EP_H-6 None 0.000000 0.000000 -1.000000 None
-
-DEBUG: set_sym_sites at multipole.py +96
-Symmetry indeces in H:
-array([0, 1, 2, 3, 4, 5])
-
-DEBUG: __init__ at multipole.py +236
-Multipole conversion matrix is set up.
-multipoles = ['00', '10', '11c', '11s']
-total number of components: 4 
-Q to M matrix: (4, 6)
-
-DEBUG: __init__ at multipole.py +276
-Spherical representation for H is set up.
-Origin = array([ 3.04008 , -1.165135, -1.695006])
-
-INFO: __init__ at sphere.py +51
-LebedevSphere H is created.
-Number of charged sites: 6
-Radius: 1.0
-
-DEBUG: set_groups at molecule.py +118
-Neighbors are assigned to O:
-[Atom: N N 2 -2.331265 -0.777068 -0.000000]
-
-DEBUG: set_groups at molecule.py +118
-Neighbors are assigned to N:
-[Atom: O O 1 -1.479913 -2.855442 0.000000, Atom: S S 3 0.000000 1.817686 0.000000]
-
-DEBUG: set_groups at molecule.py +118
-Neighbors are assigned to S:
-[Atom: N N 2 -2.331265 -0.777068 -0.000000, Atom: C C 4 2.932288 0.022600 0.000000]
-
-DEBUG: set_groups at molecule.py +118
-Neighbors are assigned to C:
-[Atom: S S 3 0.000000 1.817686 0.000000, Atom: H H 5 4.484271 1.394699 0.000000, Atom: H H 6 3.040080 -1.165135 1.695006, Atom: H H 7 3.040080 -1.165135 -1.695006]
-
-DEBUG: set_groups at molecule.py +118
-Neighbors are assigned to H:
-[Atom: C C 4 2.932288 0.022600 0.000000]
-
-DEBUG: set_groups at molecule.py +118
-Neighbors are assigned to H:
-[Atom: C C 4 2.932288 0.022600 0.000000]
-
-DEBUG: set_groups at molecule.py +118
-Neighbors are assigned to H:
-[Atom: C C 4 2.932288 0.022600 0.000000]
-
-DEBUG: __init__ at groups.py +56
-Buried atom created with center @ C_CH3 and 3 hydrogen atoms: ['H_CH3-0', 'H_CH3-1', 'H_CH3-2']
-
-DEBUG: set_sym_sites at multipole.py +96
-Symmetry indeces in cis-mesno:
-array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
-       17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-       34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-       51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65])
-
-DEBUG: __init__ at multipole.py +236
-Multipole conversion matrix is set up.
-multipoles = ['00', '10', '11c', '11s', '20', '21c', '21s', '22c', '22s']
-total number of components: 9 
-Q to M matrix: (9, 66)
-
-DEBUG: __init__ at multipole.py +276
-Spherical representation for cis-mesno is set up.
-Origin = array([ 0.,  0.,  0.])
-
-INFO: __init__ at molecule.py +51
-Names of equivalent atoms: ['O', 'N', 'S', 'C_CH3', 'H_CH3-0', 'H_CH3-1', 'H_CH3-2']
-
-INFO: __init__ at molecule.py +52
-Names of non-equivalent atoms: ['O', 'N', 'S', 'C_CH3', 'H_CH3-0', 'H_CH3-1', 'H_CH3-2']
-
-INFO: __init__ at molecule.py +53
-Names of equivalent sites: ['EP_O-1', 'EP_O-2', 'EP_O-3', 'EP_O-4', 'EP_O-5', 'EP_O-6', 'EP_O-7', 'EP_O-8', 'EP_O-9', 'EP_O-10', 'EP_O-11', 'EP_O-12', 'EP_O-13', 'EP_O-14', 'EP_N-1', 'EP_N-2', 'EP_N-3', 'EP_N-4', 'EP_N-5', 'EP_N-6', 'EP_N-7', 'EP_N-8', 'EP_N-9', 'EP_N-10', 'EP_N-11', 'EP_N-12', 'EP_N-13', 'EP_N-14', 'EP_S-1', 'EP_S-2', 'EP_S-3', 'EP_S-4', 'EP_S-5', 'EP_S-6', 'EP_S-7', 'EP_S-8', 'EP_S-9', 'EP_S-10', 'EP_S-11', 'EP_S-12', 'EP_S-13', 'EP_S-14', 'EP_C_CH3-1', 'EP_C_CH3-2', 'EP_C_CH3-3', 'EP_C_CH3-4', 'EP_C_CH3-5', 'EP_C_CH3-6', 'EP_H_CH3-0-1', 'EP_H_CH3-0-2', 'EP_H_CH3-0-3', 'EP_H_CH3-0-4', 'EP_H_CH3-0-5', 'EP_H_CH3-0-6', 'EP_H_CH3-1-1', 'EP_H_CH3-1-2', 'EP_H_CH3-1-3', 'EP_H_CH3-1-4', 'EP_H_CH3-1-5', 'EP_H_CH3-1-6', 'EP_H_CH3-2-1', 'EP_H_CH3-2-2', 'EP_H_CH3-2-3', 'EP_H_CH3-2-4', 'EP_H_CH3-2-5', 'EP_H_CH3-2-6']
-
-INFO: __init__ at molecule.py +54
-Names of non-equivalent sites: ['EP_O-1', 'EP_O-2', 'EP_O-3', 'EP_O-4', 'EP_O-5', 'EP_O-6', 'EP_O-7', 'EP_O-8', 'EP_O-9', 'EP_O-10', 'EP_O-11', 'EP_O-12', 'EP_O-13', 'EP_O-14', 'EP_N-1', 'EP_N-2', 'EP_N-3', 'EP_N-4', 'EP_N-5', 'EP_N-6', 'EP_N-7', 'EP_N-8', 'EP_N-9', 'EP_N-10', 'EP_N-11', 'EP_N-12', 'EP_N-13', 'EP_N-14', 'EP_S-1', 'EP_S-2', 'EP_S-3', 'EP_S-4', 'EP_S-5', 'EP_S-6', 'EP_S-7', 'EP_S-8', 'EP_S-9', 'EP_S-10', 'EP_S-11', 'EP_S-12', 'EP_S-13', 'EP_S-14', 'EP_C_CH3-1', 'EP_C_CH3-2', 'EP_C_CH3-3', 'EP_C_CH3-4', 'EP_C_CH3-5', 'EP_C_CH3-6', 'EP_H_CH3-0-1', 'EP_H_CH3-0-2', 'EP_H_CH3-0-3', 'EP_H_CH3-0-4', 'EP_H_CH3-0-5', 'EP_H_CH3-0-6', 'EP_H_CH3-1-1', 'EP_H_CH3-1-2', 'EP_H_CH3-1-3', 'EP_H_CH3-1-4', 'EP_H_CH3-1-5', 'EP_H_CH3-1-6', 'EP_H_CH3-2-1', 'EP_H_CH3-2-2', 'EP_H_CH3-2-3', 'EP_H_CH3-2-4', 'EP_H_CH3-2-5', 'EP_H_CH3-2-6']
-
-INFO: read_file at parser.py +39
 Gaussian cube parser will read data from /Volumes/HDD/Maxim/work/devel/fftoolbox/data/cub/cis-mesno_b3lyp_augccpvdz_d1.5.cub
 
 INFO: __init__ at grid.py +125
@@ -944,139 +14,2181 @@ INFO: __init__ at grid.py +233
 vdW grid is based on 7 atoms: ['O', 'N', 'S', 'C', 'H', 'H', 'H']
 
 INFO: create_vdw_grid at grid.py +266
-vdW grid is created: 2057 points
+vdW grid is created: 3917 points
+
+INFO: read_file at parser.py +39
+GDMA parser will read data from /Volumes/HDD/Maxim/work/devel/fftoolbox/data/gdma/cis-mesno_b3lyp_augccpvdz.out
+
+INFO: __init__ at multipole.py +160
+cis-mesno Multipole is created.
+Multipoles representation: ('spherical', 0)
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = 0.000
+r = 0.000 theta = 0.000 phi = 0.000
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: cis-mesno None 0.000000 0.000000 0.000000 0.0
+
+DEBUG: set_sym_sites at multipole.py +96
+Symmetry indeces in cis-mesno:
+array([0])
+
+DEBUG: __init__ at multipole.py +239
+Multipole conversion matrix is set up.
+multipoles = ['00']
+total number of components: 1 
+Q to M matrix: (1, 1)
+
+DEBUG: __init__ at multipole.py +279
+Spherical representation for cis-mesno is set up.
+Origin = array([ 0.,  0.,  0.])
+
+INFO: __init__ at sphere.py +53
+LebedevSphere cis-mesno is created.
+Number of charged sites: 1
+Radius: 1.0
 
 DEBUG: setA at charges.py +43
-Number of coordinates in the grid: 2057
-Number of sites in molecule: 66
-Number of sites with different names: 66
+Number of coordinates in the grid: 3917
+Number of sites in molecule: 1
+Number of sites with different names: 1
 
 INFO: setA at charges.py +46
-Least squares matrix is set up with shape (2057, 66)
+Least squares matrix is set up with shape (3917, 1)
 
 DEBUG: __init__ at LeastSquares.py +25
-Shape of reference vector b: (2057,)
-Shape of LS matrix A: (2057, 66)
+Shape of reference vector b: (3917,)
+Shape of LS matrix A: (3917, 1)
 
 INFO: sites_to_solution at charges.py +70
 Charges were transfered from sites to _solution
 
-INFO: __init__ at grid.py +125
-Grid instance is to be created:
-Number of points: [30 30 30]
-vectors:
-[[ 0.666667  0.        0.      ]
- [ 0.        0.666667  0.      ]
- [ 0.        0.        0.666667]]
-Origin: [-10. -10. -10.]
+INFO: read_file at parser.py +39
+GDMA parser will read data from /Volumes/HDD/Maxim/work/devel/fftoolbox/data/gdma/cis-mesno_b3lyp_augccpvdz.out
 
-INFO: __init__ at grid.py +233
-vdW grid is based on 1 atoms: ['O']
+INFO: __init__ at multipole.py +160
+cis-mesno Multipole is created.
+Multipoles representation: ('spherical', 1)
 
-INFO: create_vdw_grid at grid.py +266
-vdW grid is created: 376 points
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 1.000 y = 0.000 z = 0.000
+r = 1.000 theta = 0.000 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-1 None 1.000000 0.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -1.000 y = 0.000 z = 0.000
+r = 1.000 theta = 3.142 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-2 None -1.000000 0.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 1.000 z = 0.000
+r = 1.000 theta = 1.571 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-3 None 0.000000 1.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -1.000 z = 0.000
+r = 1.000 theta = -1.571 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-4 None 0.000000 -1.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = 1.000
+r = 1.000 theta = 0.000 phi = 0.000
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-5 None 0.000000 0.000000 1.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = -1.000
+r = 1.000 theta = 0.000 phi = 3.142
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-6 None 0.000000 0.000000 -1.000000 None
+
+DEBUG: set_sym_sites at multipole.py +96
+Symmetry indeces in cis-mesno:
+array([0, 1, 2, 3, 4, 5])
+
+DEBUG: __init__ at multipole.py +239
+Multipole conversion matrix is set up.
+multipoles = ['00', '10', '11c', '11s']
+total number of components: 4 
+Q to M matrix: (4, 6)
+
+DEBUG: __init__ at multipole.py +279
+Spherical representation for cis-mesno is set up.
+Origin = array([ 0.,  0.,  0.])
+
+INFO: __init__ at sphere.py +53
+LebedevSphere cis-mesno is created.
+Number of charged sites: 6
+Radius: 1.0
 
 DEBUG: setA at charges.py +43
-Number of coordinates in the grid: 376
-Number of sites in molecule: 66
-Number of sites with different names: 66
+Number of coordinates in the grid: 3917
+Number of sites in molecule: 6
+Number of sites with different names: 6
 
 INFO: setA at charges.py +46
-Least squares matrix is set up with shape (376, 66)
+Least squares matrix is set up with shape (3917, 6)
 
 DEBUG: __init__ at LeastSquares.py +25
-Shape of reference vector b: (376,)
-Shape of LS matrix A: (376, 66)
+Shape of reference vector b: (3917,)
+Shape of LS matrix A: (3917, 6)
 
 INFO: sites_to_solution at charges.py +70
 Charges were transfered from sites to _solution
 
-INFO: __init__ at grid.py +125
-Grid instance is to be created:
-Number of points: [30 30 30]
-vectors:
-[[ 0.666667  0.        0.      ]
- [ 0.        0.666667  0.      ]
- [ 0.        0.        0.666667]]
-Origin: [-10. -10. -10.]
+INFO: read_file at parser.py +39
+GDMA parser will read data from /Volumes/HDD/Maxim/work/devel/fftoolbox/data/gdma/cis-mesno_b3lyp_augccpvdz.out
 
-INFO: __init__ at grid.py +233
-vdW grid is based on 1 atoms: ['N']
+INFO: __init__ at multipole.py +160
+cis-mesno Multipole is created.
+Multipoles representation: ('spherical', 2)
 
-INFO: create_vdw_grid at grid.py +266
-vdW grid is created: 353 points
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 1.000 y = 0.000 z = 0.000
+r = 1.000 theta = 0.000 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-1 None 1.000000 0.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -1.000 y = 0.000 z = 0.000
+r = 1.000 theta = 3.142 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-2 None -1.000000 0.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 1.000 z = 0.000
+r = 1.000 theta = 1.571 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-3 None 0.000000 1.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -1.000 z = 0.000
+r = 1.000 theta = -1.571 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-4 None 0.000000 -1.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = 1.000
+r = 1.000 theta = 0.000 phi = 0.000
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-5 None 0.000000 0.000000 1.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = -1.000
+r = 1.000 theta = 0.000 phi = 3.142
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-6 None 0.000000 0.000000 -1.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = 0.577 z = 0.577
+r = 1.000 theta = 0.785 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-7 None 0.577350 0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = 0.577 z = 0.577
+r = 1.000 theta = 2.356 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-8 None -0.577350 0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = -0.577 z = 0.577
+r = 1.000 theta = -0.785 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-9 None 0.577350 -0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = -0.577 z = 0.577
+r = 1.000 theta = -2.356 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-10 None -0.577350 -0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = 0.577 z = -0.577
+r = 1.000 theta = 0.785 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-11 None 0.577350 0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = 0.577 z = -0.577
+r = 1.000 theta = 2.356 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-12 None -0.577350 0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = -0.577 z = -0.577
+r = 1.000 theta = -0.785 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-13 None 0.577350 -0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = -0.577 z = -0.577
+r = 1.000 theta = -2.356 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-14 None -0.577350 -0.577350 -0.577350 None
+
+DEBUG: set_sym_sites at multipole.py +96
+Symmetry indeces in cis-mesno:
+array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13])
+
+DEBUG: __init__ at multipole.py +239
+Multipole conversion matrix is set up.
+multipoles = ['00', '10', '11c', '11s', '20', '21c', '21s', '22c', '22s']
+total number of components: 9 
+Q to M matrix: (9, 14)
+
+DEBUG: __init__ at multipole.py +279
+Spherical representation for cis-mesno is set up.
+Origin = array([ 0.,  0.,  0.])
+
+INFO: __init__ at sphere.py +53
+LebedevSphere cis-mesno is created.
+Number of charged sites: 14
+Radius: 1.0
 
 DEBUG: setA at charges.py +43
-Number of coordinates in the grid: 353
-Number of sites in molecule: 66
-Number of sites with different names: 66
+Number of coordinates in the grid: 3917
+Number of sites in molecule: 14
+Number of sites with different names: 14
 
 INFO: setA at charges.py +46
-Least squares matrix is set up with shape (353, 66)
+Least squares matrix is set up with shape (3917, 14)
 
 DEBUG: __init__ at LeastSquares.py +25
-Shape of reference vector b: (353,)
-Shape of LS matrix A: (353, 66)
+Shape of reference vector b: (3917,)
+Shape of LS matrix A: (3917, 14)
 
 INFO: sites_to_solution at charges.py +70
 Charges were transfered from sites to _solution
 
-INFO: __init__ at grid.py +125
-Grid instance is to be created:
-Number of points: [30 30 30]
-vectors:
-[[ 0.666667  0.        0.      ]
- [ 0.        0.666667  0.      ]
- [ 0.        0.        0.666667]]
-Origin: [-10. -10. -10.]
+INFO: read_file at parser.py +39
+GDMA parser will read data from /Volumes/HDD/Maxim/work/devel/fftoolbox/data/gdma/cis-mesno_b3lyp_augccpvdz.out
 
-INFO: __init__ at grid.py +233
-vdW grid is based on 1 atoms: ['S']
+INFO: __init__ at multipole.py +160
+cis-mesno Multipole is created.
+Multipoles representation: ('spherical', 3)
 
-INFO: create_vdw_grid at grid.py +266
-vdW grid is created: 471 points
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 1.000 y = 0.000 z = 0.000
+r = 1.000 theta = 0.000 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-1 None 1.000000 0.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -1.000 y = 0.000 z = 0.000
+r = 1.000 theta = 3.142 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-2 None -1.000000 0.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 1.000 z = 0.000
+r = 1.000 theta = 1.571 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-3 None 0.000000 1.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -1.000 z = 0.000
+r = 1.000 theta = -1.571 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-4 None 0.000000 -1.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = 1.000
+r = 1.000 theta = 0.000 phi = 0.000
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-5 None 0.000000 0.000000 1.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = -1.000
+r = 1.000 theta = 0.000 phi = 3.142
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-6 None 0.000000 0.000000 -1.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.707 z = 0.707
+r = 1.000 theta = 1.571 phi = 0.785
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-7 None 0.000000 0.707107 0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.707 z = 0.707
+r = 1.000 theta = -1.571 phi = 0.785
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-8 None 0.000000 -0.707107 0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.707 z = -0.707
+r = 1.000 theta = 1.571 phi = 2.356
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-9 None 0.000000 0.707107 -0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.707 z = -0.707
+r = 1.000 theta = -1.571 phi = 2.356
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-10 None 0.000000 -0.707107 -0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.707 y = 0.000 z = 0.707
+r = 1.000 theta = 0.000 phi = 0.785
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-11 None 0.707107 0.000000 0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.707 y = 0.000 z = 0.707
+r = 1.000 theta = 3.142 phi = 0.785
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-12 None -0.707107 0.000000 0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.707 y = 0.000 z = -0.707
+r = 1.000 theta = 0.000 phi = 2.356
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-13 None 0.707107 0.000000 -0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.707 y = 0.000 z = -0.707
+r = 1.000 theta = 3.142 phi = 2.356
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-14 None -0.707107 0.000000 -0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.707 y = 0.707 z = 0.000
+r = 1.000 theta = 0.785 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-15 None 0.707107 0.707107 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.707 y = 0.707 z = 0.000
+r = 1.000 theta = 2.356 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-16 None -0.707107 0.707107 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.707 y = -0.707 z = 0.000
+r = 1.000 theta = -0.785 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-17 None 0.707107 -0.707107 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.707 y = -0.707 z = 0.000
+r = 1.000 theta = -2.356 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-18 None -0.707107 -0.707107 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = 0.577 z = 0.577
+r = 1.000 theta = 0.785 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-19 None 0.577350 0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = 0.577 z = 0.577
+r = 1.000 theta = 2.356 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-20 None -0.577350 0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = -0.577 z = 0.577
+r = 1.000 theta = -0.785 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-21 None 0.577350 -0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = -0.577 z = 0.577
+r = 1.000 theta = -2.356 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-22 None -0.577350 -0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = 0.577 z = -0.577
+r = 1.000 theta = 0.785 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-23 None 0.577350 0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = 0.577 z = -0.577
+r = 1.000 theta = 2.356 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-24 None -0.577350 0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = -0.577 z = -0.577
+r = 1.000 theta = -0.785 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-25 None 0.577350 -0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = -0.577 z = -0.577
+r = 1.000 theta = -2.356 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-26 None -0.577350 -0.577350 -0.577350 None
+
+DEBUG: set_sym_sites at multipole.py +96
+Symmetry indeces in cis-mesno:
+array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
+       17, 18, 19, 20, 21, 22, 23, 24, 25])
+
+DEBUG: __init__ at multipole.py +239
+Multipole conversion matrix is set up.
+multipoles = ['00', '10', '11c', '11s', '20', '21c', '21s', '22c', '22s', '30', '31c', '31s', '32c', '32s', '33c', '33s']
+total number of components: 16 
+Q to M matrix: (16, 26)
+
+DEBUG: __init__ at multipole.py +279
+Spherical representation for cis-mesno is set up.
+Origin = array([ 0.,  0.,  0.])
+
+INFO: __init__ at sphere.py +53
+LebedevSphere cis-mesno is created.
+Number of charged sites: 26
+Radius: 1.0
 
 DEBUG: setA at charges.py +43
-Number of coordinates in the grid: 471
-Number of sites in molecule: 66
-Number of sites with different names: 66
+Number of coordinates in the grid: 3917
+Number of sites in molecule: 26
+Number of sites with different names: 26
 
 INFO: setA at charges.py +46
-Least squares matrix is set up with shape (471, 66)
+Least squares matrix is set up with shape (3917, 26)
 
 DEBUG: __init__ at LeastSquares.py +25
-Shape of reference vector b: (471,)
-Shape of LS matrix A: (471, 66)
+Shape of reference vector b: (3917,)
+Shape of LS matrix A: (3917, 26)
 
 INFO: sites_to_solution at charges.py +70
 Charges were transfered from sites to _solution
 
-INFO: __init__ at grid.py +125
-Grid instance is to be created:
-Number of points: [30 30 30]
-vectors:
-[[ 0.666667  0.        0.      ]
- [ 0.        0.666667  0.      ]
- [ 0.        0.        0.666667]]
-Origin: [-10. -10. -10.]
+INFO: read_file at parser.py +39
+GDMA parser will read data from /Volumes/HDD/Maxim/work/devel/fftoolbox/data/gdma/cis-mesno_b3lyp_augccpvdz.out
 
-INFO: __init__ at grid.py +233
-vdW grid is based on 4 atoms: ['C', 'H', 'H', 'H']
+INFO: __init__ at multipole.py +160
+cis-mesno Multipole is created.
+Multipoles representation: ('spherical', 4)
 
-INFO: create_vdw_grid at grid.py +266
-vdW grid is created: 857 points
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 1.000 y = 0.000 z = 0.000
+r = 1.000 theta = 0.000 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-1 None 1.000000 0.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -1.000 y = 0.000 z = 0.000
+r = 1.000 theta = 3.142 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-2 None -1.000000 0.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 1.000 z = 0.000
+r = 1.000 theta = 1.571 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-3 None 0.000000 1.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -1.000 z = 0.000
+r = 1.000 theta = -1.571 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-4 None 0.000000 -1.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = 1.000
+r = 1.000 theta = 0.000 phi = 0.000
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-5 None 0.000000 0.000000 1.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = -1.000
+r = 1.000 theta = 0.000 phi = 3.142
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-6 None 0.000000 0.000000 -1.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = 0.577 z = 0.577
+r = 1.000 theta = 0.785 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-7 None 0.577350 0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = 0.577 z = 0.577
+r = 1.000 theta = 2.356 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-8 None -0.577350 0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = -0.577 z = 0.577
+r = 1.000 theta = -0.785 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-9 None 0.577350 -0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = -0.577 z = 0.577
+r = 1.000 theta = -2.356 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-10 None -0.577350 -0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = 0.577 z = -0.577
+r = 1.000 theta = 0.785 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-11 None 0.577350 0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = 0.577 z = -0.577
+r = 1.000 theta = 2.356 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-12 None -0.577350 0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = -0.577 z = -0.577
+r = 1.000 theta = -0.785 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-13 None 0.577350 -0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = -0.577 z = -0.577
+r = 1.000 theta = -2.356 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-14 None -0.577350 -0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.460 y = 0.888 z = 0.000
+r = 1.000 theta = 1.093 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-15 None 0.459701 0.888074 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.460 y = 0.888 z = 0.000
+r = 1.000 theta = 2.048 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-16 None -0.459701 0.888074 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.460 y = -0.888 z = 0.000
+r = 1.000 theta = -1.093 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-17 None 0.459701 -0.888074 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.460 y = -0.888 z = 0.000
+r = 1.000 theta = -2.048 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-18 None -0.459701 -0.888074 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.888 y = 0.460 z = 0.000
+r = 1.000 theta = 0.478 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-19 None 0.888074 0.459701 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.888 y = 0.460 z = 0.000
+r = 1.000 theta = 2.664 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-20 None -0.888074 0.459701 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.888 y = -0.460 z = 0.000
+r = 1.000 theta = -0.478 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-21 None 0.888074 -0.459701 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.888 y = -0.460 z = 0.000
+r = 1.000 theta = -2.664 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-22 None -0.888074 -0.459701 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.460 y = 0.000 z = 0.888
+r = 1.000 theta = 0.000 phi = 0.478
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-23 None 0.459701 0.000000 0.888074 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.460 y = 0.000 z = 0.888
+r = 1.000 theta = 3.142 phi = 0.478
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-24 None -0.459701 0.000000 0.888074 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.460 y = 0.000 z = -0.888
+r = 1.000 theta = 0.000 phi = 2.664
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-25 None 0.459701 0.000000 -0.888074 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.460 y = 0.000 z = -0.888
+r = 1.000 theta = 3.142 phi = 2.664
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-26 None -0.459701 0.000000 -0.888074 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.888 y = 0.000 z = 0.460
+r = 1.000 theta = 0.000 phi = 1.093
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-27 None 0.888074 0.000000 0.459701 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.888 y = 0.000 z = 0.460
+r = 1.000 theta = 3.142 phi = 1.093
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-28 None -0.888074 0.000000 0.459701 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.888 y = 0.000 z = -0.460
+r = 1.000 theta = 0.000 phi = 2.048
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-29 None 0.888074 0.000000 -0.459701 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.888 y = 0.000 z = -0.460
+r = 1.000 theta = 3.142 phi = 2.048
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-30 None -0.888074 0.000000 -0.459701 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.460 z = 0.888
+r = 1.000 theta = 1.571 phi = 0.478
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-31 None 0.000000 0.459701 0.888074 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.460 z = 0.888
+r = 1.000 theta = -1.571 phi = 0.478
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-32 None 0.000000 -0.459701 0.888074 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.460 z = -0.888
+r = 1.000 theta = 1.571 phi = 2.664
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-33 None 0.000000 0.459701 -0.888074 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.460 z = -0.888
+r = 1.000 theta = -1.571 phi = 2.664
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-34 None 0.000000 -0.459701 -0.888074 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.888 z = 0.460
+r = 1.000 theta = 1.571 phi = 1.093
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-35 None 0.000000 0.888074 0.459701 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.888 z = 0.460
+r = 1.000 theta = -1.571 phi = 1.093
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-36 None 0.000000 -0.888074 0.459701 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.888 z = -0.460
+r = 1.000 theta = 1.571 phi = 2.048
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-37 None 0.000000 0.888074 -0.459701 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.888 z = -0.460
+r = 1.000 theta = -1.571 phi = 2.048
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-38 None 0.000000 -0.888074 -0.459701 None
+
+DEBUG: set_sym_sites at multipole.py +96
+Symmetry indeces in cis-mesno:
+array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
+       17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+       34, 35, 36, 37])
+
+DEBUG: __init__ at multipole.py +239
+Multipole conversion matrix is set up.
+multipoles = ['00', '10', '11c', '11s', '20', '21c', '21s', '22c', '22s', '30', '31c', '31s', '32c', '32s', '33c', '33s', '40', '41c', '41s', '42c', '42s', '43c', '43s', '44c', '44s']
+total number of components: 25 
+Q to M matrix: (25, 38)
+
+DEBUG: __init__ at multipole.py +279
+Spherical representation for cis-mesno is set up.
+Origin = array([ 0.,  0.,  0.])
+
+INFO: __init__ at sphere.py +53
+LebedevSphere cis-mesno is created.
+Number of charged sites: 38
+Radius: 1.0
 
 DEBUG: setA at charges.py +43
-Number of coordinates in the grid: 857
-Number of sites in molecule: 66
-Number of sites with different names: 66
+Number of coordinates in the grid: 3917
+Number of sites in molecule: 38
+Number of sites with different names: 38
 
 INFO: setA at charges.py +46
-Least squares matrix is set up with shape (857, 66)
+Least squares matrix is set up with shape (3917, 38)
 
 DEBUG: __init__ at LeastSquares.py +25
-Shape of reference vector b: (857,)
-Shape of LS matrix A: (857, 66)
+Shape of reference vector b: (3917,)
+Shape of LS matrix A: (3917, 38)
+
+INFO: sites_to_solution at charges.py +70
+Charges were transfered from sites to _solution
+
+INFO: read_file at parser.py +39
+GDMA parser will read data from /Volumes/HDD/Maxim/work/devel/fftoolbox/data/gdma/cis-mesno_b3lyp_augccpvdz.out
+
+INFO: __init__ at multipole.py +160
+cis-mesno Multipole is created.
+Multipoles representation: ('spherical', 5)
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 1.000 y = 0.000 z = 0.000
+r = 1.000 theta = 0.000 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-1 None 1.000000 0.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -1.000 y = 0.000 z = 0.000
+r = 1.000 theta = 3.142 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-2 None -1.000000 0.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 1.000 z = 0.000
+r = 1.000 theta = 1.571 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-3 None 0.000000 1.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -1.000 z = 0.000
+r = 1.000 theta = -1.571 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-4 None 0.000000 -1.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = 1.000
+r = 1.000 theta = 0.000 phi = 0.000
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-5 None 0.000000 0.000000 1.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = -1.000
+r = 1.000 theta = 0.000 phi = 3.142
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-6 None 0.000000 0.000000 -1.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.707 z = 0.707
+r = 1.000 theta = 1.571 phi = 0.785
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-7 None 0.000000 0.707107 0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.707 z = 0.707
+r = 1.000 theta = -1.571 phi = 0.785
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-8 None 0.000000 -0.707107 0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.707 z = -0.707
+r = 1.000 theta = 1.571 phi = 2.356
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-9 None 0.000000 0.707107 -0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.707 z = -0.707
+r = 1.000 theta = -1.571 phi = 2.356
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-10 None 0.000000 -0.707107 -0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.707 y = 0.000 z = 0.707
+r = 1.000 theta = 0.000 phi = 0.785
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-11 None 0.707107 0.000000 0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.707 y = 0.000 z = 0.707
+r = 1.000 theta = 3.142 phi = 0.785
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-12 None -0.707107 0.000000 0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.707 y = 0.000 z = -0.707
+r = 1.000 theta = 0.000 phi = 2.356
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-13 None 0.707107 0.000000 -0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.707 y = 0.000 z = -0.707
+r = 1.000 theta = 3.142 phi = 2.356
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-14 None -0.707107 0.000000 -0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.707 y = 0.707 z = 0.000
+r = 1.000 theta = 0.785 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-15 None 0.707107 0.707107 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.707 y = 0.707 z = 0.000
+r = 1.000 theta = 2.356 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-16 None -0.707107 0.707107 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.707 y = -0.707 z = 0.000
+r = 1.000 theta = -0.785 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-17 None 0.707107 -0.707107 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.707 y = -0.707 z = 0.000
+r = 1.000 theta = -2.356 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-18 None -0.707107 -0.707107 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = 0.577 z = 0.577
+r = 1.000 theta = 0.785 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-19 None 0.577350 0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = 0.577 z = 0.577
+r = 1.000 theta = 2.356 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-20 None -0.577350 0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = -0.577 z = 0.577
+r = 1.000 theta = -0.785 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-21 None 0.577350 -0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = -0.577 z = 0.577
+r = 1.000 theta = -2.356 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-22 None -0.577350 -0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = 0.577 z = -0.577
+r = 1.000 theta = 0.785 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-23 None 0.577350 0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = 0.577 z = -0.577
+r = 1.000 theta = 2.356 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-24 None -0.577350 0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = -0.577 z = -0.577
+r = 1.000 theta = -0.785 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-25 None 0.577350 -0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = -0.577 z = -0.577
+r = 1.000 theta = -2.356 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-26 None -0.577350 -0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.302 y = 0.302 z = 0.905
+r = 1.000 theta = 0.785 phi = 0.441
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-27 None 0.301511 0.301511 0.904534 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.302 y = 0.302 z = 0.905
+r = 1.000 theta = 2.356 phi = 0.441
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-28 None -0.301511 0.301511 0.904534 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.302 y = -0.302 z = 0.905
+r = 1.000 theta = -0.785 phi = 0.441
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-29 None 0.301511 -0.301511 0.904534 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.302 y = -0.302 z = 0.905
+r = 1.000 theta = -2.356 phi = 0.441
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-30 None -0.301511 -0.301511 0.904534 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.302 y = 0.302 z = -0.905
+r = 1.000 theta = 0.785 phi = 2.701
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-31 None 0.301511 0.301511 -0.904534 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.302 y = 0.302 z = -0.905
+r = 1.000 theta = 2.356 phi = 2.701
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-32 None -0.301511 0.301511 -0.904534 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.302 y = -0.302 z = -0.905
+r = 1.000 theta = -0.785 phi = 2.701
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-33 None 0.301511 -0.301511 -0.904534 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.302 y = -0.302 z = -0.905
+r = 1.000 theta = -2.356 phi = 2.701
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-34 None -0.301511 -0.301511 -0.904534 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.302 y = 0.905 z = 0.302
+r = 1.000 theta = 1.249 phi = 1.265
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-35 None 0.301511 0.904534 0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.302 y = 0.905 z = 0.302
+r = 1.000 theta = 1.893 phi = 1.265
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-36 None -0.301511 0.904534 0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.302 y = -0.905 z = 0.302
+r = 1.000 theta = -1.249 phi = 1.265
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-37 None 0.301511 -0.904534 0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.302 y = -0.905 z = 0.302
+r = 1.000 theta = -1.893 phi = 1.265
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-38 None -0.301511 -0.904534 0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.302 y = 0.905 z = -0.302
+r = 1.000 theta = 1.249 phi = 1.877
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-39 None 0.301511 0.904534 -0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.302 y = 0.905 z = -0.302
+r = 1.000 theta = 1.893 phi = 1.877
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-40 None -0.301511 0.904534 -0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.302 y = -0.905 z = -0.302
+r = 1.000 theta = -1.249 phi = 1.877
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-41 None 0.301511 -0.904534 -0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.302 y = -0.905 z = -0.302
+r = 1.000 theta = -1.893 phi = 1.877
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-42 None -0.301511 -0.904534 -0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.905 y = 0.302 z = 0.302
+r = 1.000 theta = 0.322 phi = 1.265
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-43 None 0.904534 0.301511 0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.905 y = 0.302 z = 0.302
+r = 1.000 theta = 2.820 phi = 1.265
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-44 None -0.904534 0.301511 0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.905 y = -0.302 z = 0.302
+r = 1.000 theta = -0.322 phi = 1.265
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-45 None 0.904534 -0.301511 0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.905 y = -0.302 z = 0.302
+r = 1.000 theta = -2.820 phi = 1.265
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-46 None -0.904534 -0.301511 0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.905 y = 0.302 z = -0.302
+r = 1.000 theta = 0.322 phi = 1.877
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-47 None 0.904534 0.301511 -0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.905 y = 0.302 z = -0.302
+r = 1.000 theta = 2.820 phi = 1.877
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-48 None -0.904534 0.301511 -0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.905 y = -0.302 z = -0.302
+r = 1.000 theta = -0.322 phi = 1.877
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-49 None 0.904534 -0.301511 -0.301511 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.905 y = -0.302 z = -0.302
+r = 1.000 theta = -2.820 phi = 1.877
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-50 None -0.904534 -0.301511 -0.301511 None
+
+DEBUG: set_sym_sites at multipole.py +96
+Symmetry indeces in cis-mesno:
+array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
+       17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+       34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49])
+
+DEBUG: __init__ at multipole.py +239
+Multipole conversion matrix is set up.
+multipoles = ['00', '10', '11c', '11s', '20', '21c', '21s', '22c', '22s', '30', '31c', '31s', '32c', '32s', '33c', '33s', '40', '41c', '41s', '42c', '42s', '43c', '43s', '44c', '44s', '50', '51c', '51s', '52c', '52s', '53c', '53s', '54c', '54s', '55c', '55s']
+total number of components: 36 
+Q to M matrix: (36, 50)
+
+DEBUG: __init__ at multipole.py +279
+Spherical representation for cis-mesno is set up.
+Origin = array([ 0.,  0.,  0.])
+
+INFO: __init__ at sphere.py +53
+LebedevSphere cis-mesno is created.
+Number of charged sites: 50
+Radius: 1.0
+
+DEBUG: setA at charges.py +43
+Number of coordinates in the grid: 3917
+Number of sites in molecule: 50
+Number of sites with different names: 50
+
+INFO: setA at charges.py +46
+Least squares matrix is set up with shape (3917, 50)
+
+DEBUG: __init__ at LeastSquares.py +25
+Shape of reference vector b: (3917,)
+Shape of LS matrix A: (3917, 50)
+
+INFO: sites_to_solution at charges.py +70
+Charges were transfered from sites to _solution
+
+INFO: read_file at parser.py +39
+GDMA parser will read data from /Volumes/HDD/Maxim/work/devel/fftoolbox/data/gdma/cis-mesno_b3lyp_augccpvdz.out
+
+INFO: __init__ at multipole.py +160
+cis-mesno Multipole is created.
+Multipoles representation: ('spherical', 6)
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 1.000 y = 0.000 z = 0.000
+r = 1.000 theta = 0.000 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-1 None 1.000000 0.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -1.000 y = 0.000 z = 0.000
+r = 1.000 theta = 3.142 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-2 None -1.000000 0.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 1.000 z = 0.000
+r = 1.000 theta = 1.571 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-3 None 0.000000 1.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -1.000 z = 0.000
+r = 1.000 theta = -1.571 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-4 None 0.000000 -1.000000 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = 1.000
+r = 1.000 theta = 0.000 phi = 0.000
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-5 None 0.000000 0.000000 1.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.000 z = -1.000
+r = 1.000 theta = 0.000 phi = 3.142
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-6 None 0.000000 0.000000 -1.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.707 z = 0.707
+r = 1.000 theta = 1.571 phi = 0.785
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-7 None 0.000000 0.707107 0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.707 z = 0.707
+r = 1.000 theta = -1.571 phi = 0.785
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-8 None 0.000000 -0.707107 0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.707 z = -0.707
+r = 1.000 theta = 1.571 phi = 2.356
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-9 None 0.000000 0.707107 -0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.707 z = -0.707
+r = 1.000 theta = -1.571 phi = 2.356
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-10 None 0.000000 -0.707107 -0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.707 y = 0.000 z = 0.707
+r = 1.000 theta = 0.000 phi = 0.785
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-11 None 0.707107 0.000000 0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.707 y = 0.000 z = 0.707
+r = 1.000 theta = 3.142 phi = 0.785
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-12 None -0.707107 0.000000 0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.707 y = 0.000 z = -0.707
+r = 1.000 theta = 0.000 phi = 2.356
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-13 None 0.707107 0.000000 -0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.707 y = 0.000 z = -0.707
+r = 1.000 theta = 3.142 phi = 2.356
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-14 None -0.707107 0.000000 -0.707107 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.707 y = 0.707 z = 0.000
+r = 1.000 theta = 0.785 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-15 None 0.707107 0.707107 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.707 y = 0.707 z = 0.000
+r = 1.000 theta = 2.356 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-16 None -0.707107 0.707107 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.707 y = -0.707 z = 0.000
+r = 1.000 theta = -0.785 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-17 None 0.707107 -0.707107 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.707 y = -0.707 z = 0.000
+r = 1.000 theta = -2.356 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-18 None -0.707107 -0.707107 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = 0.577 z = 0.577
+r = 1.000 theta = 0.785 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-19 None 0.577350 0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = 0.577 z = 0.577
+r = 1.000 theta = 2.356 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-20 None -0.577350 0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = -0.577 z = 0.577
+r = 1.000 theta = -0.785 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-21 None 0.577350 -0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = -0.577 z = 0.577
+r = 1.000 theta = -2.356 phi = 0.955
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-22 None -0.577350 -0.577350 0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = 0.577 z = -0.577
+r = 1.000 theta = 0.785 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-23 None 0.577350 0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = 0.577 z = -0.577
+r = 1.000 theta = 2.356 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-24 None -0.577350 0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.577 y = -0.577 z = -0.577
+r = 1.000 theta = -0.785 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-25 None 0.577350 -0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.577 y = -0.577 z = -0.577
+r = 1.000 theta = -2.356 phi = 2.186
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-26 None -0.577350 -0.577350 -0.577350 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.480 y = 0.480 z = 0.734
+r = 1.000 theta = 0.785 phi = 0.747
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-27 None 0.480384 0.480384 0.733799 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.480 y = 0.480 z = 0.734
+r = 1.000 theta = 2.356 phi = 0.747
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-28 None -0.480384 0.480384 0.733799 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.480 y = -0.480 z = 0.734
+r = 1.000 theta = -0.785 phi = 0.747
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-29 None 0.480384 -0.480384 0.733799 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.480 y = -0.480 z = 0.734
+r = 1.000 theta = -2.356 phi = 0.747
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-30 None -0.480384 -0.480384 0.733799 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.480 y = 0.480 z = -0.734
+r = 1.000 theta = 0.785 phi = 2.395
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-31 None 0.480384 0.480384 -0.733799 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.480 y = 0.480 z = -0.734
+r = 1.000 theta = 2.356 phi = 2.395
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-32 None -0.480384 0.480384 -0.733799 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.480 y = -0.480 z = -0.734
+r = 1.000 theta = -0.785 phi = 2.395
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-33 None 0.480384 -0.480384 -0.733799 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.480 y = -0.480 z = -0.734
+r = 1.000 theta = -2.356 phi = 2.395
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-34 None -0.480384 -0.480384 -0.733799 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.480 y = 0.734 z = 0.480
+r = 1.000 theta = 0.991 phi = 1.070
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-35 None 0.480384 0.733799 0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.480 y = 0.734 z = 0.480
+r = 1.000 theta = 2.150 phi = 1.070
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-36 None -0.480384 0.733799 0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.480 y = -0.734 z = 0.480
+r = 1.000 theta = -0.991 phi = 1.070
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-37 None 0.480384 -0.733799 0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.480 y = -0.734 z = 0.480
+r = 1.000 theta = -2.150 phi = 1.070
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-38 None -0.480384 -0.733799 0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.480 y = 0.734 z = -0.480
+r = 1.000 theta = 0.991 phi = 2.072
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-39 None 0.480384 0.733799 -0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.480 y = 0.734 z = -0.480
+r = 1.000 theta = 2.150 phi = 2.072
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-40 None -0.480384 0.733799 -0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.480 y = -0.734 z = -0.480
+r = 1.000 theta = -0.991 phi = 2.072
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-41 None 0.480384 -0.733799 -0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.480 y = -0.734 z = -0.480
+r = 1.000 theta = -2.150 phi = 2.072
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-42 None -0.480384 -0.733799 -0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.734 y = 0.480 z = 0.480
+r = 1.000 theta = 0.580 phi = 1.070
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-43 None 0.733799 0.480384 0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.734 y = 0.480 z = 0.480
+r = 1.000 theta = 2.562 phi = 1.070
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-44 None -0.733799 0.480384 0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.734 y = -0.480 z = 0.480
+r = 1.000 theta = -0.580 phi = 1.070
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-45 None 0.733799 -0.480384 0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.734 y = -0.480 z = 0.480
+r = 1.000 theta = -2.562 phi = 1.070
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-46 None -0.733799 -0.480384 0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.734 y = 0.480 z = -0.480
+r = 1.000 theta = 0.580 phi = 2.072
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-47 None 0.733799 0.480384 -0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.734 y = 0.480 z = -0.480
+r = 1.000 theta = 2.562 phi = 2.072
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-48 None -0.733799 0.480384 -0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.734 y = -0.480 z = -0.480
+r = 1.000 theta = -0.580 phi = 2.072
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-49 None 0.733799 -0.480384 -0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.734 y = -0.480 z = -0.480
+r = 1.000 theta = -2.562 phi = 2.072
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-50 None -0.733799 -0.480384 -0.480384 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.321 y = 0.947 z = 0.000
+r = 1.000 theta = 1.244 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-51 None 0.320773 0.947156 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.321 y = 0.947 z = 0.000
+r = 1.000 theta = 1.897 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-52 None -0.320773 0.947156 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.321 y = -0.947 z = 0.000
+r = 1.000 theta = -1.244 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-53 None 0.320773 -0.947156 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.321 y = -0.947 z = 0.000
+r = 1.000 theta = -1.897 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-54 None -0.320773 -0.947156 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.947 y = 0.321 z = 0.000
+r = 1.000 theta = 0.327 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-55 None 0.947156 0.320773 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.947 y = 0.321 z = 0.000
+r = 1.000 theta = 2.815 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-56 None -0.947156 0.320773 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.947 y = -0.321 z = 0.000
+r = 1.000 theta = -0.327 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-57 None 0.947156 -0.320773 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.947 y = -0.321 z = 0.000
+r = 1.000 theta = -2.815 phi = 1.571
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-58 None -0.947156 -0.320773 0.000000 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.321 y = 0.000 z = 0.947
+r = 1.000 theta = 0.000 phi = 0.327
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-59 None 0.320773 0.000000 0.947156 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.321 y = 0.000 z = 0.947
+r = 1.000 theta = 3.142 phi = 0.327
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-60 None -0.320773 0.000000 0.947156 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.321 y = 0.000 z = -0.947
+r = 1.000 theta = 0.000 phi = 2.815
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-61 None 0.320773 0.000000 -0.947156 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.321 y = 0.000 z = -0.947
+r = 1.000 theta = 3.142 phi = 2.815
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-62 None -0.320773 0.000000 -0.947156 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.947 y = 0.000 z = 0.321
+r = 1.000 theta = 0.000 phi = 1.244
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-63 None 0.947156 0.000000 0.320773 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.947 y = 0.000 z = 0.321
+r = 1.000 theta = 3.142 phi = 1.244
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-64 None -0.947156 0.000000 0.320773 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.947 y = 0.000 z = -0.321
+r = 1.000 theta = 0.000 phi = 1.897
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-65 None 0.947156 0.000000 -0.320773 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = -0.947 y = 0.000 z = -0.321
+r = 1.000 theta = 3.142 phi = 1.897
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-66 None -0.947156 0.000000 -0.320773 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.321 z = 0.947
+r = 1.000 theta = 1.571 phi = 0.327
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-67 None 0.000000 0.320773 0.947156 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.321 z = 0.947
+r = 1.000 theta = -1.571 phi = 0.327
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-68 None 0.000000 -0.320773 0.947156 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.321 z = -0.947
+r = 1.000 theta = 1.571 phi = 2.815
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-69 None 0.000000 0.320773 -0.947156 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.321 z = -0.947
+r = 1.000 theta = -1.571 phi = 2.815
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-70 None 0.000000 -0.320773 -0.947156 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.947 z = 0.321
+r = 1.000 theta = 1.571 phi = 1.244
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-71 None 0.000000 0.947156 0.320773 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.947 z = 0.321
+r = 1.000 theta = -1.571 phi = 1.244
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-72 None 0.000000 -0.947156 0.320773 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = 0.947 z = -0.321
+r = 1.000 theta = 1.571 phi = 1.897
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-73 None 0.000000 0.947156 -0.320773 None
+
+INFO: __init__ at atom.py +19
+Coordinates instance is created with coordinates:
+x = 0.000 y = -0.947 z = -0.321
+r = 1.000 theta = -1.571 phi = 1.897
+
+INFO: __init__ at atom.py +87
+FFSite instance is created:
+FFSite: EP_cis-mesno-74 None 0.000000 -0.947156 -0.320773 None
+
+DEBUG: set_sym_sites at multipole.py +96
+Symmetry indeces in cis-mesno:
+array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
+       17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+       34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+       51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67,
+       68, 69, 70, 71, 72, 73])
+
+DEBUG: __init__ at multipole.py +239
+Multipole conversion matrix is set up.
+multipoles = ['00', '10', '11c', '11s', '20', '21c', '21s', '22c', '22s', '30', '31c', '31s', '32c', '32s', '33c', '33s', '40', '41c', '41s', '42c', '42s', '43c', '43s', '44c', '44s', '50', '51c', '51s', '52c', '52s', '53c', '53s', '54c', '54s', '55c', '55s', '60', '61c', '61s', '62c', '62s', '63c', '63s', '64c', '64s', '65c', '65s', '66c', '66s']
+total number of components: 49 
+Q to M matrix: (49, 74)
+
+DEBUG: __init__ at multipole.py +279
+Spherical representation for cis-mesno is set up.
+Origin = array([ 0.,  0.,  0.])
+
+INFO: __init__ at sphere.py +53
+LebedevSphere cis-mesno is created.
+Number of charged sites: 74
+Radius: 1.0
+
+DEBUG: setA at charges.py +43
+Number of coordinates in the grid: 3917
+Number of sites in molecule: 74
+Number of sites with different names: 74
+
+INFO: setA at charges.py +46
+Least squares matrix is set up with shape (3917, 74)
+
+DEBUG: __init__ at LeastSquares.py +25
+Shape of reference vector b: (3917,)
+Shape of LS matrix A: (3917, 74)
 
 INFO: sites_to_solution at charges.py +70
 Charges were transfered from sites to _solution

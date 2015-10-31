@@ -2,7 +2,7 @@ from parser import GaussianCube, QChem, Gaussian, ForceFieldXML
 from grid import vdwGrid
 from charges import LeastSquaresCharges
 from molecule import HybridMolecule
-from results import Results
+from results import Results, Report
 
 import logging, sys
 
@@ -31,6 +31,8 @@ ls.solve()
 results.add(ls)
 
 print results
+report = Report('cis-mesno', ls)
+print report
 
 # save
 molecule.write_xyz(filename='%s_%s.xyz' % (data['name'], data['theory']))

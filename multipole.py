@@ -152,7 +152,10 @@ class Multipole(GroupOfSites):
     """
     def __init__(self, name=None, origin=None, representation=None):
         GroupOfSites.__init__(self, name)
-        self.origin = origin
+        if origin is None:
+            self.origin = np.zeros(3)
+        else:
+            self.origin = origin
         self.representation = representation
         logger.info('%s Multipole is created.\nMultipoles representation: %s' % (self.name, self.representation))
 
@@ -293,11 +296,8 @@ class Cartesian(MultipoleMatrix):
 class Formulas(dict):
 
     def __init__(self, coordinates=None, origin=None):
+        self.origin = origin
         self.coordinates = coordinates
-        if origin is None:
-            self.origin = np.zeros(3)
-        else:
-            self.origin = origin
         dict.__init__(self)
 
 

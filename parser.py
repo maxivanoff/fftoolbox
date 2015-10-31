@@ -452,6 +452,7 @@ class GDMA(Parser):
                         values = tmp[shift+2:][::3]
                         for key, value in zip(keys, values):
                             total_multipoles[key[1:]] = float(value)
+            total_multipoles['rank'] = rank
             self.data = {'atoms': self.atoms,
                          'multipoles': total_multipoles,
                          }
