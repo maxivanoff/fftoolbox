@@ -1,8 +1,4 @@
-from fftoolbox.grid import vdwGrid
-from fftoolbox.charges import LeastSquaresCharges
-from fftoolbox.parser import GDMA, GaussianCube
-from molecule import LebedevMolecule
-from fftoolbox.results import Report
+import fftoolbox as fftb
 
 import logging, sys
 
@@ -16,9 +12,9 @@ data = {
         'theory': 'b3lyp_augccpvdz',
         'density': 1.5,
         }
-parser = GaussianCube(data=data)
+parser = fftb.GaussianCube(data=data)
 data.update(parser.data.copy())
-grid = vdwGrid(data)
+grid = fftb.vdwGrid(data)
 
 for rank in xrange(7):
     data = {
@@ -27,13 +23,13 @@ for rank in xrange(7):
             'sphere params': (rank, 1.0),
             }
 
-    parser = GDMA(data=data)
+    parser = fftb.GDMA(data=data)
     data.update(parser.data.copy())
-    molecule = LebedevMolecule(data)
+    molecule = fftb.LebedevMolecule(data)
 
     #grid.build_LEM('full-vdw.pymol')
-    charges = LeastSquaresCharges(molecule, grid)
+    charges = fftb.LeastSquaresCharges(molecule, grid)
     charges.sites_to_solution()
-    report = Report('rank %i' % rank, charges)
+    report = fftb.Report('rank %i' % rank, charges)
     print report
  

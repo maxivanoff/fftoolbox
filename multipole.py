@@ -261,10 +261,6 @@ class Spherical(MultipoleMatrix):
                 return (-1)*np.pi*np.sign(a)/2
             else:
                 return np.arctan(a/b)
-
-        if origin == None:
-            origin = np.zeros(3)
-
         spherical = np.zeros(coordinates.shape)
         x, y, z = coordinates[:,0], coordinates[:,1], coordinates[:,2]
         x += -origin[0]

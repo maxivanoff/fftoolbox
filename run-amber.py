@@ -1,8 +1,4 @@
-from parser import GaussianCube, QChem, Gaussian, ForceFieldXML
-from grid import vdwGrid
-from charges import LeastSquaresCharges
-from molecule import HybridMolecule
-from results import Results
+import fftoolbox as fftb
 
 import logging, sys
 
@@ -26,15 +22,15 @@ data = {
         'representation': ('cartesian', 2)
         }
 
-results = Results(Gaussian(data=data).data['multipoles'])
+results = fftb.Results(fftb.Gaussian(data=data).data['multipoles'])
 
-parser = GaussianCube(data=data)
+parser = fftb.GaussianCube(data=data)
 data.update(parser.data.copy())
 
-grid = vdwGrid(data)
-molecule = HybridMolecule(data)
+grid = fftb.vdwGrid(data)
+molecule = fftb.HybridMolecule(data)
 
-ls = LeastSquaresCharges(grid=grid, molecule=molecule) 
+ls = fftb.LeastSquaresCharges(grid=grid, molecule=molecule) 
 ls.solve()
 results.add(ls)
 
@@ -44,7 +40,7 @@ print results
 molecule.write_xyz(filename='amber-%s_%s.xyz' % (data['name'], data['theory']))
 molecule.write_mol2(filename='amber-%s_%s.mol2' % (data['name'], data['theory']))
 
-ff = ForceFieldXML()
+ff = fftb.ForceFieldXML()
 ff.write_file(molecule=molecule, xmlfilename='data/forcefields/amber-%s_%s.xml' % (data['name'], data['theory']))
 ff.load_forcefields(filename='amber-%s_%s.xml' % (data['name'], data['theory']), molecule=molecule)
 
