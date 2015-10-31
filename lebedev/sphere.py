@@ -38,7 +38,7 @@ class LebedevSphere(Multipole):
                 w = point[3]*4*np.pi
                 # create site and compute charge
                 name = '%s-%i' % (self.name, i)
-                s = FFSite(index=index, coordinates=xyz, attachment=self)
+                s = FFSite(index=index, element='EP', coordinates=xyz, attachment=self)
                 q = w*self.compute_charge(rank, s.r, s.theta, s.phi)
                 s.set_charge(q)
                 # shift site relative to the atom center

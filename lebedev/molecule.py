@@ -37,8 +37,6 @@ class DistributedLebedevMolecule(Molecule):
             atom = LebedevAtom(element=element, coordinates=crds, ref_multipoles=multipoles, \
                     index=index, rank=rank, radius=radius)
             self.add_atom(atom)
-        for atom in self.atoms:
-            pass
             
 
 

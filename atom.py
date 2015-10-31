@@ -83,7 +83,16 @@ class FFSite(Coordinates):
         self.r0 = r0
         self.epsilon = epsilon
         self.set_attachment(attachment)
+        self._internal_index = 0
         logger.info("FFSite instance is created:\n%s" % self.__repr__())
+
+    def get_internal_index(self):
+        if self._internal_index == 0:
+            try:
+                self._internal_index = max([s._internal_index for s in self._attachment.sites]) + 1
+            except ValueError:
+                self._internal_index = 1
+        return self._internal_index
 
     @property
     def charge(self):
@@ -96,11 +105,12 @@ class FFSite(Coordinates):
     def name(self):
         if not self._name is None:
             return self._name
-        if self.element == 'EP':
+        elif self.element == 'EP':
             try:
-                return 'EP_%s' % self._attachment.name
+                name = 'EP_%s' % self._attachment.name
             except AttributeError:
-                return 'EP'
+                name = 'EP'
+            return '%s-%i' % (name, self.get_internal_index())
         else:
             return self._attachment.name
 
