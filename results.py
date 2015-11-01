@@ -1,5 +1,26 @@
 import units
 
+class Reports(object):
+
+    def __init__(self):
+        self.data = {
+                'rmsd':[],
+                'max error': [],
+                'rmad': [],
+                'R2': [],
+                'alpha': [],
+                }
+        self.keys = self.data.keys()
+
+    def add(self, charges):
+        self.data['rmsd'].append(charges.rmsd)
+        self.data['rmad'].append(charges.rmad)
+        self.data['R2'].append(charges.R2)
+        self.data['max error'].append(charges.max_error)
+        a, da, b, db = charges.ab
+        self.data['alpha'].append(a)
+
+
 class Report(object):
 
     def __init__(self, name=None, charges=None):
@@ -9,6 +30,13 @@ class Report(object):
         self.rmad = charges.rmad
         self.R2 = charges.R2
         self.a, self.da, self.b, self.db = charges.ab
+        self.data = {
+                'rmsd': self.rmsd,
+                'max error': self.max_error,
+                'rmad': self.rmad,
+                'R2': self.R2,
+                'alpha': self.a,
+                }
 
     def __repr__(self):
         s = '%s\nrmsd = %.3f kcal/mol\nmax error = %.3f kcal/mol\nrmad = %.3f\ny = (%.3f +/- %.3f) * b + %.3f +/- %.3f\nR2 = %.3f\n' \

@@ -31,7 +31,7 @@ class CarbonOxygenGroup(Multipole):
         #self.hydrogens = filter(lambda a: a.element=='H', center.neighbors)
         logger.debug('%s group identified with center %s, %i oxygens' % (self.name, center.name, len(oxygens)))
 
-class BuriedGroup(Multipole):
+class BuriedGroup(object):
     """
     Methyl or methylene group
     """
@@ -42,6 +42,7 @@ class BuriedGroup(Multipole):
             raise ValueError('Should be a buried carbon group')
         hydrogens = filter(lambda a: a.element=='H', center.neighbors)
         num_h = len(hydrogens)
+        self.name = 'CH%i' % num_h
         name = 'C%s_CH%i' % (count, num_h)
         center.set_name(name)
         # set hydrogens names
@@ -52,6 +53,6 @@ class BuriedGroup(Multipole):
             else:
                 name = 'H%s-%i' % (center.name[1:], i)
                 a.set_name(name)
-        #Multipole.__init__(self, name=self.name)
+        self.atoms = [center] + hydrogens
         logger.debug('Buried atom created with center @ %s and %i hydrogen atoms: %r' %(center.name, len(hydrogens), [a.name for a in hydrogens]))
 

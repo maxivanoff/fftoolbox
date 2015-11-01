@@ -4,7 +4,7 @@ import os
 
 import units
 from bonds import Bond
-from atom import HybridAtom, FFSite
+from atom import HybridAtom, FFSite, Atom
 from multipole import Multipole
 from parser import ForceFieldXML
 from multipole import GroupOfSites
@@ -27,7 +27,7 @@ class Molecule(Multipole):
         try:
             representation = data['representation']
         except KeyError:
-            representation = ('cartesian', 0)
+            representation = None
         try:
             self.sym = data['symmetry']
         except KeyError:
@@ -47,7 +47,8 @@ class Molecule(Multipole):
         self.add_atoms(atoms)
         self.set_groups()
         self.set_sym_sites()
-        self.set_multipole_matrix()
+        if representation is not None:
+            self.set_multipole_matrix()
         logger.info("Names of equivalent atoms: %s" % self.atoms_names_eq)
         logger.info("Names of non-equivalent atoms: %s" % self.atoms_names_noneq)
         logger.info("Names of equivalent sites: %s" % self.sites_names_eq)
@@ -57,7 +58,12 @@ class Molecule(Multipole):
         self._atoms.append(atom)
 
     def add_atoms(self, atoms):
-        pass
+        extra_points = []
+        for i, a in enumerate(atoms):
+            index, element, crds, multipoles = a
+            atom = HybridAtom(index=index, element=element, coordinates=crds, 
+                    multipoles=multipoles)
+            self.add_atom(atom)
 
     @property
     def sites(self):
@@ -119,11 +125,13 @@ class Molecule(Multipole):
         # create groups
         # group instances just change the atoms names
         exclude = ['methane', 'benzene', 'methane', 'tip5p', 'tip3p', 'ammonia', 'water']
+        self.buried_groups = []
         if not self.name in exclude:
             for count, atom in enumerate(carbons_with_oxygen):
                 CarbonOxygenGroup(center=atom, count=count, sym=self.sym)
             for count, atom in enumerate(buried_atoms):
-                BuriedGroup(center=atom, count=count, sym=self.sym)
+                g = BuriedGroup(center=atom, count=count, sym=self.sym)
+                self.buried_groups.append(g)
         # symmetrical atoms have identical names
         try:
             template, symmetrical = self.sym[0], self.sym[1:] 
@@ -172,7 +180,8 @@ class HybridMolecule(Molecule):
         self.set_hybridizations()
         self.set_frames_from_sites() # in case extra points are loaded from the file
         self.set_sym_sites()
-        self.set_multipole_matrix()
+        if self.representation:
+            self.set_multipole_matrix()
         logger.info('%s Molecule is created' % (self.name))
 
     def get_ep_data(self):

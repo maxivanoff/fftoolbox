@@ -2,7 +2,7 @@ Title "cis-mesno b3lyp aug-cc-pvdz"
 File cis-mesno_b3lyp_augccpvdz.fchk
 
 Multipoles
-  switch 6
+  switch 4
   Limit 6
 Start
 

@@ -2,6 +2,7 @@ import numpy as np
 import os
 import logging
 import parser
+from molecule import Molecule
 
 import units
 
@@ -216,7 +217,24 @@ class Grid(object):
                 s += ' %s' % (l)
             s += '\n'
         return s
- 
+
+class vdwGrids(dict):
+
+    def __init__(self, data):
+        self['full vdw'] = vdwGrid(data)
+        mol = Molecule(data=data)
+        for a in mol.atoms:
+            for g in mol.buried_groups:
+                if not a in g.atoms:
+                    data['vdw atoms'] = [a.index]
+                    name = a.name
+                else:
+                    data['vdw atoms'] = [x.index for x in g.atoms]
+                    name = g.name
+                if not name in self:
+                    self[name] = vdwGrid(data)
+
+
 class vdwGrid(Grid):
     vdw_radius_angst = {'O':1.52, 'N':1.55, 'S':1.8, 'C':1.7, 'H':1.2, 'Na': 2.27, 'F':1.47, 'Cl':1.88, 'K': 2.75 }#taken from wikipedia
     vdw_radius_bohr = dict((name, radius/0.52917721092) for name, radius in vdw_radius_angst.iteritems())
@@ -231,7 +249,7 @@ class vdwGrid(Grid):
         atoms = filter(lambda a: a[0] in self.vdw_atoms, self.atoms)
         elems = [a[1] for a in atoms]
         logger.info('vdW grid is based on %i atoms: %r' % (len(elems), elems))
-        self.create_vdw_grid(values=data['values'])        
+        self.create_vdw_grid(values=data['values'])
 
     def inside_range(self, xyz):
         inside_small = False

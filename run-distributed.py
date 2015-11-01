@@ -34,25 +34,10 @@ data['density'] = 1.5
 parser = fftb.GaussianCube(data=data)
 data.update(parser.data.copy())
 
-grid = fftb.vdwGrid(data)
-#grid.build_LEM('full-vdw.pymol')
-charges = fftb.LeastSquaresCharges(molecule, grid)
-charges.sites_to_solution()
-report = fftb.Report('full', charges)
-print report
-
-atoms = [('O', [1]), 
-         ('N', [2]),
-         ('S', [3]),
-         ('CH3', [4,5,6,7])]
-
-for s, i in atoms:
-    data['vdw atoms'] = i
-    grid = fftb.vdwGrid(data)
-    #grid.build_LEM('atom-%s.pymol' % s)
+grids = fftb.vdwGrids(data)
+for key, grid in grids.items():
     charges = fftb.LeastSquaresCharges(molecule, grid)
     charges.sites_to_solution()
-    report = fftb.Report(s, charges)
+    report = fftb.Report(key, charges)
     print report
-
 
