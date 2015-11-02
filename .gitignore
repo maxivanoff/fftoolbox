@@ -1,2 +1,4 @@
 *.pyc
 *.swp
+data/cub/*
+data/log/*
