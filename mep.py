@@ -1,6 +1,9 @@
+from scipy.special import sph_harm as Y
+from fftoolbox.multipole import Ylmc, Ylms
 from numpy.linalg import norm
 import numpy as np
 import units
+from time import time
 
 class MEP(object):
 
@@ -9,19 +12,52 @@ class MEP(object):
     def __init__(self, grid=None, molecule=None):
         self.grid = grid
         self.molecule = molecule
-        self.evaluate()
 
-    def evaluate(self):
-        values = []
-        for p in self.grid.points:
+    def compute(self, representation='point charges'):
+        if representation == 'point charges':
+            values = self.point_charge()
+        if representation == 'multipole':
+            values = self.multipole()
+        return values
+
+    def point_charge(self):
+        values = np.zeros(self.grid.num_points)
+        for i, p in enumerate(self.grid.points):
             f = 0.
             for s in self.molecule.sites:
-                r = norm(p.coordinates - s.coordinates)
-                #f += (1 - np.exp(-2*r)*(1+r))*s.charge/r
+                r = np.linalg.norm(p.coordinates - s.coordinates)
                 f += s.charge/r
-                if not s.element[0] == 'E':
-                    Z = self.Z[s.element]
-                    f += np.exp(-2.*r)*(Z - (s.charge - Z)/r)
-            values.append(f)
-        self.values = np.array(values)*units.au_to_kcal
+            values[i] = f
+        values *= units.au_to_kcal
+        return values
+
+    def multipole(self):
+        values = np.zeros(self.grid.num_points)
+        for i, p in enumerate(self.grid.points):
+            f = 0.
+            for name, mult_data in self.molecule.multipoles_data().items():
+                origin, rank, multipoles = mult_data
+                r, theta, phi = p.cartesian_to_spherical(origin)
+                for l in range(rank+1):
+                    k = np.sqrt(4*np.pi/(2*l + 1))*np.power(r, -l-1)
+                    for m in range(-l, l+1):
+                        if m < 0:
+                            mname = '%i%is' % (l, abs(m))
+                            YY = Ylms
+                        if m == 0:
+                            mname = '%i0' % l
+                            YY = Y
+                        if m > 0:
+                            mname = '%i%ic' % (l, m)
+                            YY = Ylmc
+                        try:
+                            Q = multipoles[mname]
+                        except KeyError:
+                            Q = 0.
+                        f += k*Q*YY(abs(m), l, theta, phi).real
+            values[i] = f
+        values *= units.au_to_kcal
+        return values
+
+
 

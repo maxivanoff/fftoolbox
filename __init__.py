@@ -8,3 +8,4 @@ from parser import GaussianCube, QChem, Gaussian, ForceFieldXML, GDMA
 from charges import LeastSquaresCharges as LSC
 from charges import LeastSquaresCharges
 from results import Results, Report, Reports
+from mep import MEP

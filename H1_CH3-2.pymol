@@ -1,0 +1,6 @@
+from pymol.cgo import *
+from pymol import cmd
+cmd.load("/Volumes/HDD/Maxim/work/devel/fftoolbox/data/xyz/methanol_mp2_augccpvtz.xyz")
+obj = [ BEGIN, LINES, ]
+obj.append(END)
+cmd.load_cgo(obj,"cgo01")

@@ -38,12 +38,10 @@ class BuriedGroup(object):
 
     def __init__(self, center, count, name=None, sym=False):
         if count == 0: count = ''
-        if not center.element == 'C':
-            raise ValueError('Should be a buried carbon group')
         hydrogens = filter(lambda a: a.element=='H', center.neighbors)
         num_h = len(hydrogens)
-        self.name = 'CH%i' % num_h
-        name = 'C%s_CH%i' % (count, num_h)
+        self.name = '%sH%i' % (center.element, num_h)
+        name = '%s%s_%sH%i' % (center.element, count, center.element, num_h)
         center.set_name(name)
         # set hydrogens names
         for i, a in enumerate(hydrogens):
