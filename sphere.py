@@ -118,7 +118,10 @@ class DistributedLebedevMolecule(Molecule):
     def add_atoms(self, atoms):
         for a in atoms:
             index, element, crds, multipoles = a
-            rank, radius = self.sphere_params[element]
+            try:
+                rank, radius = self.sphere_params[element]
+            except:
+                rank, radius = self.sphere_params
             atom = LebedevAtom(element=element, coordinates=crds, ref_multipoles=multipoles, \
                     index=index, rank=rank, radius=radius)
             self.add_atom(atom)

@@ -8,7 +8,7 @@ __email__ = "maxim.ivanov@marquette.edu"
 
 logger = logging.getLogger(__name__)
 
-class CarbonOxygenGroup(Multipole):
+class CarbonOxygenGroup(object):
 
     def __init__(self, center, count, name=None, sym=False):
         if count == 0: count = ''

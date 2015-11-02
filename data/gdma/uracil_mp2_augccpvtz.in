@@ -1,0 +1,9 @@
+Title "uracil mp2 aug-cc-pvtz"
+File uracil_mp2_augccpvtz.fchk
+
+Multipoles
+  switch 4
+  Limit 6
+Start
+
+Finish

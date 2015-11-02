@@ -45,7 +45,7 @@ class LeastSquaresBasic(object):
 
     @property
     def max_error(self):
-        return np.amax(self.residual)*units.au_to_kcal
+        return np.amax(np.absolute(self.residual))*units.au_to_kcal
 
     @property
     def rmad(self):
