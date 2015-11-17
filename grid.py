@@ -155,7 +155,9 @@ class Grid(object):
             self.points.append(point)
         logger.info("grid is created: %i points" % len(self.points))
 
-    def create_grid(self, values):
+    def create_grid(self, values=None):
+        if values is None:
+            values = [0.]*np.prod(self.num_cubic_points)
         self.points = []
         count = 0
         for i in xrange(self.num_cubic_points[0]):
@@ -249,7 +251,7 @@ class vdwGrid(Grid):
     
     def __init__(self, data):
         Grid.__init__(self, data)
-        self.scale = [1.4, 2.]
+        self.scale = [1.66, 2.2]
         try:
             self.vdw_atoms = data['vdw atoms']
         except KeyError:

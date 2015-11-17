@@ -82,6 +82,10 @@ class Molecule(Multipole):
         return len(sites)
 
     @property
+    def num_atoms(self):
+        return len(self._atoms)
+
+    @property
     def atoms(self):
         return iter(sorted(self._atoms, key=lambda a: a.index))
 

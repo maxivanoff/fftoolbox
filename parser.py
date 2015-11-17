@@ -44,6 +44,7 @@ class Parser(object):
 class GaussianCube(Parser):
     
     number_to_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 16:'S'}
+    name_to_number = dict(zip(number_to_name.values(), number_to_name.keys()))
         
     def __init__(self, filename=None, data=None, here=False):
         "Cubefile is in atomic units"
@@ -54,12 +55,56 @@ class GaussianCube(Parser):
         self.values = ()
         self.atoms = ()
         self.density = None
-        Parser.__init__(self, filename=filename, data=data, dname='cub', suffix='_d%s.cub' % data['density'], here=here)
-        self.read_file(filename=self.filename)
+        if not data is None:
+            Parser.__init__(self, filename=filename, data=data, dname='cub', suffix='_d%s.cub' % data['density'], here=here)
+            self.read_file(filename=self.filename)
+        if not filename is None:
+            Parser.__init__(self, filename=filename, here=here)
+            self.read_file(filename=self.filename)
+
 
     def set_grids_density(self):
         cube_sides = np.array([np.linalg.norm(v) for v in self.vectors])
         self.density = np.prod(self.num_points)/np.prod((self.num_points - 1)*cube_sides)
+
+    def write_file(self, grid=None, molecule=None, values=None, filename=None):
+        s = ' %s Potential\n Electrostatic potential\n' % molecule.name
+        s += '%5s' % molecule.num_atoms
+        a = '%.6f' % grid.origin[0]
+        b = '%.6f' % grid.origin[1]
+        c = '%.6f' % grid.origin[2]
+        s += '%12s%12s%12s    1\n' % (a, b, c)
+        for i in xrange(3):
+            a = '%.6f' % grid.vectors[i][0]
+            b = '%.6f' % grid.vectors[i][1]
+            c = '%.6f' % grid.vectors[i][2]
+            s += '%5s%12s%12s%12s\n' % (grid.num_cubic_points[i], a, b, c)
+        for a in molecule.atoms:
+            atomn = self.name_to_number[a.element]
+            ns = '%.6f' % atomn
+            xs = '%.6f' % a.x
+            ys = '%.6f' % a.y
+            zs = '%.6f' % a.z
+            s += '%5s%12s%12s%12s%12s\n' % (atomn, ns, xs, ys, zs)
+        # write values
+        nz = grid.num_cubic_points[2]  
+        countz = nz   
+        countc = 1
+        for i, v in enumerate(values):
+            x = '%.5E' % v
+            s += '%13s' % x 
+            if countc == 6:
+                s += '\n' 
+                countc = 0
+            if i == countz - 1:
+                s += '\n'
+                countz += nz
+                countc = 0
+            countc += 1
+        file = open(filename, 'w')
+        file.write(s)
+        file.close()
+
 
     def read_file(self, filename=None):
         Parser.read_file(self, filename)

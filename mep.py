@@ -26,7 +26,10 @@ class MEP(object):
             f = 0.
             for s in self.molecule.sites:
                 r = np.linalg.norm(p.coordinates - s.coordinates)
-                f += s.charge/r
+                if abs(r)< 0.0001:
+                    f += 0.
+                else:
+                    f += s.charge/r
             values[i] = f
         values *= units.au_to_kcal
         return values
@@ -39,7 +42,10 @@ class MEP(object):
                 origin, rank, multipoles = mult_data
                 r, theta, phi = p.cartesian_to_spherical(origin)
                 for l in range(rank+1):
-                    k = np.sqrt(4*np.pi/(2*l + 1))*np.power(r, -l-1)
+                    if abs(r) < 0.0001:
+                        k = 0.
+                    else:
+                        k = np.sqrt(4*np.pi/(2*l + 1))*np.power(r, -l-1)
                     for m in range(-l, l+1):
                         if m < 0:
                             mname = '%i%is' % (l, abs(m))

@@ -166,7 +166,10 @@ class HybridAtom(Atom):
 
     def __init__(self, element=None, coordinates=None, index=None, multipoles=None, representation=None):
         Atom.__init__(self, index=index, element=element, coordinates=coordinates, representation=representation)
-        charge = multipoles['charge']
+        try:
+            charge = multipoles['charge']
+        except KeyError:
+            charge = None
         center = FFSite(index=index, element=element, coordinates=coordinates, charge=charge, attachment=self)
         self.add_site(center)
         self.frame = None
