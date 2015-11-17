@@ -1,7 +1,6 @@
 import numpy as np
 from numpy.linalg import norm
 from scipy.special import sph_harm as Y
-import openbabel
 import logging
 import os
 
