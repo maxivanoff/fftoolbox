@@ -30,6 +30,7 @@ class LebedevSphere(Multipole):
         if rank > self.reference_multipoles['rank']:
             raise ValueError('Multipoles only up to rank %i are available' % self.reference_multipoles['rank'])
         representation = ('spherical', rank)
+        self.rank = rank
         Multipole.__init__(self, name, origin=origin, representation=representation)
         if rank == 0:
             charge = self.reference_multipoles['00']
@@ -104,16 +105,33 @@ class LebedevAtom(Atom, LebedevSphere):
 class LebedevMolecule(LebedevSphere):
 
     def __init__(self, data):
+        self.data = data
         rank, radius = data['sphere params']
+        self.rank = rank
         representation = ('spherical', rank)
+        self.molecule = Molecule(data)
         LebedevSphere.__init__(self, name=data['name'], rank=rank, radius=radius, \
                 origin=None, ref_multipoles=data['multipoles'])
+    
+    def multipoles_data(self):
+        data = {
+                self.name: (self.origin, self.rank, self.reference_multipoles), 
+                }
+        return data
+
 
 class DistributedLebedevMolecule(Molecule):
 
     def __init__(self, data):
         self.sphere_params = data['sphere params']
         Molecule.__init__(self, data)
+
+    def multipoles_data(self):
+        data = {}
+        for a in self.atoms:
+            d = (a.origin, a.rank, a.reference_multipoles)
+            data[a.name] = d
+        return data
 
     def add_atoms(self, atoms):
         for a in atoms:

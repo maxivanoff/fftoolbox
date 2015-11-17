@@ -3,6 +3,7 @@ import os
 import logging
 import parser
 from molecule import Molecule
+from time import time
 
 import units
 
@@ -63,14 +64,17 @@ class GridPoint(object):
             if self.coordinates[i]>0.: self.labels.add('>'+ortho_plane(i))
             if self.coordinates[i]==0.: 
                 self.labels.add(ortho_plane(i))
-        self.spherical = self.cart_to_sphere()
+        self.spherical = self.cartesian_to_spherical()
     
-    def cart_to_sphere(self):
+    def cartesian_to_spherical(self, origin=None):
+        if origin is None:
+            origin = np.zeros(3)
+        x, y, z = self.coordinates - origin
         spherical = np.zeros(3)
-        xy2 = self.x**2 + self.y**2                     # x2 + y2
-        spherical[0] = np.sqrt(xy2 + self.z**2)         # r2 = x2 + y2 + z2
-        spherical[1] = np.arctan2(self.y, self.x)       # theta = arctan(y/x)
-        spherical[2] = np.arctan2(np.sqrt(xy2), self.z) # phi = arctan(xy/z)
+        xy2 = x**2 + y**2                     # x2 + y2
+        spherical[0] = np.sqrt(xy2 + z**2)         # r2 = x2 + y2 + z2
+        spherical[1] = np.arctan2(y, x)       # theta = arctan(y/x)
+        spherical[2] = np.arctan2(np.sqrt(xy2), z) # phi = arctan(xy/z)
         return spherical
  
 
@@ -120,13 +124,13 @@ class Grid(object):
             self.include = []
         try:
             self.origin = data['origin']
-            self.num_points = data['num_points']
+            self.num_cubic_points = data['num_points']
             self.vectors = data['vectors']
             logger.info("Grid instance is to be created:\nNumber of points: %s\nvectors:\n%s\nOrigin: %s"\
-                    % (self.num_points, self.vectors, self.origin))
+                    % (self.num_cubic_points, self.vectors, self.origin))
         except KeyError:
             self.origin = None
-            self.num_points = None
+            self.num_cubic_points = None
             self.vectors = None
         try:
             self.atoms = data['atoms']
@@ -135,6 +139,10 @@ class Grid(object):
 
 
         self.points = []
+
+    @property
+    def num_points(self):
+        return len(self.points)
 
     def create_from_list(self, coordinates=None, values=None):
         self.points = []
@@ -147,12 +155,14 @@ class Grid(object):
             self.points.append(point)
         logger.info("grid is created: %i points" % len(self.points))
 
-    def create_grid(self, values):
+    def create_grid(self, values=None):
+        if values is None:
+            values = [0.]*np.prod(self.num_cubic_points)
         self.points = []
         count = 0
-        for i in xrange(self.num_points[0]):
-            for j in xrange(self.num_points[1]):
-                for k in xrange(self.num_points[2]):
+        for i in xrange(self.num_cubic_points[0]):
+            for j in xrange(self.num_cubic_points[1]):
+                for k in xrange(self.num_cubic_points[2]):
                     xyz = self.origin + i*self.vectors[0] + j*self.vectors[1] + k*self.vectors[2]
                     point = GridPoint(coordinates=xyz, value=values[count])
                     self.points.append(point)
@@ -241,7 +251,7 @@ class vdwGrid(Grid):
     
     def __init__(self, data):
         Grid.__init__(self, data)
-        self.scale = [1.4, 2.]
+        self.scale = [1.66, 2.2]
         try:
             self.vdw_atoms = data['vdw atoms']
         except KeyError:
@@ -273,9 +283,9 @@ class vdwGrid(Grid):
     def create_vdw_grid(self, values):
         self.points = []
         count = 0
-        for i in xrange(self.num_points[0]):
-            for j in xrange(self.num_points[1]):
-                for k in xrange(self.num_points[2]):
+        for i in xrange(self.num_cubic_points[0]):
+            for j in xrange(self.num_cubic_points[1]):
+                for k in xrange(self.num_cubic_points[2]):
                     xyz = self.origin + i*self.vectors[0] + j*self.vectors[1] + k*self.vectors[2]
                     point = GridPoint(coordinates=xyz, value=values[count])
                     if self.inside_range(xyz) and self.proper(point):

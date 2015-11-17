@@ -19,9 +19,9 @@ import fftoolbox as fftb
 
 # In[3]:
 
-molecule_name = 'uracil'
+molecule_name = 'methanol'
 theory = 'mp2_augccpvtz'
-max_rank = 6
+max_rank = 1
 radius = 1.0
 ranks = range(max_rank+1)
 
