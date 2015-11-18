@@ -24,6 +24,9 @@ class LeastSquaresBasic(object):
         self._solution = None
         logger.debug('Shape of reference vector b: %s\nShape of LS matrix A: %s' % (self.b.shape, self.A.shape))
 
+    def set_solution(self, solution):
+        self._solution = solution
+
     @property
     def solution(self):
         return self._solution

@@ -24,7 +24,9 @@ class LeastSquaresCharges(LeastSquaresBasic):
     def update_grid(self, grid):
         self.grid = grid
         self.setA()
+        solution = self.solution.copy()
         LeastSquaresBasic.__init__(self, A=self.A, b=grid.get_values())
+        self.set_solution(solution)
 
     def setA_slow(self):
         n_p = len(self.grid.points)
