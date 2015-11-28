@@ -97,7 +97,7 @@ class GaussianCube(Parser):
                 s += '\n' 
                 countc = 0
             if i == countz - 1:
-                s += '\n'
+                if not s[-1] == '\n': s += '\n'
                 countz += nz
                 countc = 0
             countc += 1

@@ -2,12 +2,15 @@ from fftoolbox.multipole import Ylmc, Ylms, Multipole
 from fftoolbox.atom import FFSite
 from fftoolbox.molecule import Molecule
 from fftoolbox.atom import Atom
+from units import au_to_angst
 import lebedev_write
 
 from scipy.special import sph_harm as Y
 import numpy as np
 import logging
+import os
 
+WORKDIR = os.path.dirname(__file__)
 logger = logging.getLogger(__name__)
 
 __author__ = "Maxim Ivanov"
@@ -118,6 +121,25 @@ class LebedevMolecule(LebedevSphere):
                 self.name: (self.origin, self.rank, self.reference_multipoles), 
                 }
         return data
+
+    def color_charges(self, filename, xyzname=False,vmax=None, r_sphere=0.1):
+        path2xyz = '%s/data/xyz/%s' % (WORKDIR, xyzname)
+        s = 'from pymol.cgo import *\nfrom pymol import cmd\ncmd.load("%s")\nobj = [ BEGIN, LINES, ]\n' % (path2xyz)
+        vmax = max([abs(ss.charge) for ss in self.sites]) + 0.3
+        for site in self.sites:
+            crds = site.coordinates*au_to_angst
+            if site.charge is None: 
+                s_color = 'x = 0.0\ncolor = [COLOR, 1-x, 1-x, 1]\n'
+            elif site.charge <= 0:
+                s_color = 'x = %f\ncolor = [COLOR, 1, 1-x, 1-x]\n' % (-site.charge/vmax)
+            elif site.charge > 0:
+                s_color = 'x = %f\ncolor = [COLOR, 1-x, 1-x, 1]\n' % (site.charge/vmax)
+            s_sphere = 'sphere = [ SPHERE, %f, %f, %f,%f]\n' % (crds[0], crds[1], crds[2], r_sphere)
+            s = s + s_color + s_sphere + 'obj += color+sphere\n'
+        s = s + 'obj.append(END)\ncmd.load_cgo(obj,"cgo01")\n'
+        file = open(filename, 'w')
+        file.write(s)
+        file.close()
 
 
 class DistributedLebedevMolecule(Molecule):

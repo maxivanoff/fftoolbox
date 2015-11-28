@@ -251,7 +251,7 @@ class vdwGrid(Grid):
     
     def __init__(self, data):
         Grid.__init__(self, data)
-        self.scale = [1.66, 2.2]
+        self.scale = [1.4, 2.0]
         try:
             self.vdw_atoms = data['vdw atoms']
         except KeyError:

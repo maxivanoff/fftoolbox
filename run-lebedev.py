@@ -8,24 +8,26 @@ lf = '%(levelname)s: %(funcName)s at %(filename)s +%(lineno)s\n%(message)s\n'
 logging.basicConfig(filename='./log', filemode='w', level=logging.DEBUG, format=lf)
 
 data = {
-        'name': 'cis-mesno',
-        'theory': 'b3lyp_augccpvdz',
+        'name': 'methanethiol',
+        'theory': 'mp2_augccpvtz',
         'density': 1.5,
         }
 parser = fftb.GaussianCube(data=data)
 data.update(parser.data.copy())
 grid = fftb.vdwGrid(data)
 
-for rank in xrange(7):
+radius = 0.5
+for rank in xrange(1,4):
     data = {
-            'name': 'cis-mesno',
-            'theory': 'b3lyp_augccpvdz',
-            'sphere params': (rank, 1.0),
+            'name': 'methanethiol',
+            'theory': 'mp2_augccpvtz',
+            'sphere params': (rank, radius),
             }
 
     parser = fftb.GDMA(data=data)
     data.update(parser.data.copy())
     molecule = fftb.LebedevMolecule(data)
+    molecule.color_charges(filename='%s_%s-%i-%.1f.pymol' % (data['name'], data['theory'], rank, radius), xyzname='%s_%s.xyz' % (data['name'], data['theory']))
 
     #grid.build_LEM('full-vdw.pymol')
     charges = fftb.LeastSquaresCharges(molecule, grid)
