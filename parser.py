@@ -222,7 +222,6 @@ class Gaussian(Parser):
 
     def __init__(self, filename=None, data=None, here=False, orientation='standard'):
         self.energy = None
-        self.atoms = ()
         self.multipoles = {}
         self.orientation=orientation
         Parser.__init__(self, filename=filename, data=data, dname='log', suffix='.log', here=here)
@@ -236,6 +235,7 @@ class Gaussian(Parser):
         self.geometries_standard = []
         self.energies = []
         self.pcm_energy = None
+        self.s1_energies = []
         self.E2 = None
         logfile = open('%s' % (filename), 'r')
         while True:
@@ -249,7 +249,7 @@ class Gaussian(Parser):
                 self.theory_level = m.group(1).split()[0]
             # geometries in input orientation
             if re.search(r'Input orientation:', line):
-                atoms = list()
+                self.atoms = []
                 for i in range(4): logfile.readline()
                 index=1
                 while True:
@@ -264,9 +264,10 @@ class Gaussian(Parser):
                     element = self.atom_name[atomic_num]
                     self.add_atom(index, element, crds)
                     index+=1
-                self.geometries_input.append(atoms)
+                self.geometries_input.append(self.atoms)
             # electronic energy
             scf = re.search(r'SCF Done:  E\(.*\) = *(-?\d*\.\d*)', line)
+            S1_energy = re.search(r' Total Energy, E\(TD-HF/TD-KS\) = *(-?\d*\.\d*)', line)
             pcm = re.search(r'After PCM corrections, the energy is *(-?\d*\.\d*)', line)
             E2 = re.search(r'E2 = *(-?\d*\.\d*)', line)
             if pcm:
@@ -275,9 +276,11 @@ class Gaussian(Parser):
                 self.energies.append(float(scf.group(1)))
             if E2:
                 self.E2 = float(E2.group(1)) 
+            if S1_energy:
+                self.s1_energies.append(float(S1_energy.group(1)))
             # geometries in standard orientation
             if re.search(r'Standard orientation:', line):
-                atoms = list()
+                self.atoms = []
                 for i in range(4): logfile.readline()
                 index=1
                 while True:
@@ -292,7 +295,7 @@ class Gaussian(Parser):
                     element = self.atom_name[atomic_num]
                     self.add_atom(index, element, crds)
                     index+=1
-                self.geometries_standard.append(atoms)
+                self.geometries_standard.append(self.atoms)
 
             monopole = re.search(r'Charge= *(-?\d\.\d*) electrons', line)
             if monopole:
@@ -347,10 +350,14 @@ class Gaussian(Parser):
             self.energy = self.energies[-1] + self.E2
         else:
             self.energy = self.energies[-1]
-
+        if self.s1_energies:
+            self.S1 = self.s1_energies[-1]
+        else:
+            self.S1 = None
         self.data = {
                 'atoms': self.atoms,
                 'energy': self.energy,
+                'S1': self.S1,
                 'multipoles': self.multipoles,
                 }
         

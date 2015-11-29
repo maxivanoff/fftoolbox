@@ -21,6 +21,10 @@ class Molecule(Multipole):
     def __init__(self, data):
         self.data = data
         try:
+            name = data['name']
+        except KeyError:
+            name = None
+        try:
             self.theory = data['theory']
         except KeyError:
             self.theory = None
@@ -36,8 +40,8 @@ class Molecule(Multipole):
             self.energy = data['energy']
         except KeyError:
             self.energy = None
-        logger.info('Start assembling %s Molecule\ntheory: %r\nsymmetry: %r\nrepresentation: %r' % (data['name'], self.theory, self.sym, representation))
-        Multipole.__init__(self, name=data['name'], representation=representation)
+        logger.info('Start assembling %s Molecule\ntheory: %r\nsymmetry: %r\nrepresentation: %r' % (name, self.theory, self.sym, representation))
+        Multipole.__init__(self, name=name, representation=representation)
         self._atoms = []
         atoms = data['atoms']
         report_atoms = ''
@@ -111,6 +115,14 @@ class Molecule(Multipole):
     def atoms_names_eq(self):
         return [a.name for a in self.atoms]
 
+    def center_of_mass(self):
+        mass = {'H': 1.0079, 'C': 12.0107}
+        M = sum([mass[s.element] for s in self.sites])
+        MR = np.zeros(3)
+        for s in self.sites:
+            MR += mass[s.element]*s.coordinates
+        return MR/M
+
     def set_groups(self):
         """
         define bonded neighboring atoms for each atom
@@ -153,8 +165,8 @@ class Molecule(Multipole):
         data = self.data.copy()
         data['atoms'] = []
         for i, a in enumerate(self.atoms):
-            element, crds, charge = self.data['atoms'][i]
-            a_updated = (element, a.coordinates, charge)
+            index, element, crds, mult = self.data['atoms'][i]
+            a_updated = (index, element, a.coordinates, mult)
             self.data['atoms'].append(a_updated)
         molecule = Molecule(data=data)
         return molecule
@@ -172,6 +184,13 @@ class Molecule(Multipole):
                 if not bond in bonds:
                     bonds.append(bond)
         return bonds
+
+    def __add__(self, molecule):
+        c = Complex()
+        c.add_molecule(self.copy())
+        c.add_molecule(molecule.copy())
+        return c
+
 
 class HybridMolecule(Molecule):
     
@@ -228,11 +247,6 @@ class HybridMolecule(Molecule):
         for a in self.atoms:
             a.set_frame_from_sites()
 
-    def __add__(self, molecule):
-        c = Complex()
-        c.add_molecule(self.copy())
-        c.add_molecule(molecule.copy())
-        return c
 
     def __repr__(self):
         o = '%s\n' % self.name
@@ -245,7 +259,7 @@ class Complex(GroupOfSites):
     def __init__(self, complex_data=None, molecules_data=None):
         if complex_data is None: complex_data = {'name': None}
         if molecules_data is None: molecules_data = []
-        GroupOfAtoms.__init__(self, name=complex_data['name'])
+        GroupOfSites.__init__(self, name=complex_data['name'])
         self.qm_energy = None
         self.molecules = []
         # load molecules

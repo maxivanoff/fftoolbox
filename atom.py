@@ -174,6 +174,16 @@ class HybridAtom(Atom):
         self.add_site(center)
         self.frame = None
 
+    def translate(self, vector):
+        self.set_coordinates(self.coordinates+vector)
+        for site in self.sites:
+            site.set_coordinates(site.coordinates+vector)
+
+    def rotate(self, R):
+        self.set_coordinates(np.dot(R, self.coordinates))
+        for site in self.sites:
+            site.set_coordinates(np.dot(R, site.coordinates))
+
     @property
     def center(self):
         return self._sites[0]

@@ -180,14 +180,23 @@ class Multipole(GroupOfSites):
 
     def rotate(self, rot_axis, angle):
         R = rodrigues_rotation_matrix(rot_axis, angle)
-        for site in self.sites:
-            site.set_coordinates(np.dot(R, site.coordinates))
-        self.set_multipole_matrix()
+        for atom in self.atoms:
+            atom.rotate(R)
+        if self.representation:
+            self.set_multipole_matrix()
 
     def translate(self, vector):
-        for site in self.sites:
-            site.set_coordinates(site.coordinates + vector)
-        self.set_multipole_matrix()
+        for atom in self.atoms:
+            atom.translate(vector)
+        if self.representation:
+            self.set_multipole_matrix()
+
+    def move_to_center(self, center=None):
+        if center is None:
+            center = self.center_of_mass()
+        self.translate(-center)
+        if self.representation:
+            self.set_multipole_matrix()
 
     def set_multipole_matrix(self):
         rep, l = self.representation
