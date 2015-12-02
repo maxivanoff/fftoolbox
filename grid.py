@@ -49,21 +49,16 @@ class GridPoint(object):
     self.labels are needed for the grid manipulation
     self.signature is a string with coordinates, used in the creating of potential energy surface
     """
-    def __init__(self, coordinates=None, signature=None, value=None):
+    def __init__(self, coordinates=None, value=None):
         self.value = value
+        self.coordinates = np.float64(coordinates)
         self.labels = set()
-        if type(coordinates)==np.ndarray and signature is None:
-            self.coordinates = np.float64(coordinates)
-            self.signature = '%.3f_%.3f_%.3f' % (coordinates[0], coordinates[1], coordinates[2]) 
-        if type(signature)==str and coordinates is None:
-            self.signature = signature
-            self.coordinates = np.array([np.float64(s) for s in self.signature.split('_')])
         for i in range(3):
-            if abs(self.coordinates[i])<1e-4: self.coordinates[i]=0.
-            if self.coordinates[i]<0.: self.labels.add('<'+ortho_plane(i))
-            if self.coordinates[i]>0.: self.labels.add('>'+ortho_plane(i))
-            if self.coordinates[i]==0.: 
-                self.labels.add(ortho_plane(i))
+            if abs(self.coordinates[i]) < 1e-4: self.coordinates[i] = 0.
+            plane = ortho_plane(i)
+            if self.coordinates[i] < 0.: self.labels.add('<' + plane)
+            if self.coordinates[i] > 0.: self.labels.add('>'+ plane)
+            if self.coordinates[i] == 0.: self.labels.add(plane)
         self.spherical = self.cartesian_to_spherical()
     
     def cartesian_to_spherical(self, origin=None):
@@ -108,12 +103,20 @@ class GridPoint(object):
 class Grid(object):
     
     def __init__(self, data):
-        
-        self.molecule_name = data['name']
+        self.points = []
+        try:
+            self.molecule_name = data['name']
+        except:
+            self.molecule_name = None
         try:
             self.theory = data['theory']
         except KeyError: 
             self.theory = None
+        try:
+            self.atoms = data['atoms']
+        except KeyError:
+            self.atoms = []
+        # points to include/exclude
         try:
             self.exclude = data['exclude']
         except KeyError:
@@ -122,6 +125,7 @@ class Grid(object):
             self.include = data['include']
         except KeyError:
             self.include = []
+        # cubic grid parameters
         try:
             self.origin = data['origin']
             self.num_cubic_points = data['num_points']
@@ -132,13 +136,6 @@ class Grid(object):
             self.origin = None
             self.num_cubic_points = None
             self.vectors = None
-        try:
-            self.atoms = data['atoms']
-        except KeyError:
-            self.atoms = []
-
-
-        self.points = []
 
     @property
     def num_points(self):

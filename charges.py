@@ -11,7 +11,6 @@ import units
 __author__ = "Maxim Ivanov"
 __email__ = "maxim.ivanov@marquette.edu"
 
-
 logger = logging.getLogger(__name__)
 
 class LeastSquaresCharges(LeastSquaresBasic):
@@ -19,31 +18,23 @@ class LeastSquaresCharges(LeastSquaresBasic):
     def __init__(self, molecule=None, grid=None):
         self.molecule = molecule
         self.update_grid(grid)
-        self._charges = {}
+        self.clear_charges()
 
     def update_grid(self, grid):
         self.grid = grid
-        self.setA()
-        LeastSquaresBasic.__init__(self, A=self.A, b=grid.get_values())
+        b = grid.get_values()
+        A = self.get_A()
+        LeastSquaresBasic.__init__(self, A=A, b=b)
 
-    def setA_slow(self):
-        n_p = len(self.grid.points)
-        n_s = len(self.molecule.sites_noneq)
-        self.A =  np.zeros((n_p, n_s))
-        for i in xrange(n_p):
-            proton = Coordinates(coordinates=self.grid.points[i].coordinates)
-            for j, name in enumerate(self.molecule.sites_names_noneq):
-                for site in self.molecule.get_sites(name=name):
-                    self.A[i,j] += 1/site.distance_to(proton)
-
-    def setA(self):
+    def get_A(self):
         grid_coordinates = self.grid.get_coordinates()
         sites_coordinates = self.molecule.get_coordinates()
         num_reduced_sites = len(self.molecule.sites_names_noneq) 
         logger.debug('Number of coordinates in the grid: %i\nNumber of sites in molecule: %i\nNumber of sites with different names: %i' % (len(grid_coordinates), len(sites_coordinates), num_reduced_sites))
-        self.A = fast.set_inversed(grid_coordinates, sites_coordinates, \
+        A = fast.set_inversed(grid_coordinates, sites_coordinates, \
                 num_reduced_sites, self.molecule.sym_sites)
-        logger.info("Least squares matrix is set up with shape (%s, %s)" % (self.A.shape[0], self.A.shape[1]))
+        logger.info("Least squares matrix is set up with shape (%s, %s)" % (A.shape[0], A.shape[1]))
+        return A
 
     @property
     def charges(self):
