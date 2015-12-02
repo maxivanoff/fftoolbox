@@ -23,25 +23,6 @@ def ortho_plane(axis):
     if axis==1: return 'xz'
     if axis==2: return 'xy'
 
-class Property(object):
-
-    def __init__(self, value=None,property_name=None, theory=None):
-        self.name = property_name
-        self.value = value
-        self.theory = theory
-
-    def set_property(self, value=None, property_name=None, theory=None):
-        self.value = value
-        self.name = property_name
-        self.theory = theory
-
-    def set_value(self, value=None):
-        self.value = value
-
-    def __str__(self):
-        return '%.10f %s %s' % (self.value, self.name, self.theory)
-
-    
 class GridPoint(object):
     """
     A grid point that contains coordinates, properties at the given coordinate
@@ -102,8 +83,9 @@ class GridPoint(object):
 
 class Grid(object):
     
-    def __init__(self, data):
-        self.points = []
+    def __init__(self, data=None):
+        self.clear_points()
+        if data is None: data = {}
         try:
             self.molecule_name = data['name']
         except:
@@ -137,36 +119,46 @@ class Grid(object):
             self.num_cubic_points = None
             self.vectors = None
 
+    def clear_points(self):
+        self._points = []
+
+    def add_point(self, point):
+        self._points.append(point)
+
+    @property
+    def points(self):
+        return self._points
+
     @property
     def num_points(self):
         return len(self.points)
 
     def create_from_list(self, coordinates=None, values=None):
-        self.points = []
+        self.clear_points()
         nc = len(coordinates)
         nv = len(values)
         if not nc == nv:
             raise ValueError('Number of grid points %i does not match number of values %i' % (nc, nv))
         for xyz, value in zip(coordinates, values):
             point = GridPoint(coordinates=xyz, value=value)
-            self.points.append(point)
+            self.add_point(point)
         logger.info("grid is created: %i points" % len(self.points))
 
     def create_grid(self, values=None):
+        self.clear_points()
         if values is None:
             values = [0.]*np.prod(self.num_cubic_points)
-        self.points = []
         count = 0
         for i in xrange(self.num_cubic_points[0]):
             for j in xrange(self.num_cubic_points[1]):
                 for k in xrange(self.num_cubic_points[2]):
                     xyz = self.origin + i*self.vectors[0] + j*self.vectors[1] + k*self.vectors[2]
                     point = GridPoint(coordinates=xyz, value=values[count])
-                    self.points.append(point)
+                    self.add_point(point)
                     count += 1
         logger.info("grid is created: %i points" % len(self.points))
 
-    def proper(self, point):
+    def contains_proper_labels(self, point):
         for label in self.exclude:
             if label in point.labels: 
                 return False
@@ -249,44 +241,58 @@ class vdwGrid(Grid):
     def __init__(self, data):
         Grid.__init__(self, data)
         self.scale = [1.4, 2.0]
-        try:
-            self.vdw_atoms = data['vdw atoms']
-        except KeyError:
-            self.vdw_atoms = [a[0] for a in self.atoms]
-        atoms = filter(lambda a: a[0] in self.vdw_atoms, self.atoms)
-        elems = [a[1] for a in atoms]
-        logger.info('vdW grid is based on %i atoms: %r' % (len(elems), elems))
         self.create_vdw_grid(values=data['values'])
+        self.create_atomic_grids()
 
-    def inside_range(self, xyz):
+    def inside_vdw_range(self, xyz):
         inside_small = False
         inside_large = False
-        closest_to = (100, 1) # distance, atom's index
         for index, atom_name, atom_crds, mass in self.atoms:
             d = np.linalg.norm(atom_crds - xyz)
-            cd, _ = closest_to
-            if d < cd:
-                closest_to = (d, index)
             low_lim = self.vdw_radius_bohr[atom_name]*self.scale[0]
             high_lim = self.vdw_radius_bohr[atom_name]*self.scale[1]
             if d < low_lim: inside_small = True
             if d < high_lim: inside_large = True
-        d, i = closest_to
-        if not inside_small and inside_large and i in self.vdw_atoms: 
+        if not inside_small and inside_large:
             return True
         else: 
             return False
 
+    def create_atomic_grids(self):
+        self.atomic_grids = {}
+        for point in self.points:
+            d_min = 100
+            for atom in self.atoms:
+                index, element, at_xyz, multipoles = atom
+                d = np.linalg.norm(at_xyz - point.coordinates)
+                if d < d_min:
+                    d_min = d
+                    element_min = element
+                    i_min = index
+            try:
+                atomic_grid = self.atomic_grids[i_min]
+            except KeyError:
+                atomic_grid = Grid()
+                self.atomic_grids[i_min] = atomic_grid
+            atomic_grid.element = element_min
+            atomic_grid.add_point(point)
+        check_sum = 0.
+        for index, grid in self.atomic_grids.items():
+            check_sum += grid.num_points
+            logger.info("vdW around atom with index %i and element %s is created with %i points" % (index, grid.element, grid.num_points))
+        if not check_sum == self.num_points:
+            raise ValueError('Number of atomic grid points (%i) does not match total number of points in the grid (%i)' % (check_sum, self.num_points))
+        
     def create_vdw_grid(self, values):
-        self.points = []
+        self.clear_points()
         count = 0
         for i in xrange(self.num_cubic_points[0]):
             for j in xrange(self.num_cubic_points[1]):
                 for k in xrange(self.num_cubic_points[2]):
                     xyz = self.origin + i*self.vectors[0] + j*self.vectors[1] + k*self.vectors[2]
                     point = GridPoint(coordinates=xyz, value=values[count])
-                    if self.inside_range(xyz) and self.proper(point):
-                        self.points.append(point)
+                    if self.inside_vdw_range(xyz) and self.contains_proper_labels(point):
+                        self.add_point(point)
                     count += 1
         logger.info("vdW grid is created: %i points" % len(self.points))
 
