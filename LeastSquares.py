@@ -36,6 +36,9 @@ class LeastSquaresBasic(object):
     @property
     def solution(self):
         return self._solution
+    
+    def copy_solution(self):
+        return self._solution.copy()
 
     @property
     def residual(self):

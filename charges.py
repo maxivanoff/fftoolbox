@@ -24,7 +24,15 @@ class LeastSquaresCharges(LeastSquaresBasic):
         self.grid = grid
         b = grid.get_values()
         A = self.get_A()
+        try:
+            saved_solution = self.copy_solution()
+        except AttributeError:
+            pass
         LeastSquaresBasic.__init__(self, A=A, b=b)
+        try:
+            self.set_solution(saved_solution)
+        except NameError:
+            pass
 
     def get_A(self):
         grid_coordinates = self.grid.get_coordinates()
