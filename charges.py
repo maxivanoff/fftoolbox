@@ -49,27 +49,32 @@ class LeastSquaresCharges(LeastSquaresBasic):
     def charges(self):
         return self._charges
 
+    def clear_charges(self):
+        self._charges = {}
+
+    def set_charge(self, name, q):
+        self._charges[name] = q
+
     @property
     def multipoles(self):
         return self.molecule.charges_to_multipoles(self.charges)
 
     def solve(self, method='svd', truncate=0):
         solution = LeastSquaresBasic.solve(self, method, truncate)
-        self._charges = {}
         if not len(solution) == len(self.molecule.sites_names_noneq):
             raise ValueError('Number of charges in solution (%i) does not match number of sites (%i):\n%r' % 
                     (len(solution), len(self.molecule.sites_names_noneq), self.molecule.sites_names_noneq))
+        self.clear_charges()
         for q, name in zip(solution, self.molecule.sites_names_noneq):
-            self._charges[name] = q
-        self.charges_to_sites(self._charges)
+            self.set_charge(name, q)
+        self.charges_to_sites(self.charges)
 
     def sites_to_solution(self):
-        self._solution = np.zeros(self.molecule.num_sites_noneq)
+        solution = np.zeros(self.molecule.num_sites_noneq)
         for i, s in enumerate(self.molecule.sites_noneq):
-            self._solution[i] = s.charge
+            solution[i] = s.charge
+        self.set_solution(solution)
         logger.info('Charges were transfered from sites to _solution')
-
-
 
     def charges_to_sites(self, charges):
         for site in self.molecule.sites:

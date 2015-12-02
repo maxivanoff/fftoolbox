@@ -15,14 +15,20 @@ class LeastSquaresBasic(object):
     """
     def __init__(self, name=None, A=None, b=None):
         self.name = name
+        self.set_b(b)
+        self.set_A(A)
+        self._solution = None
+        logger.debug('Shape of reference vector b: %s\nShape of LS matrix A: %s' % (self.b.shape, self.A.shape))
+
+    def set_A(self, A):
         self.A = A
-        self.b = b
         self.At = np.transpose(A)
         self.Atb = np.dot(self.At, self.b)
         self.AtA = np.dot(self.At, self.A)
         self.AAt = np.dot(self.A, self.At)
-        self._solution = None
-        logger.debug('Shape of reference vector b: %s\nShape of LS matrix A: %s' % (self.b.shape, self.A.shape))
+
+    def set_b(self, b):
+        self.b = b
 
     def set_solution(self, solution):
         self._solution = solution
@@ -70,11 +76,12 @@ class LeastSquaresBasic(object):
     def solve(self, method='svd', truncate=0):
         if method == 'normal':
             logger.info('Solving least squares problem using normal equations')
-            self._solution = self.solve_normal()
+            s = self.solve_normal()
         if method == 'svd':
             logger.info('Solving least squares problem using SVD and truncating %i terms' % truncate)
-            self._solution = self.solve_svd(truncate)
-        return self._solution
+            s = self.solve_svd(truncate)
+        self.set_solution(s)
+        return self.solution
 
     def solve_normal(self):
         return np.linalg.solve(self.AtA, self.Atb)
