@@ -1,9 +1,0 @@
-Title "hno b3lyp aug-cc-pvdz"
-File hno_b3lyp_augccpvdz.fchk
-
-Multipoles
-  switch 4
-  Limit 4
-Start
-
-Finish

@@ -1,9 +1,0 @@
-Title "trans-mesno pbe def2svp"
-File trans-mesno_pbe_def2svp.fchk
-
-Multipoles
-  switch 4
-  Limit 4
-Start
-
-Finish

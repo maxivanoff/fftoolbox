@@ -3,7 +3,4 @@
 *.xyz
 *.pyc
 *.swp
-data/cub/*
-data/log/*
-data/gdma/*fchk
-data/forcefields/*
+data

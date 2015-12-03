@@ -1,9 +1,0 @@
-Title "co2 b3lyp aug-cc-pvdz"
-File co2_b3lyp_augccpvdz.fchk
-
-Multipoles
-  switch 4
-  Limit 4
-Start
-
-Finish

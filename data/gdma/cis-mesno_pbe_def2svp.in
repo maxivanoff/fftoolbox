@@ -1,9 +1,0 @@
-Title "cis-mesno pbe def2svp"
-File cis-mesno_pbe_def2svp.fchk
-
-Multipoles
-  switch 4
-  Limit 4
-Start
-
-Finish
