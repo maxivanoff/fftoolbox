@@ -55,10 +55,14 @@ class GaussianCube(Parser):
         self.values = ()
         self.atoms = ()
         self.density = None
-        if not data is None:
-            Parser.__init__(self, filename=filename, data=data, dname='cub', suffix='_d%s.cub' % data['density'], here=here)
+        if data:
+            try:
+                suffix = '_d%s.cub' % data['density']
+            except KeyError:
+                suffix = '.cub'
+            Parser.__init__(self, filename=filename, data=data, dname='cub', suffix=suffix, here=here)
             self.read_file(filename=self.filename)
-        if not filename is None:
+        if filename:
             Parser.__init__(self, filename=filename, here=here)
             self.read_file(filename=self.filename)
 
@@ -67,7 +71,9 @@ class GaussianCube(Parser):
         cube_sides = np.array([np.linalg.norm(v) for v in self.vectors])
         self.density = np.prod(self.num_points)/np.prod((self.num_points - 1)*cube_sides)
 
-    def write_file(self, grid=None, molecule=None, values=None, filename=None):
+    def write_file(self, grid=None, molecule=None, values=None, filename=None, here=False):
+        if here is False:
+            filename = '%s/data/cub/local/%s' % (WORKDIR, filename)
         s = ' %s Potential\n Electrostatic potential\n' % molecule.name
         s += '%5s' % molecule.num_atoms
         a = '%.6f' % grid.origin[0]
@@ -104,6 +110,7 @@ class GaussianCube(Parser):
         file = open(filename, 'w')
         file.write(s)
         file.close()
+        logger.info('Cubefile was written to %s' % filename)
 
 
     def read_file(self, filename=None):
@@ -129,14 +136,15 @@ class GaussianCube(Parser):
             index = ati + 1
             self.add_atom(index, element, crds)
         # Read values
-        self.values = []
+        values = []
         while True:
             line = cubefile.readline()
             if line == '':
                 break
             else:
                 tmp = [float(t) for t in line.split()]
-                self.values += tmp
+                values += tmp
+        self.values = np.array(values)
         cubefile.close()
         self.data = {
                 'origin': self.origin,
@@ -356,8 +364,8 @@ class Gaussian(Parser):
             self.S1 = None
         self.data = {
                 'atoms': self.atoms,
-                'energy': self.energy,
-                'S1': self.S1,
+                'ground energy': self.energy,
+                'S1 energy': self.S1,
                 'multipoles': self.multipoles,
                 }
         
