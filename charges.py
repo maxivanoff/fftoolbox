@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 class LeastSquaresCharges(LeastSquaresBasic):
 
     def __init__(self, molecule=None, grid=None):
+        self.name = molecule.name
         self.molecule = molecule
         self.update_grid(grid)
         self.clear_charges()

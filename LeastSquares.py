@@ -13,8 +13,7 @@ class LeastSquaresBasic(object):
     """
     LS problem: min ||b-Ax||
     """
-    def __init__(self, name=None, A=None, b=None):
-        self.name = name
+    def __init__(self, A=None, b=None):
         self.set_b(b)
         self.set_A(A)
         self._solution = None

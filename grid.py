@@ -235,7 +235,7 @@ class vdwGrids(dict):
 
 
 class vdwGrid(Grid):
-    vdw_radius_angst = {'O':1.52, 'N':1.55, 'S':1.8, 'C':1.7, 'H':1.2, 'Na': 2.27, 'F':1.47, 'Cl':1.88, 'K': 2.75 }#taken from wikipedia
+    vdw_radius_angst = {'O':1.52, 'N':1.55, 'S':1.8, 'C':1.7, 'H':1.2, 'Na': 2.27, 'F':1.47, 'Cl':1.88, 'Br': 1.9, 'K': 2.75 }#taken from wikipedia
     vdw_radius_bohr = dict((name, radius/0.52917721092) for name, radius in vdw_radius_angst.iteritems())
     
     def __init__(self, data):

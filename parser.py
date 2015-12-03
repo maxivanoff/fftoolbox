@@ -43,7 +43,7 @@ class Parser(object):
 
 class GaussianCube(Parser):
     
-    number_to_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 16:'S'}
+    number_to_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 16:'S', 35:'Br'}
     name_to_number = dict(zip(number_to_name.values(), number_to_name.keys()))
         
     def __init__(self, filename=None, data=None, here=False):
@@ -226,7 +226,7 @@ class QChem(Parser):
         return 'QChem parser'
 
 class Gaussian(Parser):
-    atom_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 0:'X', 16:'S'}
+    atom_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 0:'X', 16:'S', 35:'Br'}
 
     def __init__(self, filename=None, data=None, here=False, orientation='standard'):
         self.energy = None

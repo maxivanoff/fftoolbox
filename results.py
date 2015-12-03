@@ -1,24 +1,36 @@
+from collections import defaultdict
 import units
 
 class Reports(object):
 
     def __init__(self):
-        self.data = {
-                'rmsd':[],
-                'max error': [],
-                'rmad': [],
-                'R2': [],
-                'alpha': [],
-                }
+        self.data = defaultdict(list)
         self.keys = self.data.keys()
+        self.n = 0
 
     def add(self, charges):
+        self.data['name'].append(charges.name)
         self.data['rmsd'].append(charges.rmsd)
         self.data['rmad'].append(charges.rmad)
         self.data['R2'].append(charges.R2)
         self.data['max error'].append(charges.max_error)
         a, da, b, db = charges.ab
         self.data['alpha'].append(a)
+        self.n += 1
+
+    def __str__(self):
+        s = ''
+        for key in self.data.keys():
+            s += '%s & ' % key
+        s += '\\\\ \n'
+        for i in xrange(self.n):
+            for key, values in self.data.items():
+                try:
+                    s += '%.3f & ' % values[i]
+                except TypeError:
+                    s += '%s & ' % values[i].ljust(20, ' ')
+            s += '\\\\ \n'
+        return s
 
 
 class Report(object):
