@@ -18,6 +18,9 @@ class Reports(object):
         self.data['alpha'].append(a)
         self.n += 1
 
+    def add_whatever(self, key, value):
+        self.data[key].append(value)
+
     def __str__(self):
         s = ''
         for key in self.data.keys():

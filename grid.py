@@ -240,7 +240,7 @@ class vdwGrid(Grid):
     
     def __init__(self, data):
         Grid.__init__(self, data)
-        self.scale = [1.4, 2.0]
+        self.scale = [1.66, 2.2]
         self.create_vdw_grid(values=data['values'])
         self.create_atomic_grids()
 

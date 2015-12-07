@@ -10,3 +10,7 @@ from charges import LeastSquaresCharges
 from results import Results, Report, Reports
 from mep import MEP
 from units import au_to_kcal
+
+import os
+PATH = os.path.dirname(__file__)
+

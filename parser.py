@@ -473,7 +473,7 @@ class GDMA(Parser):
             while True:
                 line = f.readline()
                 if line == '': break
-                m = re.search(r'([A-Z]\d*) *x = +(-?\d*\.\d*) *y = +(-?\d*\.\d*) *z = +(-?\d*\.\d*)', line)
+                m = re.search(r'([A-Z][a-z]?) *x = +(-?\d*\.\d*) *y = +(-?\d*\.\d*) *z = +(-?\d*\.\d*)', line)
                 if m:
                     # add atom
                     elem =  m.group(1)
