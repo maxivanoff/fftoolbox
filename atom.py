@@ -135,7 +135,7 @@ class Atom(Coordinates, Multipole):
     vdw_radius_bohr = dict((name, radius/0.52917721092) for name, radius in vdw_radius_angst.iteritems())
 
     def __init__(self, index=None, element=None, coordinates=None, representation=None):
-        Multipole.__init__(self, name=element, origin=coordinates, representation=representation)
+        Multipole.__init__(self, name='%s-%i' % (element, index), origin=coordinates, representation=representation)
         Coordinates.__init__(self, coordinates)
         self.index = index
         self.element = element

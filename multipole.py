@@ -145,8 +145,11 @@ class GroupOfSites(object):
         mol2 = parser.Mol2()
         mol2.write_file(filename, here, self)
 
-    def color_charges(self, filename, xyzname=False,vmax=None, r_sphere=0.1):
-        path2xyz = '%s/data/xyz/%s' % (WORKDIR, xyzname)
+    def color_charges(self, filename, xyzname=False, here=False, vmax=None, r_sphere=0.05):
+        if here is False:
+            path2xyz = '%s/data/xyz/%s' % (WORKDIR, xyzname)
+        else:
+            path2xyz = './%s' % xyzname
         s = 'from pymol.cgo import *\nfrom pymol import cmd\ncmd.load("%s")\nobj = [ BEGIN, LINES, ]\n' % (path2xyz)
         for atom in self.atoms:
             vmax = max([abs(ss.charge) for ss in atom.sites]) + 0.3
@@ -216,6 +219,10 @@ class Multipole(GroupOfSites):
         self.MtoQ = multipole.rotation_matrix_inverse
 
     def charges_to_multipoles(self, charges):
+        try:
+            self.QtoM
+        except AttributeError:
+            raise ValueError('Transformation matrix from charges to multipoles was not set up. Include "representation" key in the data dictionary.')
         Q = np.array([])
         for name in self.sites_names_noneq:
             Q = np.append(Q, charges[name])

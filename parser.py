@@ -470,6 +470,7 @@ class GDMA(Parser):
         with open(filename, 'r') as f:
             i=1
             multipoles = {}
+            max_rank = 0
             while True:
                 line = f.readline()
                 if line == '': break
@@ -486,6 +487,8 @@ class GDMA(Parser):
                 if m:
                     rank = int(m.group(1))
                     multipoles['rank'] = rank
+                    if rank > max_rank:
+                        max_rank = rank
                     while True:
                         tmp = f.readline().split()
                         if len(tmp) == 0: 
@@ -508,11 +511,20 @@ class GDMA(Parser):
                             shift = 3
                         else:
                             shift = 0
-                        keys = tmp[shift:][::3]
-                        values = tmp[shift+2:][::3]
+                        keys = []
+                        values =[]
+                        for word in tmp[shift:]:
+                            if word == '=':
+                                continue
+                            elif word.startswith('Q'):
+                                keys.append(word)
+                            elif word.startswith('='):
+                                values.append(float(word[1:]))
+                            else:
+                                values.append(float(word))
                         for key, value in zip(keys, values):
-                            total_multipoles[key[1:]] = float(value)
-            total_multipoles['rank'] = rank
+                            total_multipoles[key[1:]] = value
+            total_multipoles['rank'] = max_rank
             self.data = {'atoms': self.atoms,
                          'multipoles': total_multipoles,
                          }

@@ -122,7 +122,15 @@ class LebedevMolecule(LebedevSphere):
                 }
         return data
 
-    def color_charges(self, filename, xyzname=False,vmax=None, r_sphere=0.1):
+    @property
+    def num_atoms(self):
+        return self.molecule.num_atoms
+
+    @property
+    def atoms(self):
+        return self.molecule.atoms
+
+    def color_charges(self, filename, xyzname=False,vmax=None, r_sphere=0.05):
         path2xyz = '%s/data/xyz/%s' % (WORKDIR, xyzname)
         s = 'from pymol.cgo import *\nfrom pymol import cmd\ncmd.load("%s")\nobj = [ BEGIN, LINES, ]\n' % (path2xyz)
         vmax = max([abs(ss.charge) for ss in self.sites]) + 0.3
@@ -155,13 +163,15 @@ class DistributedLebedevMolecule(Molecule):
             data[a.name] = d
         return data
 
-    def add_atoms(self, atoms):
+    def add_atoms(self, atoms, H_rank_1 = True):
         for a in atoms:
             index, element, crds, multipoles = a
             try:
                 rank, radius = self.sphere_params[element]
             except:
                 rank, radius = self.sphere_params
+            if element == 'H' and H_rank_1 is True:
+                rank = 1
             atom = LebedevAtom(element=element, coordinates=crds, ref_multipoles=multipoles, \
                     index=index, rank=rank, radius=radius)
             self.add_atom(atom)
