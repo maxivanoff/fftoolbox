@@ -145,7 +145,7 @@ class GroupOfSites(object):
         mol2 = parser.Mol2()
         mol2.write_file(filename, here, self)
 
-    def color_charges(self, filename, xyzname=False, here=False, vmax=None, r_sphere=0.05):
+    def color_charges(self, filename, xyzname=False, here=False, vmax=None, r_sphere=0.08):
         if here is False:
             path2xyz = '%s/data/xyz/%s' % (WORKDIR, xyzname)
         else:

@@ -9,29 +9,44 @@ class Reports(object):
         self.n = 0
 
     def add(self, charges):
-        self.data['name'].append(charges.name)
-        self.data['rmsd'].append(charges.rmsd)
-        self.data['rmad'].append(charges.rmad)
-        self.data['R2'].append(charges.R2)
-        self.data['max error'].append(charges.max_error)
+        #self.data['Name'].append(charges.name)
+        self.data['RMSD'.ljust(10, ' ')].append(charges.rmsd)
+        self.data['RMAE'.ljust(10, ' ')].append(charges.rmad)
+        self.data['R2'.ljust(10, ' ')].append(charges.R2)
+        self.data['Max. Error'.ljust(10, ' ')].append(charges.max_error)
         a, da, b, db = charges.ab
-        self.data['alpha'].append(a)
+        self.data['alpha'.ljust(10, ' ')].append(a)
         self.n += 1
 
     def add_whatever(self, key, value):
         self.data[key].append(value)
 
     def __str__(self):
+        num = len(self.data.keys())
         s = ''
+        j = 0
         for key in self.data.keys():
-            s += '%s & ' % key
-        s += '\\\\ \n'
+            j += 1
+            if not j == num:
+                s += '%s & ' % key
+            else:
+                s += '%s\\\\ \n\\hline \n' % key
         for i in xrange(self.n):
+            j = 0
             for key, values in self.data.items():
-                try:
-                    s += '%.3f & ' % values[i]
-                except TypeError:
+                j += 1
+                if key == 'name':
                     s += '%s & ' % values[i].ljust(20, ' ')
+                    continue
+                try:
+                    value_str = '%.3f' % values[i]
+                except TypeError:
+                    value_str = '%s' % values[i]
+                value_str = value_str.ljust(10, ' ')
+                if not j == num:
+                    s += '%s & ' % value_str
+                else:
+                    s += '%s' % value_str
             s += '\\\\ \n'
         return s
 

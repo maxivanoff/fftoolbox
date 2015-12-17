@@ -130,7 +130,7 @@ class LebedevMolecule(LebedevSphere):
     def atoms(self):
         return self.molecule.atoms
 
-    def color_charges(self, filename, xyzname=False,vmax=None, r_sphere=0.05):
+    def color_charges(self, filename, xyzname=False,vmax=None, r_sphere=0.08):
         path2xyz = '%s/data/xyz/%s' % (WORKDIR, xyzname)
         s = 'from pymol.cgo import *\nfrom pymol import cmd\ncmd.load("%s")\nobj = [ BEGIN, LINES, ]\n' % (path2xyz)
         vmax = max([abs(ss.charge) for ss in self.sites]) + 0.3

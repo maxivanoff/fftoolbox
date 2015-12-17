@@ -21,6 +21,9 @@ class LeastSquaresCharges(LeastSquaresBasic):
         self.update_grid(grid)
         self.clear_charges()
 
+    def set_name(self, name):
+        self.name = name
+
     def update_grid(self, grid):
         self.grid = grid
         b = grid.get_values()
