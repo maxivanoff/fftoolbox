@@ -21,7 +21,7 @@ data = {
         'theory': 'mp2_augccpvtz',
         'representation': ('spherical', 2),
         'symmetry': False,
-        'sphere params': d,
+        'sphere params': (2, 0.5),
         'exclude': ['<xy'],
         }
 
@@ -35,9 +35,9 @@ molecule.color_charges('%s_%s-2-0.5-DLM.pymol' % (data['name'], data['theory']),
 data['density'] = 1.5
 parser = fftb.GaussianCube(data=data)
 data.update(parser.data.copy())
+grid = fftb.vdwGrid(data)
 
-grids = fftb.vdwGrids(data)
-for key, grid in grids.items():
+for key, grid in grid.atomic_grids.items():
     charges = fftb.LeastSquaresCharges(molecule, grid)
     charges.sites_to_solution()
     report = fftb.Report(key, charges)

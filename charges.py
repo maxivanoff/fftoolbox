@@ -2,7 +2,6 @@ import numpy as np
 import logging
 
 from LeastSquares import LeastSquaresBasic
-from molecule import Molecule
 from grid import Grid
 from atom import Coordinates
 import fast

@@ -19,7 +19,7 @@ data.update(parser.data.copy())
 grid = fftb.vdwGrid(data)
 
 radius = 0.5
-for rank in xrange(1,4):
+for rank in xrange(1,3):
     data = {
             'name': molecule_name,
             'theory': 'mp2_augccpvtz',

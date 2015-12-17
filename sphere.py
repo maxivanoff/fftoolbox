@@ -1,6 +1,6 @@
 from fftoolbox.multipole import Ylmc, Ylms, Multipole
 from fftoolbox.atom import FFSite
-from fftoolbox.molecule import Molecule
+from fftoolbox.molecule import AtomsInMolecule
 from fftoolbox.atom import Atom
 from units import au_to_angst
 import lebedev_write
@@ -105,15 +105,21 @@ class LebedevAtom(Atom, LebedevSphere):
         LebedevSphere.__init__(self, name=self.name, rank=rank, radius=radius, \
                 origin=coordinates, ref_multipoles=ref_multipoles)
 
-class LebedevMolecule(LebedevSphere):
+class LebedevMolecule(LebedevSphere, AtomsInMolecule):
 
     def __init__(self, data):
         self.data = data
         rank, radius = data['sphere params']
         self.rank = rank
         representation = ('spherical', rank)
-        self.molecule = Molecule(data)
-        LebedevSphere.__init__(self, name=data['name'], rank=rank, radius=radius, \
+        atoms = data['atoms']
+        name = data['name']
+        try:
+            sym = data['symmetry']
+        except KeyError:
+            sym = False
+        AtomsInMolecule.__init__(self, name=name, atoms=atoms, sym=sym)
+        LebedevSphere.__init__(self, name=name, rank=rank, radius=radius, \
                 origin=None, ref_multipoles=data['multipoles'])
     
     def multipoles_data(self):
@@ -121,14 +127,6 @@ class LebedevMolecule(LebedevSphere):
                 self.name: (self.origin, self.rank, self.reference_multipoles), 
                 }
         return data
-
-    @property
-    def num_atoms(self):
-        return self.molecule.num_atoms
-
-    @property
-    def atoms(self):
-        return self.molecule.atoms
 
     def color_charges(self, filename, xyzname=False,vmax=None, r_sphere=0.08):
         path2xyz = '%s/data/xyz/%s' % (WORKDIR, xyzname)
@@ -150,11 +148,25 @@ class LebedevMolecule(LebedevSphere):
         file.close()
 
 
-class DistributedLebedevMolecule(Molecule):
+class DistributedLebedevMolecule(AtomsInMolecule, Multipole):
 
     def __init__(self, data):
         self.sphere_params = data['sphere params']
-        Molecule.__init__(self, data)
+        atoms = data['atoms']
+        name = data['name']
+        try:
+            sym = data['symmetry']
+        except KeyError:
+            sym = False
+        try:
+            representation = data['representation']
+        except KeyError:
+            representation = None
+        Multipole.__init__(self, name=name, representation=representation)
+        AtomsInMolecule.__init__(self, name, atoms, sym)
+        self.set_sym_sites()
+        if representation is not None:
+            self.set_multipole_matrix()
 
     def multipoles_data(self):
         data = {}
@@ -176,4 +188,19 @@ class DistributedLebedevMolecule(Molecule):
                     index=index, rank=rank, radius=radius)
             self.add_atom(atom)
             
+    @property
+    def sites(self):
+        sites = []
+        for atom in self.atoms:
+            for site in atom.sites:
+                sites.append(site)
+        return iter(sorted(sites, key=lambda s: s.index))
+
+    @property
+    def num_sites(self):
+        sites = []
+        for atom in self.atoms:
+            for site in atom.sites:
+                sites.append(site)
+        return len(sites)
 

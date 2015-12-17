@@ -18,50 +18,19 @@ WORKDIR = os.path.dirname(__file__)
 
 class AtomsInMolecule(object):
     
-    def __init__(self):
-        pass
-
-class Molecule(Multipole):
-    
-    def __init__(self, data):
-        self.data = data
-        try:
-            name = data['name']
-        except KeyError:
-            name = None
-        try:
-            self.theory = data['theory']
-        except KeyError:
-            self.theory = None
-        try:
-            representation = data['representation']
-        except KeyError:
-            representation = None
-        try:
-            self.sym = data['symmetry']
-        except KeyError:
-            self.sym = False
-        try:
-            self.energy = data['energy']
-        except KeyError:
-            self.energy = None
-        logger.info('Start assembling %s Molecule\ntheory: %r\nsymmetry: %r\nrepresentation: %r' % (name, self.theory, self.sym, representation))
-        Multipole.__init__(self, name=name, representation=representation)
+    def __init__(self, name=None, atoms=None, sym=None):
+        self._name = name
         self._atoms = []
-        atoms = data['atoms']
-        report_atoms = ''
-        for a in atoms:
-            report_atoms += '%r\n' % (a,)
-        logger.info('Following atoms will be added to the %s Molecule:\n%s' % (self.name, report_atoms))
-        self.add_atoms(atoms)
+        self.sym = sym
+        if atoms:
+            self.add_atoms(atoms)
         self.set_groups()
-        self.set_sym_sites()
-        if representation is not None:
-            self.set_multipole_matrix()
         logger.info("Names of equivalent atoms: %s" % self.atoms_names_eq)
         logger.info("Names of non-equivalent atoms: %s" % self.atoms_names_noneq)
-        logger.info("Names of equivalent sites: %s" % self.sites_names_eq)
-        logger.info("Names of non-equivalent sites: %s" % self.sites_names_noneq)
+
+    @property
+    def name(self):
+        return self._name
 
     def add_atom(self, atom):
         self._atoms.append(atom)
@@ -73,22 +42,6 @@ class Molecule(Multipole):
             atom = HybridAtom(index=index, element=element, coordinates=crds, 
                     multipoles=multipoles)
             self.add_atom(atom)
-
-    @property
-    def sites(self):
-        sites = []
-        for atom in self.atoms:
-            for site in atom.sites:
-                sites.append(site)
-        return iter(sorted(sites, key=lambda s: s.index))
-
-    @property
-    def num_sites(self):
-        sites = []
-        for atom in self.atoms:
-            for site in atom.sites:
-                sites.append(site)
-        return len(sites)
 
     @property
     def num_atoms(self):
@@ -163,7 +116,6 @@ class Molecule(Multipole):
         except TypeError:
             pass
 
-
     def copy(self):
         # take coordinates of the current molecule
         # and create a new one
@@ -190,27 +142,73 @@ class Molecule(Multipole):
                     bonds.append(bond)
         return bonds
 
+class HybridMolecule(Multipole, AtomsInMolecule):
+    
+    def __init__(self, data):
+        self.data = data
+        try:
+            name = data['name']
+        except KeyError:
+            name = None
+        try:
+            self.theory = data['theory']
+        except KeyError:
+            self.theory = None
+        try:
+            representation = data['representation']
+        except KeyError:
+            representation = None
+        try:
+            sym = data['symmetry']
+        except KeyError:
+            sym = False
+        try:
+            self.energy = data['energy']
+        except KeyError:
+            self.energy = None
+        try:
+            atoms = data['atoms']
+        except KeyError:
+            atoms = None
+        try:
+            self.hybrid_atoms = data['hybridizations']
+        except KeyError:
+            self.hybrid_atoms = []
+        logger.info('Start assembling %s Molecule\ntheory: %r\nsymmetry: %r\nrepresentation: %r' % (name, self.theory, sym, representation))
+        Multipole.__init__(self, name=name, representation=representation)
+        AtomsInMolecule.__init__(self, name=name, atoms=atoms, sym=sym)
+        self.set_hybridizations()
+        self.set_frames_from_sites() # in case extra points are loaded from the file
+        self.set_sym_sites()
+        if representation is not None:
+            self.set_multipole_matrix()
+        logger.info("Names of equivalent sites: %s" % self.sites_names_eq)
+        logger.info("Names of non-equivalent sites: %s" % self.sites_names_noneq)
+        logger.info('%s Molecule is created' % (self.name))
+
+    @property
+    def sites(self):
+        sites = []
+        for atom in self.atoms:
+            for site in atom.sites:
+                sites.append(site)
+        return iter(sorted(sites, key=lambda s: s.index))
+
+    @property
+    def num_sites(self):
+        sites = []
+        for atom in self.atoms:
+            for site in atom.sites:
+                sites.append(site)
+        return len(sites)
+
+
     def __add__(self, molecule):
         c = Complex()
         c.add_molecule(self.copy())
         c.add_molecule(molecule.copy())
         return c
 
-
-class HybridMolecule(Molecule):
-    
-    def __init__(self, data):
-        Molecule.__init__(self, data)
-        try:
-            self.hybrid_atoms = data['hybridizations']
-        except KeyError:
-            self.hybrid_atoms = []
-        self.set_hybridizations()
-        self.set_frames_from_sites() # in case extra points are loaded from the file
-        self.set_sym_sites()
-        if self.representation:
-            self.set_multipole_matrix()
-        logger.info('%s Molecule is created' % (self.name))
 
     def get_ep_data(self):
         data = {}
