@@ -16,6 +16,11 @@ __email__ = "maxim.ivanov@marquette.edu"
 logger = logging.getLogger(__name__)
 WORKDIR = os.path.dirname(__file__)
 
+class AtomsInMolecule(object):
+    
+    def __init__(self):
+        pass
+
 class Molecule(Multipole):
     
     def __init__(self, data):
