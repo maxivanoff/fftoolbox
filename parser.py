@@ -27,6 +27,7 @@ class Parser(object):
         else:
             self.filename = '%s/%s' % (path2xyz, filename)
         self.atoms = []
+        self.data = {}
 
     def add_atom(self, index=None, element=None, crds=None, charge=None, multipoles=None):
         if multipoles is None:
@@ -38,6 +39,24 @@ class Parser(object):
                 'multipoles': multipoles,
                 }
         self.atoms.append(atom)
+
+    def split_data(self, ind1, ind2):
+        atoms1 = []
+        atoms2 = []
+        for atom in self.atoms:
+            index = atom['index']
+            if index in ind1:
+                atoms1.append(atom)
+            if index in ind2:
+                atoms2.append(atom)
+        data1 = self.data.copy()
+        data1['atoms'] = atoms1
+        data2 = self.data.copy()
+        data2['atoms'] = atoms2
+        return data1, data2
+
+    def write_to_data(self, key, value):
+        self.data[key] = value
 
     def read_file(self, filename):
         logger.info('%s will read data from %s' % (self, filename))
@@ -52,13 +71,6 @@ class GaussianCube(Parser):
         
     def __init__(self, filename=None, data=None, here=False):
         "Cubefile is in atomic units"
-        self.property = 'esp'
-        self.origin = None
-        self.vectors = np.zeros((3,3), dtype=np.float64)
-        self.num_points = np.zeros(3, dtype=np.int)
-        self.values = ()
-        self.atoms = ()
-        self.density = None
         if data:
             try:
                 suffix = '_d%s.cub' % data['density']
@@ -69,11 +81,6 @@ class GaussianCube(Parser):
         if filename:
             Parser.__init__(self, filename=filename, here=here)
             self.read_file(filename=self.filename)
-
-
-    def set_grids_density(self):
-        cube_sides = np.array([np.linalg.norm(v) for v in self.vectors])
-        self.density = np.prod(self.num_points)/np.prod((self.num_points - 1)*cube_sides)
 
     def write_file(self, grid=None, molecule=None, values=None, filename=None, here=False):
         if here is False:
@@ -124,21 +131,28 @@ class GaussianCube(Parser):
         cubefile.readline()
         # Read number of atoms and origin coordinate
         tmp = np.array([float(t) for t in cubefile.readline().split()])
-        self.num_atoms = int(tmp[0])
-        self.origin = np.array(tmp[1:4])
+        num_atoms = int(tmp[0])
+        origin = np.array(tmp[1:4])
+        self.write_to_data('origin', origin)
+        self.write_to_data('num_atoms', num_atoms)
+        num_points = np.zeros(3, dtype=np.int)
+        vectors = np.zeros((3, 3))
         # Read cell geometry
         for i in xrange(3):
             tmp = np.array([float(t) for t in cubefile.readline().split()])
-            self.num_points[i] = tmp[0]
-            self.vectors[i][:] = np.array(tmp[1:4])
+            num_points[i] = tmp[0]
+            vectors[i][:] = np.array(tmp[1:4])
+        self.write_to_data('vectors', vectors)
+        self.write_to_data('num_points', num_points)
         #Read atoms coordinates
-        for ati in xrange(self.num_atoms):
+        for ati in xrange(num_atoms):
             line = cubefile.readline().split()
             crds = np.array([float(t) for t in line[2:]])
             atomic_n = int(line[0])
             element = self.number_to_name[atomic_n]
             index = ati + 1
             self.add_atom(index, element, crds)
+        self.write_to_data('atoms', self.atoms)
         # Read values
         values = []
         while True:
@@ -148,16 +162,9 @@ class GaussianCube(Parser):
             else:
                 tmp = [float(t) for t in line.split()]
                 values += tmp
-        self.values = np.array(values)
+        values = np.array(values)
+        self.write_to_data('values', values)
         cubefile.close()
-        self.data = {
-                'origin': self.origin,
-                'vectors': self.vectors,
-                'num_points': self.num_points,
-                'atoms': self.atoms,
-                'values': self.values,
-                'property': self.property,
-                }
 
     def __str__(self):
         return 'Gaussian cube parser'
@@ -237,7 +244,8 @@ class Gaussian(Parser):
         self.multipoles = {}
         self.orientation=orientation
         Parser.__init__(self, filename=filename, data=data, dname='log', suffix='.log', here=here)
-        self.read_file(filename=self.filename)
+        if filename:
+            self.read_file(filename=self.filename)
 
     def read_file(self, filename, orientation=None):
         Parser.read_file(self, filename)
@@ -366,12 +374,10 @@ class Gaussian(Parser):
             self.S1 = self.s1_energies[-1]
         else:
             self.S1 = None
-        self.data = {
-                'atoms': self.atoms,
-                'ground energy': self.energy,
-                'S1 energy': self.S1,
-                'multipoles': self.multipoles,
-                }
+        self.write_to_data('atoms', self.atoms)
+        self.write_to_data('ground energy', self.energy)
+        self.write_to_data('S1 energy', self.S1)
+        self.write_to_data('multipoles', self.multipoles)
         
 
     def __str__(self):
@@ -529,6 +535,7 @@ class GDMA(Parser):
                         for key, value in zip(keys, values):
                             total_multipoles[key[1:]] = value
             total_multipoles['rank'] = max_rank
+            self.multipoles = total_multipoles
             self.data = {'atoms': self.atoms,
                          'multipoles': total_multipoles,
                          }
