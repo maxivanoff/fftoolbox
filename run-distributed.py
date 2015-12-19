@@ -22,7 +22,7 @@ data = {
         'representation': ('spherical', 2),
         'symmetry': False,
         'sphere params': (2, 0.5),
-        'exclude': ['<xy'],
+        'exclude': [],
         }
 
 parser = fftb.GDMA(data=data)

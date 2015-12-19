@@ -32,7 +32,11 @@ class Parser(object):
         if multipoles is None:
             multipoles = {}
             multipoles['charge'] = charge
-        atom = (index, element, crds, multipoles)
+        atom = {'index': index,
+                'element': element,
+                'coordinates': crds,
+                'multipoles': multipoles,
+                }
         self.atoms.append(atom)
 
     def read_file(self, filename):

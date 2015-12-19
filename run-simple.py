@@ -11,7 +11,7 @@ data = {
         'theory': 'mp2_augccpvtz',
         'density': 1.5,
         'symmetry': False,
-        'exclude': ['<xy'],
+        'exclude': [],
         'representation': ('cartesian', 1)
         }
 

@@ -229,10 +229,12 @@ class vdwGrid(Grid):
     def inside_vdw_range(self, xyz):
         inside_small = False
         inside_large = False
-        for index, atom_name, atom_crds, mass in self.atoms:
+        for atom in self.atoms:
+            atom_crds = atom['coordinates']
+            element = atom['element']
             d = np.linalg.norm(atom_crds - xyz)
-            low_lim = self.vdw_radius_bohr[atom_name]*self.scale[0]
-            high_lim = self.vdw_radius_bohr[atom_name]*self.scale[1]
+            low_lim = self.vdw_radius_bohr[element]*self.scale[0]
+            high_lim = self.vdw_radius_bohr[element]*self.scale[1]
             if d < low_lim: inside_small = True
             if d < high_lim: inside_large = True
         if not inside_small and inside_large:
@@ -245,7 +247,9 @@ class vdwGrid(Grid):
         for point in self.points:
             d_min = 100
             for atom in self.atoms:
-                index, element, at_xyz, multipoles = atom
+                index = atom['index']
+                at_xyz = atom['coordinates']
+                element = atom['element']
                 d = np.linalg.norm(at_xyz - point.coordinates)
                 if d < d_min:
                     d_min = d

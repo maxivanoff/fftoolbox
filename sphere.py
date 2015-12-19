@@ -176,8 +176,11 @@ class DistributedLebedevMolecule(AtomsInMolecule, Multipole):
         return data
 
     def add_atoms(self, atoms, H_rank_1 = True):
-        for a in atoms:
-            index, element, crds, multipoles = a
+        for atom in atoms:
+            index = atom['index']
+            element = atom['element']
+            crds = atom['coordinates']
+            multipoles = atom['multipoles']
             try:
                 rank, radius = self.sphere_params[element]
             except:

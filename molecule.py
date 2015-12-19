@@ -37,8 +37,11 @@ class AtomsInMolecule(object):
 
     def add_atoms(self, atoms):
         extra_points = []
-        for i, a in enumerate(atoms):
-            index, element, crds, multipoles = a
+        for i, atom in enumerate(atoms):
+            index = atom['index']
+            element = atom['element']
+            crds = atom['coordinates']
+            multipoles = atom['multipoles']
             atom = HybridAtom(index=index, element=element, coordinates=crds, 
                     multipoles=multipoles)
             self.add_atom(atom)
@@ -219,8 +222,11 @@ class HybridMolecule(Multipole, AtomsInMolecule):
     
     def add_atoms(self, atoms):
         extra_points = []
-        for i, a in enumerate(atoms):
-            index, element, crds, multipoles = a
+        for i, atom in enumerate(atoms):
+            index = atom['index']
+            element = atom['element']
+            crds = atom['coordinates']
+            multipoles = atom['multipoles']
             if element.startswith('EP'):
                 charge = multipoles['charge']
                 s = FFSite(element='EP', coordinates=crds, index=index, charge=charge)
