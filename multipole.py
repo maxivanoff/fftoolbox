@@ -101,7 +101,10 @@ class GroupOfSites(object):
         return crds
 
     def get_max_index(self):
-        return max([s.index for s in self.sites])
+        try:
+            return max([s.index for s in self.sites])
+        except ValueError:
+            return 0
     
     def get_sites_by_name(self, name):
         return iter(filter(lambda s: s.name == name, self.sites))

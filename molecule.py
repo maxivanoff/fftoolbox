@@ -139,10 +139,6 @@ class AtomsInMolecule(object):
                 bond = Bond(atom, nghbr)
                 if not bond in bonds:
                     bonds.append(bond)
-            for s in atom.extra_sites:
-                bond = Bond(atom, s)
-                if not bond in bonds:
-                    bonds.append(bond)
         return bonds
 
 class HybridMolecule(Multipole, AtomsInMolecule):

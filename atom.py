@@ -123,7 +123,7 @@ class FFSite(Coordinates):
     def __repr__(self):
         return 'FFSite: %s %s %f %f %f %s' % (self.name, self.index, self.coordinates[0], self.coordinates[1], self.coordinates[2], self.charge)
 
-class Atom(Coordinates, Multipole):
+class Atom(Coordinates):
 
     """
     An atom in a molecule. 
@@ -134,8 +134,7 @@ class Atom(Coordinates, Multipole):
     vdw_radius_angst = {'O':1.52, 'N':1.55, 'S':1.8, 'C':1.7, 'H':1.2, 'Na': 2.27, 'F':1.47, 'Cl':1.88, 'CL':1.88, 'K': 2.75, 'Br': 1.9}
     vdw_radius_bohr = dict((name, radius/0.52917721092) for name, radius in vdw_radius_angst.iteritems())
 
-    def __init__(self, index=None, element=None, coordinates=None, representation=None):
-        Multipole.__init__(self, name='%s-%i' % (element, index), origin=coordinates, representation=representation)
+    def __init__(self, index=None, element=None, coordinates=None):
         Coordinates.__init__(self, coordinates)
         self.index = index
         self.element = element
@@ -159,6 +158,34 @@ class Atom(Coordinates, Multipole):
             return True
         else: return False
 
+
+class MultipolarAtom(Multipole, Atom):
+
+    def __init__(self, element=None, coordinates=None, index=None, multipoles=None, representation=None):
+        if multipoles is None: multipoles = {}
+        Multipole.__init__(self, name='%s-%i' % (element, index), origin=coordinates, representation=representation)
+        Atom.__init__(self, index=index, element=element, coordinates=coordinates)
+        try:
+            charge = multipoles['charge']
+        except KeyError:
+            charge = 0.
+        center = FFSite(index=index, element=element, coordinates=coordinates, charge=charge, attachment=self)
+        self.add_site(center)
+
+    def translate(self, vector):
+        self.set_coordinates(self.coordinates+vector)
+        for site in self.sites:
+            site.set_coordinates(site.coordinates+vector)
+
+    def rotate(self, R):
+        self.set_coordinates(np.dot(R, self.coordinates))
+        for site in self.sites:
+            site.set_coordinates(np.dot(R, site.coordinates))
+
+    @property
+    def center(self):
+        return self._sites[0]
+
     def __repr__(self):
         return 'Atom: %s %s %s %f %f %f' % (self.name, self.element, self.index, self.coordinates[0], self.coordinates[1], self.coordinates[2])
 
@@ -174,19 +201,6 @@ class HybridAtom(Atom):
         self.add_site(center)
         self.frame = None
 
-    def translate(self, vector):
-        self.set_coordinates(self.coordinates+vector)
-        for site in self.sites:
-            site.set_coordinates(site.coordinates+vector)
-
-    def rotate(self, R):
-        self.set_coordinates(np.dot(R, self.coordinates))
-        for site in self.sites:
-            site.set_coordinates(np.dot(R, site.coordinates))
-
-    @property
-    def center(self):
-        return self._sites[0]
 
     @property
     def extra_sites(self):

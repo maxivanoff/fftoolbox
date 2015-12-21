@@ -422,7 +422,10 @@ class Mol2(Parser):
         for mi, mol in enumerate(molecules):
             for site in mol.sites:
                 sid = '%i' % site.index
-                aname = '%s' % amberType[site.name.split('-')[0]]
+                if site.name.startswith('EP'):
+                    aname = 'EP'
+                else:
+                    aname = '%s' % amberType[site.name.split('-')[0]]
                 x = '% .3f' % (site.x*units.au_to_angst)
                 y = '% .3f' % (site.y*units.au_to_angst)
                 z = '% .3f' % (site.z*units.au_to_angst)
@@ -434,9 +437,17 @@ class Mol2(Parser):
         s += '@<TRIPOS>BOND\n'
         for i, bond in enumerate(molecule.bonds):
             bid = '%i' % (i+1)
-            a1 = '%i' % bond.a1.index
-            a2 = '%i' % bond.a2.index
-            s += ' %s %s %s 1\n' % (bid.ljust(3), a1.ljust(3), a2.ljust(3))
+            x1 = '%i' % bond.a1.index
+            x2 = '%i' % bond.a2.index
+            s += ' %s %s %s 1\n' % (bid.ljust(3), x1.ljust(3), x2.ljust(3))
+        for atom in molecule.atoms:
+            x1 = '%i' % atom.index
+            for site in atom.sites:
+                if not site.index == atom.index:
+                    i += 1
+                    bid = '%i' % (i+1)
+                    x2 = '%i' % site.index
+                    s += ' %s %s %s 1\n' % (bid.ljust(3), x1.ljust(3), x2.ljust(3))
         with open('%s/%s' % (path2mol2, filename), 'w') as f:
             f.write(s)
 

@@ -1,7 +1,7 @@
-from fftoolbox.multipole import Ylmc, Ylms, Multipole
+from fftoolbox.multipole import Ylmc, Ylms, Multipole, GroupOfSites
 from fftoolbox.atom import FFSite
 from fftoolbox.molecule import AtomsInMolecule
-from fftoolbox.atom import Atom
+from fftoolbox.atom import Atom, MultipolarAtom
 from units import au_to_angst
 import lebedev_write
 
@@ -17,7 +17,7 @@ __author__ = "Maxim Ivanov"
 __email__ = "maxim.ivanov@marquette.edu"
 
 
-class LebedevSphere(Multipole):
+class LebedevSphere(GroupOfSites):
 
     rank_to_num = {
                     1:6,
@@ -32,9 +32,7 @@ class LebedevSphere(Multipole):
         self.reference_multipoles = ref_multipoles 
         if rank > self.reference_multipoles['rank']:
             raise ValueError('Multipoles only up to rank %i are available' % self.reference_multipoles['rank'])
-        representation = ('spherical', rank)
         self.rank = rank
-        Multipole.__init__(self, name, origin=origin, representation=representation)
         if rank == 0:
             charge = self.reference_multipoles['00']
             s = FFSite(index=index, name=self.name, coordinates=self.origin, charge=charge, attachment=self)
@@ -47,7 +45,7 @@ class LebedevSphere(Multipole):
                 w = point[3]*4*np.pi
                 # create site and compute charge
                 name = '%s-%i' % (self.name, i)
-                s = FFSite(index=index, element='EP', coordinates=xyz, attachment=self)
+                s = FFSite(index=index+i+1, element='EP', coordinates=xyz, attachment=self)
                 q = w*self.compute_charge(rank, s.r, s.theta, s.phi)
                 s.set_charge(q)
                 # shift site relative to the atom center
@@ -98,11 +96,12 @@ class LebedevSphere(Multipole):
                 i += 1
         return B
 
-class LebedevAtom(Atom, LebedevSphere):
+class LebedevAtom(MultipolarAtom, LebedevSphere):
 
     def __init__(self, element=None, coordinates=None, index=None, ref_multipoles=None, rank=None, radius=None):
-        Atom.__init__(self, index=index, element=element, coordinates=coordinates, representation=None)
-        LebedevSphere.__init__(self, name=self.name, rank=rank, radius=radius, \
+        representation = ('spherical', rank)
+        MultipolarAtom.__init__(self, index=index, element=element, coordinates=coordinates, representation=representation)
+        LebedevSphere.__init__(self, index=index, name=self.name, rank=rank, radius=radius, \
                 origin=coordinates, ref_multipoles=ref_multipoles)
 
 class LebedevMolecule(LebedevSphere, AtomsInMolecule):
@@ -177,7 +176,6 @@ class DistributedLebedevMolecule(AtomsInMolecule, Multipole):
 
     def add_atoms(self, atoms, H_rank_1 = True):
         for atom in atoms:
-            index = atom['index']
             element = atom['element']
             crds = atom['coordinates']
             multipoles = atom['multipoles']
@@ -187,6 +185,7 @@ class DistributedLebedevMolecule(AtomsInMolecule, Multipole):
                 rank, radius = self.sphere_params
             if element == 'H' and H_rank_1 is True:
                 rank = 1
+            index = self.get_max_index() + 1
             atom = LebedevAtom(element=element, coordinates=crds, ref_multipoles=multipoles, \
                     index=index, rank=rank, radius=radius)
             self.add_atom(atom)

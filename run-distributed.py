@@ -29,6 +29,8 @@ parser = fftb.GDMA(data=data)
 data.update(parser.data)
 molecule = fftb.DistributedLebedevMolecule(data=data)
 molecule.write_xyz('%s_%s-2-0.5.xyz' % (data['name'], data['theory']), here=True)
+molecule.write_mol2('%s_%s-2-0.5.mol2' % (data['name'], data['theory']), here=True)
+
 molecule.color_charges('%s_%s-2-0.5-DLM.pymol' % (data['name'], data['theory']), xyzname='%s_%s.xyz' % (data['name'], data['theory']))
 
 
