@@ -29,13 +29,18 @@ class LebedevSphere(GroupOfSites):
                     }
 
     def __init__(self, index=None, name=None, rank=None, radius=None, origin=None, ref_multipoles=None):
+        GroupOfSites.__init__(self, name)
+        if index is None:
+            index = 0
+        if origin is None:
+            origin = np.zeros(3)
         self.reference_multipoles = ref_multipoles 
         if rank > self.reference_multipoles['rank']:
             raise ValueError('Multipoles only up to rank %i are available' % self.reference_multipoles['rank'])
         self.rank = rank
         if rank == 0:
             charge = self.reference_multipoles['00']
-            s = FFSite(index=index, name=self.name, coordinates=self.origin, charge=charge, attachment=self)
+            s = FFSite(index=index, name=self.name, coordinates=origin, charge=charge, attachment=self)
             self.add_site(s)
         else:
             points = lebedev_write.Lebedev(self.rank_to_num[rank])
@@ -49,13 +54,10 @@ class LebedevSphere(GroupOfSites):
                 q = w*self.compute_charge(rank, s.r, s.theta, s.phi)
                 s.set_charge(q)
                 # shift site relative to the atom center
-                shifted = self.origin + s.coordinates
+                shifted = origin + s.coordinates
                 s.set_coordinates(shifted)
                 self.add_site(s)
-        self.set_sym_sites()
-        self.set_multipole_matrix()
-        logger.info("LebedevSphere %s is created.\nNumber of charged sites: %i\nRadius: %.1f" 
-                % (self.name, self.num_sites, radius))
+        logger.info("LebedevSphere %s is created.\nNumber of charged sites: %i\nRadius: %.1f" % (self.name, self.num_sites, radius))
 
     def compute_charge(self, n, r, theta, phi):
         q = 0.
@@ -103,8 +105,10 @@ class LebedevAtom(MultipolarAtom, LebedevSphere):
         MultipolarAtom.__init__(self, index=index, element=element, coordinates=coordinates, representation=representation)
         LebedevSphere.__init__(self, index=index, name=self.name, rank=rank, radius=radius, \
                 origin=coordinates, ref_multipoles=ref_multipoles)
+        self.set_sym_sites()
+        self.set_multipole_matrix()
 
-class LebedevMolecule(LebedevSphere, AtomsInMolecule):
+class LebedevMolecule(LebedevSphere, AtomsInMolecule, Multipole):
 
     def __init__(self, data):
         self.data = data
@@ -118,8 +122,12 @@ class LebedevMolecule(LebedevSphere, AtomsInMolecule):
         except KeyError:
             sym = False
         AtomsInMolecule.__init__(self, name=name, atoms=atoms, sym=sym)
+        origin = self.center_of_mass()
+        Multipole.__init__(self, name=name, origin=origin, representation=representation)
         LebedevSphere.__init__(self, name=name, rank=rank, radius=radius, \
-                origin=None, ref_multipoles=data['multipoles'])
+                origin=origin, ref_multipoles=data['multipoles'])
+        self.set_sym_sites()
+        self.set_multipole_matrix()
     
     def multipoles_data(self):
         data = {

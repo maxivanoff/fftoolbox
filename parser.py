@@ -244,7 +244,7 @@ class Gaussian(Parser):
         self.multipoles = {}
         self.orientation=orientation
         Parser.__init__(self, filename=filename, data=data, dname='log', suffix='.log', here=here)
-        if filename:
+        if filename or data:
             self.read_file(filename=self.filename)
 
     def read_file(self, filename, orientation=None):

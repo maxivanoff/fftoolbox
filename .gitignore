@@ -1,6 +1,7 @@
 *log
 *.pymol
 *.xyz
+*.mol2
 *.pyc
 *.swp
 data

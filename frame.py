@@ -9,7 +9,25 @@ __email__ = "maxim.ivanov@marquette.edu"
 
 logger = logging.getLogger(__name__)
 
-class Frame(object):
+class BasicFrame(object):
+
+    def __init__(self, a=None, b=None, c=None):
+        self.local_axes = np.zeros((3,3))
+        if a and b and c:
+            self.set_axes(a, b, c)
+
+    def set_axes(self, a, b, c):
+        ba = b - a
+        bc = b - c
+        bc_normed, ba_normed = [v/norm(v) for v in [ba, bc]]
+        z = bc_normed + ba_normed
+        x = bc_normed - ba_normed
+        y = np.cross(x,z)
+        for i, a in enumerate([x,y,z]):
+            self.local_axes[:,i] = a/norm(a)
+        logger.debug("Local coordinate system is set:\n%r" % self.local_axes)
+
+class Frame(BasicFrame):
 
     def __init__(self, atom, hybridization):
         self.hybridization = hybridization
@@ -20,21 +38,9 @@ class Frame(object):
         if hybridization == 'sp2': self.offset = np.pi/2. # extra points are in xz plane
         
         logger.info("Creating Frame instance for %s.\nHybridization: %s\nNumber of extra points: %i" % (atom.name, hybridization, self.num_ep))
-        self.set_local_system()
-        logger.debug("Local coordinate system:\n%r" % self.local_system)
-        
-    def set_local_system(self):
         a, b, c = self.set_frame()
-        ba = b - a
-        bc = b - c
-        bc_normed, ba_normed = [v/norm(v) for v in [ba, bc]]
-        z = bc_normed + ba_normed
-        x = bc_normed - ba_normed
-        y = np.cross(x,z)
-        self.local_system = np.zeros((3,3))
-        for i, a in enumerate([x,y,z]):
-            self.local_system[:,i] = a/norm(a)
-
+        BasicFrame.__init__(self, a, b, c)
+        
     def set_frame(self):
         b = self.center.coordinates
         if len(self.center.neighbors) == 2: # e.g. OH2 or HN=CH2
@@ -68,11 +74,11 @@ class Frame(object):
             ep_local[i][1] = np.sin(angle)*np.cos(teta)*distance 
             ep_local[i][2] = np.cos(angle)*distance
             # in global
-            ep_global[i] = np.dot(self.local_system, ep_local[i])
+            ep_global[i] = np.dot(self.local_axes, ep_local[i])
             ep_global[i] += self.center.coordinates
         logger.debug("Coordinates of extra points:\n%r" % ep_global)
         return ep_global
 
     def ep_crds_fast(self, distance, angle):
-        return fast.ep_crds(distance, angle, self.tetas, self.local_system, self.center.coordinates, self.num_ep)
+        return fast.ep_crds(distance, angle, self.tetas, self.local_axes, self.center.coordinates, self.num_ep)
 

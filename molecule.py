@@ -17,16 +17,18 @@ logger = logging.getLogger(__name__)
 WORKDIR = os.path.dirname(__file__)
 
 class AtomsInMolecule(object):
+
+    masses = {'H': 1.0079, 'C': 12.0107, 'O': 15.9994, 'S': 32.065}
     
-    def __init__(self, name=None, atoms=None, sym=None):
+    def __init__(self, name=None, atoms=None, sym=False):
         self._name = name
         self._atoms = []
         self.sym = sym
         if atoms:
             self.add_atoms(atoms)
-        self.set_groups()
-        logger.info("Names of equivalent atoms: %s" % self.atoms_names_eq)
-        logger.info("Names of non-equivalent atoms: %s" % self.atoms_names_noneq)
+            self.set_groups()
+            logger.info("Names of equivalent atoms: %s" % self.atoms_names_eq)
+            logger.info("Names of non-equivalent atoms: %s" % self.atoms_names_noneq)
 
     @property
     def name(self):
@@ -77,11 +79,10 @@ class AtomsInMolecule(object):
         return [a.name for a in self.atoms]
 
     def center_of_mass(self):
-        mass = {'H': 1.0079, 'C': 12.0107}
-        M = sum([mass[s.element] for s in self.sites])
+        M = sum([self.masses[atom.element] for atom in self.atoms])
         MR = np.zeros(3)
-        for s in self.sites:
-            MR += mass[s.element]*s.coordinates
+        for atom in self.atoms:
+            MR += self.masses[atom.element]*atom.coordinates
         return MR/M
 
     def set_groups(self):
@@ -259,7 +260,31 @@ class HybridMolecule(Multipole, AtomsInMolecule):
             o += '%s %s xyz = %.3f %.3f %.3f charge = %s r0 = %s epsilon = %s\n' % (s.element, s.name, s.x, s.y, s.z, s.charge, s.r0, s.epsilon)
         return o
 
-class Complex(GroupOfSites):
+class Complex(GroupOfSites, AtomsInMolecule):
+
+    def __init__(self, name, m1, m2):
+        GroupOfSites.__init__(self, name)
+        AtomsInMolecule.__init__(self, name)
+        self.molecules = (m1, m2)
+        i = 1
+        for m in self.molecules:
+            for site in m.sites:
+                self.add_site(site)
+                site.set_index(i)
+                i += 1
+            for atom in m.atoms:
+                self.add_atom(atom)
+
+    @property
+    def bonds(self):
+        bonds = []
+        for m in self.molecules:
+            bonds += m.bonds
+        return bonds
+
+
+
+class OldComplex(GroupOfSites):
 
     def __init__(self, complex_data=None, molecules_data=None):
         if complex_data is None: complex_data = {'name': None}

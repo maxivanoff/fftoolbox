@@ -77,7 +77,7 @@ class FFSite(Coordinates):
     def __init__(self, index=None, element=None, name=None, coordinates=None, charge=None, r0=None, epsilon=None, attachment=None):
         Coordinates.__init__(self, coordinates)
         self._name = name
-        self.index = index
+        self.set_index(index)
         self.element = element
         self._charge = charge
         self.r0 = r0
@@ -93,6 +93,13 @@ class FFSite(Coordinates):
             except ValueError:
                 self._internal_index = 1
         return self._internal_index
+
+    def set_index(self, index):
+        self._index = index
+
+    @property
+    def index(self):
+        return self._index
 
     @property
     def charge(self):
@@ -136,7 +143,7 @@ class Atom(Coordinates):
 
     def __init__(self, index=None, element=None, coordinates=None):
         Coordinates.__init__(self, coordinates)
-        self.index = index
+        self.set_index(index)
         self.element = element
         self.neighbors = None
         logger.info('Atom instance is created:\n%s' % self)
@@ -146,6 +153,13 @@ class Atom(Coordinates):
         for atom in atoms:
             if not atom is self and self.bonded_to(atom):
                 self.neighbors.append(atom)
+
+    def set_index(self, index):
+        self._index = index
+
+    @property
+    def index(self):
+        return self._index
 
     @property
     def radius(self):
@@ -186,22 +200,6 @@ class MultipolarAtom(Multipole, Atom):
     def center(self):
         return self._sites[0]
 
-    def __repr__(self):
-        return 'Atom: %s %s %s %f %f %f' % (self.name, self.element, self.index, self.coordinates[0], self.coordinates[1], self.coordinates[2])
-
-class HybridAtom(Atom):
-
-    def __init__(self, element=None, coordinates=None, index=None, multipoles=None, representation=None):
-        Atom.__init__(self, index=index, element=element, coordinates=coordinates, representation=representation)
-        try:
-            charge = multipoles['charge']
-        except KeyError:
-            charge = None
-        center = FFSite(index=index, element=element, coordinates=coordinates, charge=charge, attachment=self)
-        self.add_site(center)
-        self.frame = None
-
-
     @property
     def extra_sites(self):
         return iter(self._sites[1:])
@@ -212,6 +210,16 @@ class HybridAtom(Atom):
 
     def free_extra(self):
         self._sites = [self._sites[0]]
+
+    def __repr__(self):
+        return 'Atom: %s %s %s %f %f %f' % (self.name, self.element, self.index, self.coordinates[0], self.coordinates[1], self.coordinates[2])
+
+class HybridAtom(MultipolarAtom):
+
+    def __init__(self, element=None, coordinates=None, index=None, multipoles=None, representation=None):
+        MultipolarAtom.__init__(self, index=index, element=element, coordinates=coordinates, \
+                multipoles=multipoles, representation=representation)
+        self.frame = None
 
     def set_hybridization(self, ep_property):
         index, hybridization, distance, angle = ep_property

@@ -33,3 +33,6 @@ print molecule2.charges
 for atom in molecule2.atoms:
     print atom
 
+dimer = fftb.Complex('water_dimer', molecule1, molecule2)
+dimer.write_xyz(filename='dimer_spheres.xyz', here=True)
+
