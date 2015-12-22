@@ -175,7 +175,10 @@ class Multipole(GroupOfSites):
     """
     This is Multipole
     """
-    def __init__(self, name=None, origin=None, representation=None):
+    def __init__(self, name=None, origin=None, representation=None, ref_multipoles=None):
+        if ref_multipoles is None:
+            ref_multipoles = None
+        self.reference_multipoles = ref_multipoles
         GroupOfSites.__init__(self, name)
         if origin is None:
             self.origin = np.zeros(3)
@@ -183,6 +186,18 @@ class Multipole(GroupOfSites):
             self.origin = origin
         self.representation = representation
         logger.info('%s Multipole is created.\nMultipoles representation: %s' % (self.name, self.representation))
+
+    def get_reference_Qlm(self, l, m):
+        if m < 0:
+            label = '%i%is' % (l, abs(m))
+        if m > 0:
+            label = '%i%ic' % (l, abs(m))
+        if m == 0:
+            label = '%i0' % l
+        try:
+            return self.reference_multipoles[label]
+        except KeyError:
+            return 0.
 
     def rotate(self, rot_axis, angle):
         R = rodrigues_rotation_matrix(rot_axis, angle)

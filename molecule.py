@@ -284,17 +284,7 @@ class Complex(GroupOfSites, AtomsInMolecule):
             bonds += m.bonds
         return bonds
 
-    def point_charge_energy(self):
-        e = 0.
-        for s1 in self.m1.sites:
-            for s2 in self.m2.sites:
-                r = s1.distance_to(s2)
-                e += s1.charge*s2.charge/r
-        return e
         
-
-
-
 class OldComplex(GroupOfSites):
 
     def __init__(self, complex_data=None, molecules_data=None):
