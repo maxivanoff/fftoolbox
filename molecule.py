@@ -265,6 +265,8 @@ class Complex(GroupOfSites, AtomsInMolecule):
     def __init__(self, name, m1, m2):
         GroupOfSites.__init__(self, name)
         AtomsInMolecule.__init__(self, name)
+        self.m1 = m1
+        self.m2 = m2
         self.molecules = (m1, m2)
         i = 1
         for m in self.molecules:
@@ -281,6 +283,15 @@ class Complex(GroupOfSites, AtomsInMolecule):
         for m in self.molecules:
             bonds += m.bonds
         return bonds
+
+    def point_charge_energy(self):
+        e = 0.
+        for s1 in self.m1.sites:
+            for s2 in self.m2.sites:
+                r = s1.distance_to(s2)
+                e += s1.charge*s2.charge/r
+        return e
+        
 
 
 

@@ -2,6 +2,7 @@ from fftoolbox.multipole import Ylmc, Ylms, Multipole, GroupOfSites
 from fftoolbox.atom import FFSite
 from fftoolbox.molecule import AtomsInMolecule
 from fftoolbox.atom import Atom, MultipolarAtom
+from fftoolbox.frame import BasicFrame
 from units import au_to_angst
 import lebedev_write
 
@@ -34,13 +35,14 @@ class LebedevSphere(GroupOfSites):
             index = 0
         if origin is None:
             origin = np.zeros(3)
+        self.origin_of_sphere = origin
         self.reference_multipoles = ref_multipoles 
         if rank > self.reference_multipoles['rank']:
             raise ValueError('Multipoles only up to rank %i are available' % self.reference_multipoles['rank'])
         self.rank = rank
         if rank == 0:
             charge = self.reference_multipoles['00']
-            s = FFSite(index=index, name=self.name, coordinates=origin, charge=charge, attachment=self)
+            s = FFSite(index=index, name=self.name, coordinates=self.origin_of_sphere, charge=charge, attachment=self)
             self.add_site(s)
         else:
             points = lebedev_write.Lebedev(self.rank_to_num[rank])
@@ -54,7 +56,7 @@ class LebedevSphere(GroupOfSites):
                 q = w*self.compute_charge(rank, s.r, s.theta, s.phi)
                 s.set_charge(q)
                 # shift site relative to the atom center
-                shifted = origin + s.coordinates
+                shifted = self.origin_of_sphere + s.coordinates
                 s.set_coordinates(shifted)
                 self.add_site(s)
         logger.info("LebedevSphere %s is created.\nNumber of charged sites: %i\nRadius: %.1f" % (self.name, self.num_sites, radius))
@@ -127,6 +129,15 @@ class LebedevMolecule(LebedevSphere, AtomsInMolecule, Multipole):
         LebedevSphere.__init__(self, name=name, rank=rank, radius=radius, \
                 origin=origin, ref_multipoles=data['multipoles'])
         self.set_sym_sites()
+        self.set_multipole_matrix()
+        self.frame = None
+
+    def align_with_frame(self, frame):
+        self.frame = BasicFrame(frame)
+        for site in self.sites:
+            local_xyz = site.coordinates - self.origin_of_sphere
+            global_xyz = np.dot(self.frame.local_axes, local_xyz) + self.origin_of_sphere
+            site.set_coordinates(global_xyz)
         self.set_multipole_matrix()
     
     def multipoles_data(self):

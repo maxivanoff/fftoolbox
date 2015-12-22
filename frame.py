@@ -11,9 +11,10 @@ logger = logging.getLogger(__name__)
 
 class BasicFrame(object):
 
-    def __init__(self, a=None, b=None, c=None):
-        self.local_axes = np.zeros((3,3))
-        if a and b and c:
+    def __init__(self, frame=None):
+        self.local_axes = np.identity(3)
+        if frame:
+            a, b, c = frame
             self.set_axes(a, b, c)
 
     def set_axes(self, a, b, c):

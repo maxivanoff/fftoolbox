@@ -654,6 +654,8 @@ def prettify(elem):
     return reparsed.toprettyxml(indent="  ")
 
 amberType = {
+        'F': 'F',
+        'C': 'CT',
         'C_CH3': 'CT',
         'H_CH3': 'HC',
         'O_CO2': 'O2',

@@ -24,7 +24,12 @@ data1.update(data)
 data2.update(data)
 
 molecule1 = fftb.LebedevMolecule(data1)
+frame1 = [molecule1.get_atom_by_index(i).coordinates for i in [2, 1, 3]]
+molecule1.align_with_frame(frame1)
+
 molecule2 = fftb.LebedevMolecule(data2)
+frame2 = [molecule2.get_atom_by_index(i).coordinates for i in [5, 4, 6]]
+molecule2.align_with_frame(frame1)
 
 print molecule1.charges
 for atom in molecule1.atoms:
@@ -35,4 +40,6 @@ for atom in molecule2.atoms:
 
 dimer = fftb.Complex('water_dimer', molecule1, molecule2)
 dimer.write_xyz(filename='dimer_spheres.xyz', here=True)
+
+print dimer.point_charge_energy()
 
