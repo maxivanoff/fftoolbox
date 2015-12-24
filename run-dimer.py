@@ -109,12 +109,12 @@ for i in xrange(1, 11):
     for atom in molecule2.atoms:
         print atom
 
-    dimer = fftb.Complex('water_dimer', molecule1, molecule2)
+    dimer = fftb.TwoLebedevMolecules('water_dimer', molecule1, molecule2)
     dimer.write_xyz(filename='dimer_spheres.xyz', here=True)
 
 
-    epc = point_charge_energy(dimer)
-    emult = multipole_energy(dimer, rank)
+    epc = dimer.point_charge_energy()
+    emult = dimer.multipole_energy(rank)
 
     pc_energies.append(epc)
     mult_energies.append(emult)
@@ -123,7 +123,7 @@ x = pc_energies
 y =  mult_energies
 
 import matplotlib.pyplot as plt
-import seaborn
+#import seaborn
 
 plt.ylabel('Multipolar Energies, au')
 plt.xlabel('Point Charge Energies, au')
