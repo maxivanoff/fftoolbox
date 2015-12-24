@@ -4,7 +4,7 @@ from sphere import LebedevMolecule, DistributedLebedevMolecule
 from sphere import LebedevMolecule as LM
 from sphere import DistributedLebedevMolecule as DLM
 from grid import vdwGrid, Grid
-from parser import GaussianCube, QChem, Gaussian, ForceFieldXML, GDMA
+from parser import GaussianCube, QChem, Gaussian, ForceFieldXML, GDMA, XYZ
 from charges import LeastSquaresCharges as LSC
 from charges import LeastSquaresCharges
 from results import Results, Report, Reports

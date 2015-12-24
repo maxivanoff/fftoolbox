@@ -1,5 +1,7 @@
 import fftoolbox as fftb
 import numpy as np
+from scipy.optimize import curve_fit
+
 
 import logging, sys
 
@@ -76,37 +78,70 @@ data = {
         'sphere params': (rank, radius),
         }
 
-parser = fftb.Gaussian()
-parser.read_file(filename='data/dimer/dimer.log')
+pc_energies = []
+mult_energies = []
 
-parser.write_to_data('multipoles', fftb.GDMA(data=data).multipoles)
+for i in xrange(1, 11):
+    parser = fftb.XYZ()
+    parser.read_file(filename='data/dimer/dimer-%i.xyz' % i)
 
-data1, data2 = parser.split_data([1,2,3], [4,5,6])
-data1.update(data)
-data2.update(data)
+    parser.write_to_data('multipoles', fftb.GDMA(data=data).multipoles)
 
-print data1
-print data2
+    data1, data2 = parser.split_data([1,2,3], [4,5,6])
+    data1.update(data)
+    data2.update(data)
 
-molecule1 = fftb.LebedevMolecule(data1)
-frame1 = [molecule1.get_atom_by_index(i).coordinates for i in [2, 1, 3]]
-molecule1.align_with_frame(frame1)
+    print data1
+    print data2
 
-molecule2 = fftb.LebedevMolecule(data2)
-frame2 = [molecule2.get_atom_by_index(i).coordinates for i in [5, 4, 6]]
-molecule2.align_with_frame(frame2)
+    molecule1 = fftb.LebedevMolecule(data1)
+    frame1 = [molecule1.get_atom_by_index(i).coordinates for i in [2, 1, 3]]
+    molecule1.align_with_frame(frame1)
 
-print molecule1.charges
-for atom in molecule1.atoms:
-    print atom
-print molecule2.charges
-for atom in molecule2.atoms:
-    print atom
+    molecule2 = fftb.LebedevMolecule(data2)
+    frame2 = [molecule2.get_atom_by_index(i).coordinates for i in [5, 4, 6]]
+    molecule2.align_with_frame(frame2)
 
-dimer = fftb.Complex('water_dimer', molecule1, molecule2)
-dimer.write_xyz(filename='dimer_spheres.xyz', here=True)
+    print molecule1.charges
+    for atom in molecule1.atoms:
+        print atom
+    print molecule2.charges
+    for atom in molecule2.atoms:
+        print atom
+
+    dimer = fftb.Complex('water_dimer', molecule1, molecule2)
+    dimer.write_xyz(filename='dimer_spheres.xyz', here=True)
 
 
-print point_charge_energy(dimer)
-print multipole_energy(dimer, rank)
+    epc = point_charge_energy(dimer)
+    emult = multipole_energy(dimer, rank)
+
+    pc_energies.append(epc)
+    mult_energies.append(emult)
+
+x = pc_energies
+y =  mult_energies
+
+import matplotlib.pyplot as plt
+import seaborn
+
+plt.ylabel('Multipolar Energies, au')
+plt.xlabel('Point Charge Energies, au')
+plt.title('Point charge vs multipoles energies of water dimer')
+xlim = [min(x), max(x)]
+
+correlation = np.corrcoef(x,y)[0,1]
+R2 = correlation**2
+popt, pcov = curve_fit(lambda xdata,m,n: m*xdata+n, np.array(x), np.array(y))
+a, b = popt
+da, db = np.sqrt(np.diag(pcov))
+xx = np.arange(xlim[0], xlim[1], 0.01)
+yy = a*xx + b
+
+plt.plot(xx, yy, '-', label='y = %.3f x + %.3f\nR2 = %.2f' % (a, b, R2))
+plt.plot(x, y, 'o')
+plt.legend(loc='upper right')
+
+plt.savefig('dimer-energies.pdf')
+plt.show()
 
