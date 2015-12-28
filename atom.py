@@ -4,7 +4,7 @@ import numpy as np
 import logging
 
 import units
-from frame import Frame
+from frame import AtomFrame
 from multipole import Multipole
 
 __author__ = "Maxim Ivanov"
@@ -224,12 +224,32 @@ class HybridAtom(MultipolarAtom):
                 multipoles=multipoles, representation=representation)
 
     def set_hybridization(self, ep_property):
+        # prepare
         index, hybridization, distance, angle = ep_property
+        angle *= np.pi/180.
+        distance *= units.angst_to_au
+        num_ep = int(hybridization[-1]) + 1 - len(self.neighbors)
+        if hybridization == 'sp3': offset = 0. # extra points are in yz plane
+        if hybridization == 'sp2': offset = np.pi/2. # extra points are in xz plane
+        tetas = [0. + offset, np.pi + offset][:num_ep]
         self.free_extra()
-        ep_coordinates = self.frame.ep_crds(distance, angle)
-        for i, crds in enumerate(ep_coordinates):
-            s = FFSite(element='EP', coordinates=crds, index=index+i, attachment=self)
+        # local to global
+        # add sites
+        ep_global = np.zeros((num_ep, 3))
+        ep_local = np.zeros((num_ep, 3))
+        for i, teta in enumerate(tetas):
+            # in local coordinate system:
+            ep_local[i][0] = np.sin(angle)*np.sin(teta)*distance
+            ep_local[i][1] = np.sin(angle)*np.cos(teta)*distance 
+            ep_local[i][2] = np.cos(angle)*distance
+            # in global
+            ep_global[i] = np.dot(self.frame.local_axes, ep_local[i])
+            ep_global[i] += self.coordinates
+            s = FFSite(element='EP', coordinates=ep_global[i], index=index+i, attachment=self)
             self.add_site(s)
+        logger.info("%s hybridization: %s\nNumber of extra points: %i" % (self.name, hybridization, num_ep))
+        logger.debug("Coordinates of extra points in local coordinate system:\n%r" % ep_local)
+        logger.debug("Coordinates of extra points in global coordinate system:\n%r" % ep_global)
 
     def set_frame_from_sites(self):
         if self.frame is None and self.num_extra_sites > 0:

@@ -57,32 +57,3 @@ class AtomFrame(BasicFrame):
                 a = X.coordinates + (v1 + v2)/norm(v1 + v2)
         return a, b, c
 
-class Frame(AtomFrame):
-
-    def __init__(self, atom, hybridization):
-        self.hybridization = hybridization
-        self.center = atom
-        self.neighbors = atom.neighbors
-        self.num_ep = int(hybridization[-1]) + 1 - len(self.neighbors)
-        if hybridization == 'sp3': self.offset = 0. # extra points are in yz plane
-        if hybridization == 'sp2': self.offset = np.pi/2. # extra points are in xz plane
-        logger.info("Creating Frame instance for %s.\nHybridization: %s\nNumber of extra points: %i" % (atom.name, hybridization, self.num_ep))
-        AtomFrame.__init__(self)
-        
-    def ep_crds(self, distance, angle):
-        angle *= np.pi/180.
-        distance *= units.angst_to_au
-        ep_global = np.zeros((self.num_ep, 3))
-        ep_local = np.zeros((self.num_ep, 3))
-        tetas = [0. + self.offset, np.pi + self.offset][:self.num_ep]
-        for i, teta in enumerate(tetas):
-            # in local coordinate system:
-            ep_local[i][0] = np.sin(angle)*np.sin(teta)*distance
-            ep_local[i][1] = np.sin(angle)*np.cos(teta)*distance 
-            ep_local[i][2] = np.cos(angle)*distance
-            # in global
-            ep_global[i] = np.dot(self.local_axes, ep_local[i])
-            ep_global[i] += self.center.coordinates
-        logger.debug("Coordinates of extra points:\n%r" % ep_global)
-        return ep_global
-

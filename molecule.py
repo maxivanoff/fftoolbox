@@ -147,9 +147,12 @@ class MoleculeWithFrames(AtomsInMolecule):
     def __init__(self, name=None, atoms=None, sym=None, framed_atoms=None):
         if framed_atoms is None: framed_atoms = []
         AtomsInMolecule.__init__(self, name=name, atoms=atoms, sym=sym)
+        self.frames = []
         for atom in self.atoms:
             if atom.element in framed_atoms:
                 atom.set_frame()
+                self.frames.append(atom.frame)
+
 
 class HybridMolecule(Multipole, MoleculeWithFrames):
     
@@ -248,7 +251,7 @@ class HybridMolecule(Multipole, MoleculeWithFrames):
             h, d, a = self.hybrid_atoms[frame.center.element]
             index = self.get_max_index()
             ep = (index+1, h, d, a)
-            atom.set_hybridization(ep)
+            frame.center.set_hybridization(ep)
 
     def set_frames_from_sites(self):
         for a in self.atoms:
