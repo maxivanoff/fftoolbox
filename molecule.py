@@ -142,7 +142,16 @@ class AtomsInMolecule(object):
                     bonds.append(bond)
         return bonds
 
-class HybridMolecule(Multipole, AtomsInMolecule):
+class MoleculeWithFrames(AtomsInMolecule):
+
+    def __init__(self, name=None, atoms=None, sym=None, framed_atoms=None):
+        if framed_atoms is None: framed_atoms = []
+        AtomsInMolecule.__init__(self, name=name, atoms=atoms, sym=sym)
+        for atom in self.atoms:
+            if atom.element in framed_atoms:
+                atom.set_frame()
+
+class HybridMolecule(Multipole, MoleculeWithFrames):
     
     def __init__(self, data):
         self.data = data
@@ -173,10 +182,10 @@ class HybridMolecule(Multipole, AtomsInMolecule):
         try:
             self.hybrid_atoms = data['hybridizations']
         except KeyError:
-            self.hybrid_atoms = []
+            self.hybrid_atoms = {}
         logger.info('Start assembling %s Molecule\ntheory: %r\nsymmetry: %r\nrepresentation: %r' % (name, self.theory, sym, representation))
         Multipole.__init__(self, name=name, representation=representation)
-        AtomsInMolecule.__init__(self, name=name, atoms=atoms, sym=sym)
+        MoleculeWithFrames.__init__(self, name=name, atoms=atoms, sym=sym, framed_atoms=self.hybrid_atoms.keys())
         self.set_hybridizations()
         self.set_frames_from_sites() # in case extra points are loaded from the file
         self.set_sym_sites()
@@ -235,17 +244,15 @@ class HybridMolecule(Multipole, AtomsInMolecule):
 
     def set_hybridizations(self):
         # set extra points
-        for atom in self.atoms:
-            if atom.element in self.hybrid_atoms:
-                h, d, a = self.hybrid_atoms[atom.element]
-                index = self.get_max_index()
-                ep = (index+1, h, d, a)
-                atom.set_hybridization(ep)
+        for frame in self.frames:
+            h, d, a = self.hybrid_atoms[frame.center.element]
+            index = self.get_max_index()
+            ep = (index+1, h, d, a)
+            atom.set_hybridization(ep)
 
     def set_frames_from_sites(self):
         for a in self.atoms:
             a.set_frame_from_sites()
-
 
     def __repr__(self):
         o = '%s\n' % self.name

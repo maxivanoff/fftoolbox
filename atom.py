@@ -172,7 +172,6 @@ class Atom(Coordinates):
             return True
         else: return False
 
-
 class MultipolarAtom(Multipole, Atom):
 
     def __init__(self, element=None, coordinates=None, index=None, multipoles=None, representation=None):
@@ -185,6 +184,10 @@ class MultipolarAtom(Multipole, Atom):
             charge = 0.
         center = FFSite(index=index, element=element, coordinates=coordinates, charge=charge, attachment=self)
         self.add_site(center)
+        self.frame = None
+
+    def set_frame(self):
+        self.frame = AtomFrame(atom=self)
 
     def translate(self, vector):
         self.set_coordinates(self.coordinates+vector)
@@ -219,11 +222,9 @@ class HybridAtom(MultipolarAtom):
     def __init__(self, element=None, coordinates=None, index=None, multipoles=None, representation=None):
         MultipolarAtom.__init__(self, index=index, element=element, coordinates=coordinates, \
                 multipoles=multipoles, representation=representation)
-        self.frame = None
 
     def set_hybridization(self, ep_property):
         index, hybridization, distance, angle = ep_property
-        if not self.frame: self.frame = Frame(self, hybridization)
         self.free_extra()
         ep_coordinates = self.frame.ep_crds(distance, angle)
         for i, crds in enumerate(ep_coordinates):

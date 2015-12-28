@@ -28,28 +28,22 @@ class BasicFrame(object):
             self.local_axes[:,i] = a/norm(a)
         logger.debug("Local coordinate system is set:\n%r" % self.local_axes)
 
-class Frame(BasicFrame):
+class AtomFrame(BasicFrame):
 
-    def __init__(self, atom, hybridization):
-        self.hybridization = hybridization
+    def __init__(self, atom):
         self.center = atom
         self.neighbors = atom.neighbors
-        self.num_ep = int(hybridization[-1]) + 1 - len(self.neighbors)
-        if hybridization == 'sp3': self.offset = 0. # extra points are in yz plane
-        if hybridization == 'sp2': self.offset = np.pi/2. # extra points are in xz plane
-        
-        logger.info("Creating Frame instance for %s.\nHybridization: %s\nNumber of extra points: %i" % (atom.name, hybridization, self.num_ep))
-        a, b, c = self.set_frame()
-        BasicFrame.__init__(self, a, b, c)
-        
-    def set_frame(self):
+        self.num_nghbrs = len(self.center.neighbors)
+        logger.info('Frame center at %s has %i neighbors' % (self.center.name, self.num_nghbrs))
+        frame = self.get_frame_vectors()
+        BasicFrame.__init__(self, frame)
+
+    def get_frame_vectors(self):
         b = self.center.coordinates
-        if len(self.center.neighbors) == 2: # e.g. OH2 or HN=CH2
-            logger.debug('Frame center at %s has 2 neighbors and %i extra points' % (self.center.name, self.num_ep))
+        if self.num_nghbrs == 2:# e.g. OH2 or HN=CH2
             a = self.center.neighbors[0].coordinates
             c = self.center.neighbors[1].coordinates
-        if len(self.center.neighbors) == 1: # e.g. O=CH2
-            logger.debug('Frame center at %s has 1 neighbors and %i extra points' % (self.center.name, self.num_ep))
+        if self.num_nghbrs == 1: # e.g. O=CH2
             X = self.center.neighbors[0]
             if len(X.neighbors) == 3:
                 x1, x2 = [atom.coordinates for atom in X.neighbors if not atom.name == self.center.name]
@@ -62,7 +56,19 @@ class Frame(BasicFrame):
                 v2 = X.coordinates - X.neighbors[1].coordinates
                 a = X.coordinates + (v1 + v2)/norm(v1 + v2)
         return a, b, c
-    
+
+class Frame(AtomFrame):
+
+    def __init__(self, atom, hybridization):
+        self.hybridization = hybridization
+        self.center = atom
+        self.neighbors = atom.neighbors
+        self.num_ep = int(hybridization[-1]) + 1 - len(self.neighbors)
+        if hybridization == 'sp3': self.offset = 0. # extra points are in yz plane
+        if hybridization == 'sp2': self.offset = np.pi/2. # extra points are in xz plane
+        logger.info("Creating Frame instance for %s.\nHybridization: %s\nNumber of extra points: %i" % (atom.name, hybridization, self.num_ep))
+        AtomFrame.__init__(self)
+        
     def ep_crds(self, distance, angle):
         angle *= np.pi/180.
         distance *= units.angst_to_au
@@ -79,7 +85,4 @@ class Frame(BasicFrame):
             ep_global[i] += self.center.coordinates
         logger.debug("Coordinates of extra points:\n%r" % ep_global)
         return ep_global
-
-    def ep_crds_fast(self, distance, angle):
-        return fast.ep_crds(distance, angle, self.tetas, self.local_axes, self.center.coordinates, self.num_ep)
 
