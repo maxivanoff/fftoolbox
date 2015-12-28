@@ -1,6 +1,6 @@
 from fftoolbox.multipole import Ylmc, Ylms, Multipole, GroupOfSites
 from fftoolbox.atom import FFSite
-from fftoolbox.molecule import AtomsInMolecule
+from fftoolbox.molecule import AtomsInMolecule, MoleculeWithFrames
 from fftoolbox.atom import Atom, MultipolarAtom
 from fftoolbox.frame import BasicFrame
 from units import au_to_angst
@@ -29,8 +29,9 @@ class LebedevSphere(GroupOfSites):
                     6:74,
                     }
 
-    def __init__(self, index=None, name=None, rank=None, radius=None, origin=None, ref_multipoles=None):
+    def __init__(self, index=None, name=None, rank=None, radius=None, origin=None, ref_multipoles=None, frame=None):
         GroupOfSites.__init__(self, name)
+        self.set_frame(frame)
         if index is None:
             index = 0
         if origin is None:
@@ -60,6 +61,18 @@ class LebedevSphere(GroupOfSites):
                 s.set_coordinates(shifted)
                 self.add_site(s)
         logger.info("LebedevSphere %s is created.\nNumber of charged sites: %i\nRadius: %.1f" % (self.name, self.num_sites, radius))
+
+    def set_frame(self, frame):
+        if not frame is None:
+            self.frame = BasicFrame(frame)
+        else:
+            self.frame = None
+
+    def align_with_frame(self):
+        for site in self.sites:
+            local_xyz = site.coordinates - self.origin_of_sphere
+            global_xyz = np.dot(self.frame.local_axes, local_xyz) + self.origin_of_sphere
+            site.set_coordinates(global_xyz)
 
     def compute_charge(self, n, r, theta, phi):
         q = 0.
@@ -123,23 +136,20 @@ class LebedevMolecule(LebedevSphere, AtomsInMolecule, Multipole):
             sym = data['symmetry']
         except KeyError:
             sym = False
+        try:
+            frame = data['frame']
+        except KeyError:
+            frame = None
         AtomsInMolecule.__init__(self, name=name, atoms=atoms, sym=sym)
         origin = self.center_of_mass()
         Multipole.__init__(self, name=name, origin=origin, representation=representation)
         LebedevSphere.__init__(self, name=name, rank=rank, radius=radius, \
-                origin=origin, ref_multipoles=data['multipoles'])
+                origin=origin, ref_multipoles=data['multipoles'], frame=frame)
+        if not self.frame is None:
+            self.align_with_frame()
         self.set_sym_sites()
         self.set_multipole_matrix()
-        self.frame = None
 
-    def align_with_frame(self, frame):
-        self.frame = BasicFrame(frame)
-        for site in self.sites:
-            local_xyz = site.coordinates - self.origin_of_sphere
-            global_xyz = np.dot(self.frame.local_axes, local_xyz) + self.origin_of_sphere
-            site.set_coordinates(global_xyz)
-        self.set_multipole_matrix()
-    
     def multipoles_data(self):
         data = {
                 self.name: (self.origin, self.rank, self.reference_multipoles), 
@@ -166,7 +176,7 @@ class LebedevMolecule(LebedevSphere, AtomsInMolecule, Multipole):
         file.close()
 
 
-class DistributedLebedevMolecule(AtomsInMolecule, Multipole):
+class DistributedLebedevMolecule(MoleculeWithFrames, Multipole):
 
     def __init__(self, data):
         self.sphere_params = data['sphere params']
@@ -181,7 +191,7 @@ class DistributedLebedevMolecule(AtomsInMolecule, Multipole):
         except KeyError:
             representation = None
         Multipole.__init__(self, name=name, representation=representation)
-        AtomsInMolecule.__init__(self, name, atoms, sym)
+        MoleculeWithFrames.__init__(self, name, atoms, sym)
         self.set_sym_sites()
         if representation is not None:
             self.set_multipole_matrix()
@@ -194,6 +204,7 @@ class DistributedLebedevMolecule(AtomsInMolecule, Multipole):
         return data
 
     def add_atoms(self, atoms, H_rank_1 = True):
+        framed_atoms = []
         for atom in atoms:
             element = atom['element']
             crds = atom['coordinates']
@@ -208,6 +219,10 @@ class DistributedLebedevMolecule(AtomsInMolecule, Multipole):
             atom = LebedevAtom(element=element, coordinates=crds, ref_multipoles=multipoles, \
                     index=index, rank=rank, radius=radius)
             self.add_atom(atom)
+            # only atoms with rank > 1 require frame
+            if rank > 1:
+                framed_atoms.append(atom.element)
+        self.set_frames(framed_atoms)
             
     @property
     def sites(self):

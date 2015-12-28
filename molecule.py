@@ -148,6 +148,10 @@ class MoleculeWithFrames(AtomsInMolecule):
         if framed_atoms is None: framed_atoms = []
         AtomsInMolecule.__init__(self, name=name, atoms=atoms, sym=sym)
         self.frames = []
+        self.set_frames(framed_atoms)
+
+    def set_frames(self, framed_atoms):
+        self.frames = []
         for atom in self.atoms:
             if atom.element in framed_atoms:
                 atom.set_frame()

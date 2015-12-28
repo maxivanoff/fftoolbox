@@ -1,4 +1,5 @@
 *log
+*.pdf
 *.pymol
 *.xyz
 *.mol2
