@@ -458,6 +458,8 @@ class XYZ(Parser):
 
     def __init__(self, filename=None, data=None, here=False):
         Parser.__init__(self, filename=filename, data=data, dname='xyz', suffix='.xyz')
+        if filename or data:
+            self.read_file(filename=self.filename)
 
     def read_file(self, filename):
         Parser.read_file(self, filename)
@@ -465,7 +467,6 @@ class XYZ(Parser):
         s = xyzfile.readline().split()
         num_atoms = int(s[0])
         comment = xyzfile.readline()
-        atoms = []
         for i in xrange(num_atoms):
             tmp = xyzfile.readline().split()
             element = tmp[0]
@@ -473,7 +474,7 @@ class XYZ(Parser):
             index = i + 1
             self.add_atom(index, element, crds)
         xyzfile.close()
-        self.data = {'atoms': atoms,
+        self.data = {'atoms': self.atoms,
                      'comment': comment,
                      }
 
@@ -599,8 +600,8 @@ class ForceFieldXML(object):
             # load force fields to atoms
             for a in molecule.get_sites_by_name(name):
                 a.set_charge(a_charge)
-                a.r0 = r0
-                a.epsilon = epsilon
+                a.set_r0(r0)
+                a.set_epsilon(epsilon)
                 logger.debug('Load forcefields to %s: charge = %.4f; epsilon = %.4f; r0 = %.4f' % (a.name, a.charge, a.epsilon, a.r0))
                 # load force fields to extra points
                 if extra_exists:
@@ -610,8 +611,8 @@ class ForceFieldXML(object):
                     atom.set_hybridization(ep)
                     for s in atom.extra_sites:
                         s.set_charge(e_charge)
-                        s.r0 = 0.0
-                        s.epsilon = 0.0
+                        s.set_r0(0.0)
+                        s.set_epsilon(0.0)
                     logger.debug('Force fields for extra points are loaded at %s %s\nNumber of extra points: %i\nCharge: %.3f\nDistance: %.3f\nAngle: %.3f' % (h, atom.name, atom.num_extra_sites, s.charge, distance, angle))
         
     def write_file(self, molecule=None, xmlfilename=None):
@@ -621,13 +622,17 @@ class ForceFieldXML(object):
         for atom in molecule.atoms_noneq:
             trunc_name = atom.name.split('-')[0]
             amber_name = amberType[trunc_name]
-            r0, e = self.LJ[amber_name]
+            if atom.center.r0 and atom.center.epsilon:
+                r0 = atom.center.r0
+                e = atom.center.epsilon
+            else:
+                r0, e = self.LJ[amber_name]
             atomElem = SubElement(top, 'atom', name=atom.name, element=atom.element, amber=amber_name)
             SubElement(atomElem, 'charge').text = '%.4f' % atom.center.charge
             SubElement(atomElem, 'r0').text = str(r0)
             SubElement(atomElem, 'epsilon').text = str(e)
             try:
-                SubElement(atomElem, 'hybridization').text = atom.frame.hybridization
+                SubElement(atomElem, 'hybridization').text = atom.hybridization
             except AttributeError:
                 pass
             # extra points
@@ -641,8 +646,7 @@ class ForceFieldXML(object):
                 SubElement(siteElem, 'angle').text = '%.4f' % ep_data['angle']
                 break # extra points are symmetrical
         s = prettify(top)
-        if xmlfilename is None:
-            xmlfilename = '%s/data/forcefields/%s_%s.xml' % (WORKDIR, molecule.name, molecule.theory)
+        xmlfilename = '%s/data/forcefields/%s' % (WORKDIR, xmlfilename)
         with open(xmlfilename, 'w') as f:
             f.write(s)
 

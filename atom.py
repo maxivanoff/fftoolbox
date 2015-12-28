@@ -80,8 +80,8 @@ class FFSite(Coordinates):
         self.set_index(index)
         self.element = element
         self._charge = charge
-        self.r0 = r0
-        self.epsilon = epsilon
+        self._r0 = r0
+        self._epsilon = epsilon
         self.set_attachment(attachment)
         self._internal_index = 0
         logger.info("FFSite instance is created:\n%s" % self.__repr__())
@@ -105,8 +105,22 @@ class FFSite(Coordinates):
     def charge(self):
         return self._charge
 
+    @property
+    def r0(self):
+        return self._r0
+
+    @property
+    def epsilon(self):
+        return self._epsilon
+
     def set_charge(self, charge):
         self._charge = charge
+
+    def set_r0(self, r0):
+        self._r0 = r0
+
+    def set_epsilon(self, epsilon):
+        self._epsilon = epsilon
 
     @property
     def name(self):
@@ -226,6 +240,7 @@ class HybridAtom(MultipolarAtom):
     def set_hybridization(self, ep_property):
         # prepare
         index, hybridization, distance, angle = ep_property
+        self.hybridization = hybridization
         angle *= np.pi/180.
         distance *= units.angst_to_au
         num_ep = int(hybridization[-1]) + 1 - len(self.neighbors)

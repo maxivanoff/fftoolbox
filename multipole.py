@@ -108,6 +108,9 @@ class GroupOfSites(object):
     
     def get_sites_by_name(self, name):
         return iter(filter(lambda s: s.name == name, self.sites))
+
+    def get_sites_by_element(self, element):
+        return iter(filter(lambda s: s.element == element, self.sites))
     
     @property
     def sites_names_noneq(self):

@@ -59,6 +59,9 @@ class AtomsInMolecule(object):
     def get_atoms_by_name(self, name):
         return iter(filter(lambda s: s.name == name, self.atoms))
 
+    def get_atoms_by_element(self, element):
+        return iter(filter(lambda s: s.element == element, self.atoms))
+
     @property
     def atoms_noneq(self):
         atoms = []

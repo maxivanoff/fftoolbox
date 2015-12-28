@@ -219,8 +219,8 @@ class DistributedLebedevMolecule(MoleculeWithFrames, Multipole):
             atom = LebedevAtom(element=element, coordinates=crds, ref_multipoles=multipoles, \
                     index=index, rank=rank, radius=radius)
             self.add_atom(atom)
-            # only atoms with rank > 1 require frame
-            if rank > 1:
+            # only atoms with rank > 0 require frame
+            if rank > 0:
                 framed_atoms.append(atom.element)
         self.set_frames(framed_atoms)
             
