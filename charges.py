@@ -69,7 +69,7 @@ class LeastSquaresCharges(LeastSquaresBasic):
         self.clear_charges()
         for q, name in zip(solution, self.molecule.sites_names_noneq):
             self.set_charge(name, q)
-        self.charges_to_sites(self.charges)
+        self.molecule.charges_to_sites(self.charges)
 
     def sites_to_solution(self):
         solution = np.zeros(self.molecule.num_sites_noneq)
@@ -78,10 +78,5 @@ class LeastSquaresCharges(LeastSquaresBasic):
         self.set_solution(solution)
         logger.info('Charges were transfered from sites to _solution')
 
-    def charges_to_sites(self, charges):
-        for site in self.molecule.sites:
-            q = charges[site.name]
-            site.set_charge(q)
-        logger.info('Charges were transfered to sites')
 
 

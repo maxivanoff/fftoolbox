@@ -174,6 +174,12 @@ class GroupOfSites(object):
         file.write(s)
         file.close()
 
+    def charges_to_sites(self, charges):
+        for site in self.sites:
+            q = charges[site.name]
+            site.set_charge(q)
+        logger.info('Charges were transfered to sites')
+
 class Multipole(GroupOfSites):
     """
     This is Multipole

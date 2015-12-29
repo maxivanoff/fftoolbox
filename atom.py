@@ -190,7 +190,7 @@ class MultipolarAtom(Multipole, Atom):
 
     def __init__(self, element=None, coordinates=None, index=None, multipoles=None, representation=None):
         if multipoles is None: multipoles = {}
-        Multipole.__init__(self, name='%s-%i' % (element, index), origin=coordinates, representation=representation)
+        Multipole.__init__(self, name=element, origin=coordinates, representation=representation)
         Atom.__init__(self, index=index, element=element, coordinates=coordinates)
         try:
             charge = multipoles['charge']
@@ -199,6 +199,13 @@ class MultipolarAtom(Multipole, Atom):
         center = FFSite(index=index, element=element, coordinates=coordinates, charge=charge, attachment=self)
         self.add_site(center)
         self.frame = None
+
+    @property
+    def name(self):
+        try:
+            return '%s-%i' % (self.element, self.index)
+        except:
+            return self._name
 
     def set_frame(self):
         self.frame = AtomFrame(atom=self)

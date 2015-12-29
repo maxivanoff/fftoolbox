@@ -608,6 +608,7 @@ class ForceFieldXML(object):
                     index = molecule.get_max_index()
                     ep = (index+1, h, distance, angle)
                     atom = a.get_attachment()
+                    atom.set_frame()
                     atom.set_hybridization(ep)
                     for s in atom.extra_sites:
                         s.set_charge(e_charge)

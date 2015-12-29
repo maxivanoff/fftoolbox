@@ -1,4 +1,4 @@
-from complex import TwoLebedevMolecules
+from complex import TwoLebedevMolecules, Complex
 from molecule import HybridMolecule
 from molecule import HybridMolecule as HM
 from sphere import LebedevMolecule, DistributedLebedevMolecule

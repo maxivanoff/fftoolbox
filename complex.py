@@ -36,20 +36,24 @@ def T(l1, l2, m1, m2, r1, r2, c):
 
 class Complex(GroupOfSites, AtomsInMolecule):
 
-    def __init__(self, name, mol1, mol2):
+    def __init__(self, mol1, mol2):
+        name = '%s-%s' % (mol1.name, mol2.name)
         GroupOfSites.__init__(self, name)
         AtomsInMolecule.__init__(self, name)
         self.mol1 = mol1
         self.mol2 = mol2
         self.molecules = (mol1, mol2)
-        i = 1
+        iatom = 1
+        isite = 1
         for m in self.molecules:
             for site in m.sites:
+                site.set_index(isite)
                 self.add_site(site)
-                site.set_index(i)
-                i += 1
+                isite += 1
             for atom in m.atoms:
+                atom.set_index(iatom)
                 self.add_atom(atom)
+                iatom += 1
 
     def point_charge_energy(self):
         e = 0.
