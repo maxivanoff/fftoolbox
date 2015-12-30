@@ -289,13 +289,15 @@ class Gaussian(Parser):
             scf = re.search(r'SCF Done:  E\(.*\) = *(-?\d*\.\d*)', line)
             S1_energy = re.search(r' Total Energy, E\(TD-HF/TD-KS\) = *(-?\d*\.\d*)', line)
             pcm = re.search(r'After PCM corrections, the energy is *(-?\d*\.\d*)', line)
-            E2 = re.search(r'E2 = *(-?\d*\.\d*)', line)
+            E2 = re.search(r'E2 = *(-?\d*\.\d*)\D((-|\+)\d\d)', line)
             if pcm:
                 self.pcm_energy = float(pcm.group(1))
             if scf:
                 self.energies.append(float(scf.group(1)))
             if E2:
-                self.E2 = float(E2.group(1)) 
+                t = float(E2.group(1)) 
+                d = int(E2.group(2))
+                self.E2 = t*pow(10, d)
             if S1_energy:
                 self.s1_energies.append(float(S1_energy.group(1)))
             # geometries in standard orientation
@@ -570,15 +572,17 @@ class ForceFieldXML(object):
             'O' : (1.6612, 0.2100), # C=O
             'O2': (1.6612, 0.2100), # CO2
             'S' : (2.0000, 0.2500),
+            'F' : (1.7500, 0.0610),
             }
 
 
     def __init__(self):
         pass
 
-    def load_forcefields(self, filename=None, here=False, molecule=None):
+    def load_forcefields(self, filename=None, here=False, molecule=None, nocharge=False):
         if here is False:
             filename = '%s/data/forcefields/%s' % (WORKDIR, filename)
+        logger.info('Loading forcefields from %s' % filename)
         tree = ElementTree.parse(filename)
         root = tree.getroot()
         for atom in root.findall('atom'):
@@ -599,7 +603,8 @@ class ForceFieldXML(object):
                 extra_exists = False
             # load force fields to atoms
             for a in molecule.get_sites_by_name(name):
-                a.set_charge(a_charge)
+                if nocharge is False:
+                    a.set_charge(a_charge)
                 a.set_r0(r0)
                 a.set_epsilon(epsilon)
                 logger.debug('Load forcefields to %s: charge = %.4f; epsilon = %.4f; r0 = %.4f' % (a.name, a.charge, a.epsilon, a.r0))
@@ -611,7 +616,8 @@ class ForceFieldXML(object):
                     atom.set_frame()
                     atom.set_hybridization(ep)
                     for s in atom.extra_sites:
-                        s.set_charge(e_charge)
+                        if nocharge is False:
+                            s.set_charge(e_charge)
                         s.set_r0(0.0)
                         s.set_epsilon(0.0)
                     logger.debug('Force fields for extra points are loaded at %s %s\nNumber of extra points: %i\nCharge: %.3f\nDistance: %.3f\nAngle: %.3f' % (h, atom.name, atom.num_extra_sites, s.charge, distance, angle))
@@ -647,6 +653,8 @@ class ForceFieldXML(object):
                 SubElement(siteElem, 'angle').text = '%.4f' % ep_data['angle']
                 break # extra points are symmetrical
         s = prettify(top)
+        if xmlfilename is None:
+            xmlfilename = '%s_%s.xml' % (molecule.name, molecule.theory)
         xmlfilename = '%s/data/forcefields/%s' % (WORKDIR, xmlfilename)
         with open(xmlfilename, 'w') as f:
             f.write(s)
@@ -670,7 +678,7 @@ amberType = {
         'N': 'N',
         'S': 'S',
         'O': 'O',
-        'H': 'HO',
+        'H': 'H',
         'EP_S':'EP',
         'EP_N':'EP',
         'EP_O':'EP',

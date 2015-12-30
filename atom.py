@@ -124,9 +124,7 @@ class FFSite(Coordinates):
 
     @property
     def name(self):
-        if not self._name is None:
-            return self._name
-        elif self.element == 'EP':
+        if self.element == 'EP':
             try:
                 name = 'EP_%s' % self._attachment.name
             except AttributeError:
@@ -188,8 +186,9 @@ class Atom(Coordinates):
 
 class MultipolarAtom(Multipole, Atom):
 
-    def __init__(self, element=None, coordinates=None, index=None, multipoles=None, representation=None):
+    def __init__(self, element=None, coordinates=None, index=None, multipoles=None, representation=None, sym=False):
         if multipoles is None: multipoles = {}
+        self.sym = sym
         Multipole.__init__(self, name=element, origin=coordinates, representation=representation)
         Atom.__init__(self, index=index, element=element, coordinates=coordinates)
         try:
@@ -203,7 +202,14 @@ class MultipolarAtom(Multipole, Atom):
     @property
     def name(self):
         try:
-            return '%s-%i' % (self.element, self.index)
+            s = '%s-' % self.element
+            for a in sorted(self.neighbors, key=lambda x: x.element):
+                s += a.element
+            if self.sym:
+                return s
+            else:
+                return '%s-%i' % (s, self.index)
+            #return '%s-%i' % (self.element, self.index)
         except:
             return self._name
 
@@ -240,9 +246,9 @@ class MultipolarAtom(Multipole, Atom):
 
 class HybridAtom(MultipolarAtom):
 
-    def __init__(self, element=None, coordinates=None, index=None, multipoles=None, representation=None):
+    def __init__(self, element=None, coordinates=None, index=None, multipoles=None, representation=None, sym=False):
         MultipolarAtom.__init__(self, index=index, element=element, coordinates=coordinates, \
-                multipoles=multipoles, representation=representation)
+                multipoles=multipoles, representation=representation, sym=sym)
 
     def set_hybridization(self, ep_property):
         # prepare

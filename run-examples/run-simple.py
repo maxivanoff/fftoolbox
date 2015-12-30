@@ -10,9 +10,7 @@ data = {
         'name': 'cf3sh',
         'theory': 'mp2_augccpvtz',
         'density': 1.5,
-        'symmetry': [4,5,6],
-        'exclude': [],
-        'representation': ('cartesian', 1)
+        'representation': ('cartesian', 2)
         }
 
 results = fftb.Results(fftb.Gaussian(data=data).data['multipoles'])
@@ -31,9 +29,9 @@ results.add(ls)
 molecule.write_xyz(filename='%s_%s.xyz' % (data['name'], data['theory']))
 molecule.write_mol2(filename='%s_%s.mol2' % (data['name'], data['theory']))
 
-#ff = fftb.ForceFieldXML()
-#ff.write_file(molecule=molecule)
-#ff.load_forcefields(filename='%s_%s.xml' % (data['name'], data['theory']), molecule=molecule)
+ff = fftb.ForceFieldXML()
+ff.write_file(molecule=molecule)
+ff.load_forcefields(filename='%s_%s.xml' % (data['name'], data['theory']), molecule=molecule)
 
 print results
 print fftb.Report(data['name'], ls)

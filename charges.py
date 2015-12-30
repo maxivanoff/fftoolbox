@@ -78,5 +78,11 @@ class LeastSquaresCharges(LeastSquaresBasic):
         self.set_solution(solution)
         logger.info('Charges were transfered from sites to _solution')
 
+    def sites_to_charges(self):
+        charges = {}
+        for site in self.molecule.sites:
+            charges[site.name] = site.charge
+        self._charges = charges
+
 
 

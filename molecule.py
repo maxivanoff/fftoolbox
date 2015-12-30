@@ -45,7 +45,7 @@ class AtomsInMolecule(object):
             crds = atom['coordinates']
             multipoles = atom['multipoles']
             atom = HybridAtom(index=index, element=element, coordinates=crds, 
-                    multipoles=multipoles)
+                    multipoles=multipoles, sym=self.sym)
             self.add_atom(atom)
 
     @property
@@ -242,7 +242,7 @@ class HybridMolecule(Multipole, MoleculeWithFrames):
                 extra_points.append(s)
             else: # regular atom
                 atom = HybridAtom(index=index, element=element, coordinates=crds, 
-                        multipoles=multipoles, representation=self.representation)
+                        multipoles=multipoles, representation=self.representation, sym=self.sym)
                 self.add_atom(atom)
         # find atom the extra point is connected to
         for s in extra_points:

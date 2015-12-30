@@ -54,6 +54,12 @@ class Complex(GroupOfSites, AtomsInMolecule):
                 atom.set_index(iatom)
                 self.add_atom(atom)
                 iatom += 1
+        self.decomposition = {
+                'electrostatic': None,
+                '6': None,
+                '12': None,
+                'LJ': None,
+                }
 
     def point_charge_energy(self):
         e = 0.
@@ -61,6 +67,25 @@ class Complex(GroupOfSites, AtomsInMolecule):
             for s2 in self.mol2.sites:
                 r = s1.distance_to(s2)
                 e += s1.charge*s2.charge/r
+        e *= units.au_to_kcal
+        self.decomposition['electrostatic'] = e
+        return e
+
+    def lennard_jones_energy(self):
+        e12, e6 = 0., 0.,
+        for s1 in self.mol1.sites:
+            for s2 in self.mol2.sites:
+                r = s1.distance_to(s2)
+                eps = np.sqrt(s1.epsilon*s2.epsilon)
+                r0 = (s1.r0 + s2.r0)*units.angst_to_au
+                r6 = pow(r0/r, 6)
+                r12 = pow(r6, 2)
+                e6 += -eps*2*r6
+                e12 += eps*r12
+        e = e12 + e6
+        self.decomposition['12'] = e12
+        self.decomposition['6'] = e6
+        self.decomposition['LJ'] = e
         return e
 
     @property
