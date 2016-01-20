@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<forcefield name="ammonium">
+  <!--distances in Angstroms, energies in kcal/mol, angles in degrees-->
+  <atom amber="N" element="N" name="N-HHHH">
+    <charge>-0.6526</charge>
+    <r0>1.824</r0>
+    <epsilon>0.17</epsilon>
+  </atom>
+  <atom amber="H" element="H" name="H-N">
+    <charge>0.4131</charge>
+    <r0>0.6</r0>
+    <epsilon>0.0157</epsilon>
+  </atom>
+</forcefield>

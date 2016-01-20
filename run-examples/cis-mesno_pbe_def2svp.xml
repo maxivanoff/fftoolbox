@@ -1,0 +1,186 @@
+<?xml version="1.0" ?>
+<forcefield name="cis-mesno">
+  <!--distances in Angstroms, energies in kcal/mol, angles in degrees-->
+  <atom amber="CT" element="C" name="C-HHHS-1">
+    <charge>-0.3755</charge>
+    <r0>1.908</r0>
+    <epsilon>0.1094</epsilon>
+    <site name="C-HHHS-1">
+      <charge>-0.3755</charge>
+    </site>
+  </atom>
+  <atom amber="S" element="S" name="S-CN-2">
+    <charge>0.0000</charge>
+    <r0>2.0</r0>
+    <epsilon>0.25</epsilon>
+    <site name="S-CN-2">
+      <charge>0.0000</charge>
+    </site>
+    <site name="EP_S-CN-2-1">
+      <charge>2.5917</charge>
+    </site>
+    <site name="EP_S-CN-2-2">
+      <charge>2.5891</charge>
+    </site>
+    <site name="EP_S-CN-2-3">
+      <charge>-3.4885</charge>
+    </site>
+    <site name="EP_S-CN-2-4">
+      <charge>-3.4885</charge>
+    </site>
+    <site name="EP_S-CN-2-5">
+      <charge>0.5507</charge>
+    </site>
+    <site name="EP_S-CN-2-6">
+      <charge>1.4890</charge>
+    </site>
+    <site name="EP_S-CN-2-7">
+      <charge>0.1505</charge>
+    </site>
+    <site name="EP_S-CN-2-8">
+      <charge>-0.6687</charge>
+    </site>
+    <site name="EP_S-CN-2-9">
+      <charge>0.1505</charge>
+    </site>
+    <site name="EP_S-CN-2-10">
+      <charge>-0.6687</charge>
+    </site>
+    <site name="EP_S-CN-2-11">
+      <charge>-0.0575</charge>
+    </site>
+    <site name="EP_S-CN-2-12">
+      <charge>0.7583</charge>
+    </site>
+    <site name="EP_S-CN-2-13">
+      <charge>-0.0575</charge>
+    </site>
+    <site name="EP_S-CN-2-14">
+      <charge>0.7583</charge>
+    </site>
+  </atom>
+  <atom amber="N" element="N" name="N-OS-17">
+    <charge>0.0000</charge>
+    <r0>1.824</r0>
+    <epsilon>0.17</epsilon>
+    <site name="N-OS-17">
+      <charge>0.0000</charge>
+    </site>
+    <site name="EP_N-OS-17-1">
+      <charge>0.6416</charge>
+    </site>
+    <site name="EP_N-OS-17-2">
+      <charge>0.1032</charge>
+    </site>
+    <site name="EP_N-OS-17-3">
+      <charge>-0.1730</charge>
+    </site>
+    <site name="EP_N-OS-17-4">
+      <charge>-0.1730</charge>
+    </site>
+    <site name="EP_N-OS-17-5">
+      <charge>-0.3833</charge>
+    </site>
+    <site name="EP_N-OS-17-6">
+      <charge>-0.1252</charge>
+    </site>
+    <site name="EP_N-OS-17-7">
+      <charge>-0.2677</charge>
+    </site>
+    <site name="EP_N-OS-17-8">
+      <charge>0.0589</charge>
+    </site>
+    <site name="EP_N-OS-17-9">
+      <charge>-0.2677</charge>
+    </site>
+    <site name="EP_N-OS-17-10">
+      <charge>0.0589</charge>
+    </site>
+    <site name="EP_N-OS-17-11">
+      <charge>0.5763</charge>
+    </site>
+    <site name="EP_N-OS-17-12">
+      <charge>-0.4498</charge>
+    </site>
+    <site name="EP_N-OS-17-13">
+      <charge>0.5763</charge>
+    </site>
+    <site name="EP_N-OS-17-14">
+      <charge>-0.4498</charge>
+    </site>
+  </atom>
+  <atom amber="O" element="O" name="O-N-32">
+    <charge>0.0000</charge>
+    <r0>1.6612</r0>
+    <epsilon>0.21</epsilon>
+    <site name="O-N-32">
+      <charge>0.0000</charge>
+    </site>
+    <site name="EP_O-N-32-1">
+      <charge>-1.0665</charge>
+    </site>
+    <site name="EP_O-N-32-2">
+      <charge>-0.9780</charge>
+    </site>
+    <site name="EP_O-N-32-3">
+      <charge>-0.0297</charge>
+    </site>
+    <site name="EP_O-N-32-4">
+      <charge>-0.0297</charge>
+    </site>
+    <site name="EP_O-N-32-5">
+      <charge>0.8410</charge>
+    </site>
+    <site name="EP_O-N-32-6">
+      <charge>1.1571</charge>
+    </site>
+    <site name="EP_O-N-32-7">
+      <charge>-0.3382</charge>
+    </site>
+    <site name="EP_O-N-32-8">
+      <charge>0.0932</charge>
+    </site>
+    <site name="EP_O-N-32-9">
+      <charge>-0.3382</charge>
+    </site>
+    <site name="EP_O-N-32-10">
+      <charge>0.0932</charge>
+    </site>
+    <site name="EP_O-N-32-11">
+      <charge>0.2411</charge>
+    </site>
+    <site name="EP_O-N-32-12">
+      <charge>-0.0755</charge>
+    </site>
+    <site name="EP_O-N-32-13">
+      <charge>0.2411</charge>
+    </site>
+    <site name="EP_O-N-32-14">
+      <charge>-0.0755</charge>
+    </site>
+  </atom>
+  <atom amber="H" element="H" name="H-C-47">
+    <charge>0.0915</charge>
+    <r0>0.6</r0>
+    <epsilon>0.0157</epsilon>
+    <site name="H-C-47">
+      <charge>0.0915</charge>
+    </site>
+  </atom>
+  <atom amber="H" element="H" name="H-C-48">
+    <charge>0.1069</charge>
+    <r0>0.6</r0>
+    <epsilon>0.0157</epsilon>
+    <site name="H-C-48">
+      <charge>0.1069</charge>
+    </site>
+  </atom>
+  <atom amber="H" element="H" name="H-C-49">
+    <charge>0.1069</charge>
+    <r0>0.6</r0>
+    <epsilon>0.0157</epsilon>
+    <site name="H-C-49">
+      <charge>0.1069</charge>
+    </site>
+  </atom>
+</forcefield>

@@ -8,6 +8,13 @@ lf = '%(levelname)s: %(funcName)s at %(filename)s +%(lineno)s\n%(message)s\n'
 logging.basicConfig(filename='./log', filemode='w', level=logging.DEBUG, format=lf)
 #logging.basicConfig(level=logging.DEBUG, format=lf)
 
+# CF3SH multipoles distribution
+distr = {
+        'C': (0, 0.5),
+        'F': (0, 0.5),
+        'S': (2, 0.5),
+        'H': (0, 0.5),
+        }
 # MeSNO multipoles distribution
 distr = {
         'H': (0, 0.5),
@@ -17,17 +24,9 @@ distr = {
         'O': (2, 0.5),
         }
 
-# CF3SH multipoles distribution
-distr = {
-        'C': (0, 0.5),
-        'F': (0, 0.5),
-        'S': (2, 0.5),
-        'H': (0, 0.5),
-        }
-
 data = {
-        'name': 'cf3sh',
-        'theory': 'mp2_augccpvtz',
+        'name': 'cis-mesno',
+        'theory': 'pbe_def2svp',
         'representation': ('spherical', 2),
         'sphere params': distr,
         'symmetry': False,

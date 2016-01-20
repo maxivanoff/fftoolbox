@@ -38,8 +38,8 @@ class LebedevSphere(GroupOfSites):
             origin = np.zeros(3)
         self.origin_of_sphere = origin
         self.reference_multipoles = ref_multipoles 
-        if rank > self.reference_multipoles['rank']:
-            raise ValueError('Multipoles only up to rank %i are available' % self.reference_multipoles['rank'])
+        #if rank > self.reference_multipoles['rank']:
+        #    raise ValueError('%s multipoles only up to rank %i are available' % (name, self.reference_multipoles['rank']))
         self.rank = rank
         self.sphere_radius = radius
         if rank == 0:
