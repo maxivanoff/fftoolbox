@@ -1,6 +1,7 @@
 import fftoolbox as fftb
 import numpy as np
 from scipy.optimize import curve_fit
+import time
 
 
 import logging, sys
@@ -23,9 +24,11 @@ data = {
 pc_energies = []
 mult_energies = []
 
+pctimes = []
+multtimes = []
 for i in xrange(1, 11):
     parser = fftb.XYZ()
-    parser.read_file(filename='data/dimer/dimer-%i.xyz' % i)
+    parser.read_file(filename='../data/dimer/dimer-%i.xyz' % i)
 
     parser.write_to_data('multipoles', fftb.GDMA(data=data).multipoles)
 
@@ -53,17 +56,31 @@ for i in xrange(1, 11):
     dimer.write_xyz(filename='dimer_spheres.xyz', here=True)
 
 
+    t = time.time()
     epc = dimer.point_charge_energy()
+    pctimes.append(time.time() - t)
+    t = time.time()
     emult = dimer.multipole_energy(rank)
+    multtimes.append(time.time() - t)
+    t = time.time()
+    for site in dimer.sites:
+        print site.charge
+    dimer.color_charges('water-%i.pymol' % i)
 
     pc_energies.append(epc)
     mult_energies.append(emult)
+
+multT = np.average(multtimes)
+pcT = np.average(pctimes)
+print 'multipole times:', multT
+print 'point charges times:', pcT
+print multT/pcT
 
 x = pc_energies
 y =  mult_energies
 
 import matplotlib.pyplot as plt
-#import seaborn
+import seaborn
 
 plt.ylabel('Multipolar Energies, au')
 plt.xlabel('Point Charge Energies, au')
@@ -80,7 +97,9 @@ yy = a*xx + b
 
 plt.plot(xx, yy, '-', label='y = %.3f x + %.3f\nR2 = %.2f' % (a, b, R2))
 plt.plot(x, y, 'o')
-plt.legend(loc='upper right')
+plt.legend(loc='lower right')
+print x
+print y
 
 plt.savefig('dimer-energies.pdf')
 #plt.show()

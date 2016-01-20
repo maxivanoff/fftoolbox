@@ -1,0 +1,22 @@
+EP EP_S-CH-2-1 xyz = -2.354 0.505 0.000 charge = 1.25091840398 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-2 xyz = -3.114 -0.144 0.000 charge = -1.08170707065 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-3 xyz = -2.734 0.180 0.500 charge = 0.0846056666667 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-4 xyz = -2.734 0.180 -0.500 charge = 0.0846056666667 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-5 xyz = -3.059 0.561 0.000 charge = -1.49009781394 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-6 xyz = -2.409 -0.200 0.000 charge = 1.65930914727 r0 = 0.0 epsilon = 0.0
+
+
+EP EP_S-CH-2-1 xyz = -2.354 0.505 0.000 charge = 5.37205848794 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-2 xyz = -3.114 -0.144 0.000 charge = 4.43900829809 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-3 xyz = -2.734 0.180 0.500 charge = -7.6122124 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-4 xyz = -2.734 0.180 -0.500 charge = -7.6122124 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-5 xyz = -3.059 0.561 0.000 charge = 2.17832441474 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-6 xyz = -2.409 -0.200 0.000 charge = 3.43808719922 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-7 xyz = -2.702 0.587 0.289 charge = -4.7419383869 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-8 xyz = -3.141 0.212 0.289 charge = 3.99984355633 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-9 xyz = -2.702 0.587 -0.289 charge = -4.7419383869 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-10 xyz = -3.141 0.212 -0.289 charge = 3.99984355633 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-11 xyz = -2.327 0.148 0.289 charge = 5.42411736247 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-12 xyz = -2.766 -0.227 0.289 charge = -4.52973233189 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-13 xyz = -2.327 0.148 -0.289 charge = 5.42411736247 r0 = 0.0 epsilon = 0.0
+EP EP_S-CH-2-14 xyz = -2.766 -0.227 -0.289 charge = -4.52973233189 r0 = 0.0 epsilon = 0.0

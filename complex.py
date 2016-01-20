@@ -66,7 +66,7 @@ class Complex(GroupOfSites, AtomsInMolecule):
         for s1 in self.mol1.sites:
             for s2 in self.mol2.sites:
                 r = s1.distance_to(s2)
-                e += s1.charge*s2.charge/r
+                e += s1.charge*s2.charge*pow(r, -1)
         e *= units.au_to_kcal
         self.decomposition['electrostatic'] = e
         return e
@@ -98,7 +98,25 @@ class Complex(GroupOfSites, AtomsInMolecule):
 class TwoLebedevMolecules(Complex):
 
     def __init__(self, name, mol1, mol2):
-        Complex.__init__(self, name, mol1, mol2)
+        Complex.__init__(self, mol1, mol2)
+    def color_charges(self, filename, xyzname=False,vmax=None, r_sphere=0.08):
+        path2xyz = '%s/data/xyz/%s' % (WORKDIR, xyzname)
+        s = 'from pymol.cgo import *\nfrom pymol import cmd\ncmd.load("%s")\nobj = [ BEGIN, LINES, ]\n' % (path2xyz)
+        vmax = max([abs(ss.charge) for ss in self.sites]) + 0.3
+        for site in self.sites:
+            crds = site.coordinates*units.au_to_angst
+            if site.charge is None: 
+                s_color = 'x = 0.0\ncolor = [COLOR, 1-x, 1-x, 1]\n'
+            elif site.charge <= 0:
+                s_color = 'x = %f\ncolor = [COLOR, 1, 1-x, 1-x]\n' % (-site.charge/vmax)
+            elif site.charge > 0:
+                s_color = 'x = %f\ncolor = [COLOR, 1-x, 1-x, 1]\n' % (site.charge/vmax)
+            s_sphere = 'sphere = [ SPHERE, %f, %f, %f,%f]\n' % (crds[0], crds[1], crds[2], r_sphere)
+            s = s + s_color + s_sphere + 'obj += color+sphere\n'
+        s = s + 'obj.append(END)\ncmd.load_cgo(obj,"cgo01")\n'
+        file = open(filename, 'w')
+        file.write(s)
+        file.close()
 
     def multipole_energy(self, rank):
         # pre-compute stuff for interaction function T
@@ -124,6 +142,7 @@ class TwoLebedevMolecules(Complex):
                         Qlm_1 = self.mol1.get_reference_Qlm(l1, m1)
                         Qlm_2 = self.mol2.get_reference_Qlm(l2, m2)
                         U += Qlm_1*Qlm_2*pow(R, -l1 -l2 -1)*T(l1,l2,m1,m2,r1,r2,c)
+        U *= units.au_to_kcal
         return U
 
         

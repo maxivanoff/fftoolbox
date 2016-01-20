@@ -41,6 +41,7 @@ class LebedevSphere(GroupOfSites):
         if rank > self.reference_multipoles['rank']:
             raise ValueError('Multipoles only up to rank %i are available' % self.reference_multipoles['rank'])
         self.rank = rank
+        self.sphere_radius = radius
         if rank == 0:
             charge = self.reference_multipoles['00']
             s = FFSite(index=index, name=self.name, coordinates=self.origin_of_sphere, charge=charge, attachment=self)
@@ -81,6 +82,28 @@ class LebedevSphere(GroupOfSites):
             global_xyz = np.dot(self.frame.local_axes, local_xyz) + self.origin_of_sphere
             site.set_coordinates(global_xyz)
         logger.info('Sphere %s was aligned with local frame' % self.name)
+
+    def align_with_frame_and_recompute_2(self):
+        points = lebedev_write.Lebedev(self.rank_to_num[self.rank])
+        for j, site in enumerate(self.sites):
+            if j == 0:
+                continue
+            i = j - 1
+            point = points[i]
+            # coordinates and weights
+            xyz = np.array(point[0:3])*self.sphere_radius
+            w = point[3]*4*np.pi
+            rotated_local_xyz = np.dot(self.frame.local_axes, xyz)
+            site.set_coordinates(rotated_local_xyz)
+            # compute charge
+            q = w*self.compute_charge(self.rank, site.r, site.theta, site.phi)
+            site.set_charge(q)
+            site.set_r0(0.0)
+            site.set_epsilon(0.0)
+            # shift site relative to the atom center
+            shifted = self.origin_of_sphere + site.coordinates
+            site.set_coordinates(shifted)
+        logger.info('Sphere %s was aligned with local frame and charges recomputed' % self.name)
 
     def align_with_frame_and_recompute(self):
         for j, site in enumerate(self.sites):

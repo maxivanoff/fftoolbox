@@ -7,9 +7,10 @@ lf = '%(levelname)s: %(funcName)s at %(filename)s +%(lineno)s\n%(message)s\n'
 logging.basicConfig(level=logging.DEBUG, format=lf)
 
 data = {
-        'name': 'cf3sh',
+        'name': 'water',
         'theory': 'mp2_augccpvtz',
         'density': 1.5,
+        'symmetry': True,
         'representation': ('cartesian', 2)
         }
 
