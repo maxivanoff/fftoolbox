@@ -229,6 +229,10 @@ class DistributedLebedevMolecule(MoleculeWithFrames, Multipole):
         atoms = data['atoms']
         name = data['name']
         try:
+            self.theory = data['theory']
+        except KeyError:
+            self.theory = None
+        try:
             sym = data['symmetry']
         except KeyError:
             sym = False

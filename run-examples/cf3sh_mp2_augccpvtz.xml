@@ -1,0 +1,94 @@
+<?xml version="1.0" ?>
+<forcefield name="cf3sh">
+  <!--distances in Angstroms, energies in kcal/mol, angles in degrees-->
+  <atom amber="H" element="H" name="H-S-1">
+    <charge>0.0131</charge>
+    <r0>0.6</r0>
+    <epsilon>0.0157</epsilon>
+    <site name="H-S-1">
+      <charge>0.0131</charge>
+    </site>
+  </atom>
+  <atom amber="S" element="S" name="S-CH-2">
+    <charge>0.0000</charge>
+    <r0>2.0</r0>
+    <epsilon>0.25</epsilon>
+    <site name="S-CH-2">
+      <charge>0.0000</charge>
+    </site>
+    <site name="EP_S-CH-2-1">
+      <charge>5.3721</charge>
+    </site>
+    <site name="EP_S-CH-2-2">
+      <charge>4.4390</charge>
+    </site>
+    <site name="EP_S-CH-2-3">
+      <charge>-7.6122</charge>
+    </site>
+    <site name="EP_S-CH-2-4">
+      <charge>-7.6122</charge>
+    </site>
+    <site name="EP_S-CH-2-5">
+      <charge>2.1783</charge>
+    </site>
+    <site name="EP_S-CH-2-6">
+      <charge>3.4381</charge>
+    </site>
+    <site name="EP_S-CH-2-7">
+      <charge>-4.7419</charge>
+    </site>
+    <site name="EP_S-CH-2-8">
+      <charge>3.9998</charge>
+    </site>
+    <site name="EP_S-CH-2-9">
+      <charge>-4.7419</charge>
+    </site>
+    <site name="EP_S-CH-2-10">
+      <charge>3.9998</charge>
+    </site>
+    <site name="EP_S-CH-2-11">
+      <charge>5.4241</charge>
+    </site>
+    <site name="EP_S-CH-2-12">
+      <charge>-4.5297</charge>
+    </site>
+    <site name="EP_S-CH-2-13">
+      <charge>5.4241</charge>
+    </site>
+    <site name="EP_S-CH-2-14">
+      <charge>-4.5297</charge>
+    </site>
+  </atom>
+  <atom amber="CT" element="C" name="C-FFFS-17">
+    <charge>0.2729</charge>
+    <r0>1.908</r0>
+    <epsilon>0.1094</epsilon>
+    <site name="C-FFFS-17">
+      <charge>0.2729</charge>
+    </site>
+  </atom>
+  <atom amber="F" element="F" name="F-C-18">
+    <charge>-0.2570</charge>
+    <r0>1.75</r0>
+    <epsilon>0.061</epsilon>
+    <site name="F-C-18">
+      <charge>-0.2570</charge>
+    </site>
+  </atom>
+  <atom amber="F" element="F" name="F-C-19">
+    <charge>-0.2684</charge>
+    <r0>1.75</r0>
+    <epsilon>0.061</epsilon>
+    <site name="F-C-19">
+      <charge>-0.2684</charge>
+    </site>
+  </atom>
+  <atom amber="F" element="F" name="F-C-20">
+    <charge>-0.2684</charge>
+    <r0>1.75</r0>
+    <epsilon>0.061</epsilon>
+    <site name="F-C-20">
+      <charge>-0.2684</charge>
+    </site>
+  </atom>
+</forcefield>

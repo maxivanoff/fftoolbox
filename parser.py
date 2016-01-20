@@ -580,6 +580,8 @@ class ForceFieldXML(object):
         pass
 
     def load_forcefields(self, filename=None, here=False, molecule=None, nocharge=False):
+        if filename is None and molecule is not None:
+            filename = '%s_%s.xml' % (molecule.name, molecule.theory)
         if here is False:
             filename = '%s/data/forcefields/%s' % (WORKDIR, filename)
         logger.info('Loading forcefields from %s' % filename)
@@ -591,6 +593,16 @@ class ForceFieldXML(object):
             a_charge = float(atom.find('charge').text)
             r0 = float(atom.find('r0').text)
             epsilon = float(atom.find('epsilon').text)
+            try:
+                ssites = atom.findall('site')
+                sites_and_charges = []
+                for ssite in ssites:
+                    e_charge = float(ssite.find('charge').text)
+                    e_name = ssite.get('name')
+                    p = (e_name, e_charge)
+                    sites_and_charges.append(p)
+            except:
+                pass
             # get extra points data
             try:
                 h = atom.find('hybridization').text
@@ -602,6 +614,12 @@ class ForceFieldXML(object):
             except AttributeError:
                 extra_exists = False
             # load force fields to atoms
+            for p in sites_and_charges:
+                e_name, e_charge = p
+                for a in molecule.get_sites_by_name(e_name):
+                    if nocharge is False:
+                        a.set_charge(e_charge)
+                    a.set_charge(e_charge)
             for a in molecule.get_sites_by_name(name):
                 if nocharge is False:
                     a.set_charge(a_charge)
@@ -622,7 +640,7 @@ class ForceFieldXML(object):
                         s.set_epsilon(0.0)
                     logger.debug('Force fields for extra points are loaded at %s %s\nNumber of extra points: %i\nCharge: %.3f\nDistance: %.3f\nAngle: %.3f' % (h, atom.name, atom.num_extra_sites, s.charge, distance, angle))
         
-    def write_file(self, molecule=None, xmlfilename=None):
+    def write_file(self, molecule=None, xmlfilename=None, here=False):
         top = Element('forcefield', name=molecule.name)
         comment = Comment('distances in Angstroms, energies in kcal/mol, angles in degrees')
         top.append(comment)
@@ -643,19 +661,27 @@ class ForceFieldXML(object):
             except AttributeError:
                 pass
             # extra points
-            ep_data = atom.get_ep_data()
-            for site in atom.extra_sites: 
-                siteElem = SubElement(atomElem, 'site', name=site.name)
-                SubElement(siteElem, 'charge').text = '%.4f' % site.charge
-                SubElement(siteElem, 'r0').text = '0.0'
-                SubElement(siteElem, 'epsilon').text = '0.0'
-                SubElement(siteElem, 'distance').text = '%.4f' % ep_data['distance']
-                SubElement(siteElem, 'angle').text = '%.4f' % ep_data['angle']
-                break # extra points are symmetrical
+            try:
+                ep_data = atom.get_ep_data()
+                for site in atom.extra_sites: 
+                    siteElem = SubElement(atomElem, 'site', name=site.name)
+                    SubElement(siteElem, 'charge').text = '%.4f' % site.charge
+                    SubElement(siteElem, 'r0').text = '0.0'
+                    SubElement(siteElem, 'epsilon').text = '0.0'
+                    SubElement(siteElem, 'distance').text = '%.4f' % ep_data['distance']
+                    SubElement(siteElem, 'angle').text = '%.4f' % ep_data['angle']
+                    break # extra points are symmetrical
+            except AttributeError:
+                for site in atom.sites:
+                    siteElem = SubElement(atomElem, 'site', name=site.name)
+                    SubElement(siteElem, 'charge').text = '%.4f' % site.charge
         s = prettify(top)
         if xmlfilename is None:
             xmlfilename = '%s_%s.xml' % (molecule.name, molecule.theory)
-        xmlfilename = '%s/data/forcefields/%s' % (WORKDIR, xmlfilename)
+        if here is False:
+            xmlfilename = '%s/data/forcefields/%s' % (WORKDIR, xmlfilename)
+        if here is True:
+            xmlfilename = './%s' % xmlfilename
         with open(xmlfilename, 'w') as f:
             f.write(s)
 
