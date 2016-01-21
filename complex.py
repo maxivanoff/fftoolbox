@@ -61,6 +61,23 @@ class Complex(GroupOfSites, AtomsInMolecule):
                 'LJ': None,
                 }
 
+    def ff_energy(self):
+        e, e12, e6 = 0., 0., 0.
+        for s1 in self.mol1.sites:
+            for s2 in self.mol2.sites:
+                r = s1.distance_to(s2)
+                # electrostatic
+                e += s1.charge*s2.charge/r
+                # Lennard-Jones
+                eps = np.sqrt(s1.epsilon*s2.epsilon)
+                r0 = (s1.r0 + s2.r0)*units.angst_to_au
+                r6 = pow(r0/r, 6)
+                r12 = pow(r6, 2)
+                e6 += -eps*2*r6
+                e12 += eps*r12
+        e *= units.au_to_kcal
+        return e + e12 + e6
+
     def point_charge_energy(self):
         e = 0.
         for s1 in self.mol1.sites:

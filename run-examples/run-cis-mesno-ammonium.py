@@ -2,7 +2,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 import logging, sys
 import matplotlib.pyplot as plt
-#import seaborn
+import seaborn
 
 import fftoolbox as fftb
 
@@ -75,7 +75,7 @@ for ifile in xrange(353):
     #print mesno
 
     two_molecules = fftb.Complex(mesno, ammonium)
-    two_molecules.write_mol2(filename='%i.mol2' % ifile, here=True)
+    #two_molecules.write_mol2(filename='%i.mol2' % ifile, here=True)
     Eff = two_molecules.point_charge_energy() + two_molecules.lennard_jones_energy()
     DFFEnergies.append(Eff)
     elec.append(two_molecules.decomposition['electrostatic'])
@@ -90,5 +90,5 @@ plt.plot(R, QMEnergies, marker='s', lw=3, label='QM')
 plt.plot(R, elec, '--', label='electrostatic')
 plt.plot(R, lj, '--', label='Lennard Jones')
 plt.legend(loc='lower right')
-plt.savefig('mesno-ammonium.pdf')
+plt.savefig('cis-mesno-ammonium.pdf')
 

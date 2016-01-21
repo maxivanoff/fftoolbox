@@ -70,7 +70,7 @@ for ifile in xrange(30):
     ff.load_forcefields(molecule=cf3sh, here=True)
 
     two_molecules = fftb.Complex(cf3sh, water)
-    two_molecules.write_mol2(filename='%i.mol2' % ifile, here=True)
+    #two_molecules.write_mol2(filename='%i.mol2' % ifile, here=True)
     Eff = two_molecules.point_charge_energy() + two_molecules.lennard_jones_energy()
     DFFEnergies.append(Eff)
     elec.append(two_molecules.decomposition['electrostatic'])

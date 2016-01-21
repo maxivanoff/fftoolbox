@@ -25,7 +25,7 @@ distr = {
         }
 
 data = {
-        'name': 'cis-mesno',
+        'name': 'trans-mesno',
         'theory': 'pbe_def2svp',
         'representation': ('spherical', 2),
         'sphere params': distr,
