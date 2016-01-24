@@ -40,27 +40,35 @@ class LebedevSphere(GroupOfSites):
         self.reference_multipoles = ref_multipoles 
         #if rank > self.reference_multipoles['rank']:
         #    raise ValueError('%s multipoles only up to rank %i are available' % (name, self.reference_multipoles['rank']))
+        self.given_index = index
         self.rank = rank
         self.sphere_radius = radius
-        if rank == 0:
+        self.set_charges()
+
+    def set_reference_multipoles(self, key, value):
+        self.reference_multipoles[key] = value
+
+    def set_charges(self):
+        self.free_sites()
+        if self.rank == 0:
             charge = self.reference_multipoles['00']
-            s = FFSite(index=index, name=self.name, coordinates=self.origin_of_sphere, charge=charge, attachment=self)
+            s = FFSite(index=self.given_index, name=self.name, coordinates=self.origin_of_sphere, charge=charge, attachment=self)
             self.add_site(s)
         else:
-            s = FFSite(index=index, name=self.name, coordinates=self.origin_of_sphere, attachment=self)
+            s = FFSite(index=self.given_index, name=self.name, coordinates=self.origin_of_sphere, attachment=self)
             s.set_charge(0.0)
             self.add_site(s)
-            points = lebedev_write.Lebedev(self.rank_to_num[rank])
+            points = lebedev_write.Lebedev(self.rank_to_num[self.rank])
             self.weights = []
             for i, point in enumerate(points):
                 # coordinates and weights
-                xyz = np.array(point[0:3])*radius
+                xyz = np.array(point[0:3])*self.sphere_radius
                 w = point[3]*4*np.pi
                 self.weights.append(w)
                 # create site and compute charge
                 name = '%s-%i' % (self.name, i)
-                s = FFSite(index=index+i+1, element='EP', coordinates=xyz, attachment=self)
-                q = w*self.compute_charge(rank, s.r, s.theta, s.phi)
+                s = FFSite(index=self.given_index+i+1, element='EP', coordinates=xyz, attachment=self)
+                q = w*self.compute_charge(self.rank, s.r, s.theta, s.phi)
                 s.set_charge(q)
                 s.set_r0(0.0)
                 s.set_epsilon(0.0)
@@ -68,7 +76,7 @@ class LebedevSphere(GroupOfSites):
                 shifted = self.origin_of_sphere + s.coordinates
                 s.set_coordinates(shifted)
                 self.add_site(s)
-        logger.info("LebedevSphere %s is created.\nNumber of charged sites: %i\nRadius: %.1f" % (self.name, self.num_sites, radius))
+        logger.info("LebedevSphere %s is created.\nNumber of charged sites: %i\nRadius: %.1f" % (self.name, self.num_sites, self.sphere_radius))
 
     def set_local_frame(self, frame=None):
         if not frame is None:
