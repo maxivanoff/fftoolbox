@@ -220,6 +220,12 @@ class HybridMolecule(Multipole, MoleculeWithFrames):
             for site in atom.sites:
                 sites.append(site)
         return len(sites)
+    @property
+    def num_extra_sites(self):
+        n = 0
+        for atom in self.atoms:
+            n += atom.num_extra_sites
+        return n
 
 
     def get_ep_data(self):

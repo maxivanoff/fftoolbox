@@ -3,6 +3,7 @@
 *.pymol
 *.xyz
 *.mol2
+*.xml
 *.pyc
 *.swp
 data

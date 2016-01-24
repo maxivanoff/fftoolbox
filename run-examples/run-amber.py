@@ -14,11 +14,11 @@ amber = {
         }
 
 data = {
-        'name': 'methanol',
-        'theory': 'pbe_def2svp',
+        'name': 'cf3sh',
+        'theory': 'mp2_augccpvtz',
         'density': 1.5,
-        'symmetry': False,
-        'hybridizations': {'O': amber['O-sp3']},
+        'symmetry': True,
+        'hybridizations': {'S': amber['S-sp3']},
         'representation': ('cartesian', 2)
         }
 
