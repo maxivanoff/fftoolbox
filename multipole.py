@@ -54,6 +54,9 @@ class GroupOfSites(object):
         self._name = name
         self._sites = []
 
+    def free_sites(self):
+        self._sites = []
+
     @property
     def name(self):
         return self._name
