@@ -35,6 +35,8 @@ QMEnergies = []
 
 elec = []
 lj = []
+sn_k = []
+no_k = []
 
 R = []
 l=2
@@ -48,7 +50,7 @@ distr = {
 r = 3.95
 for ifile in xrange(353):
     parser = fftb.XYZ()
-    parser.read_file(filename='../data/mesno-ammonium/ordered/cis-%i.xyz' % ifile)
+    parser.read_file(filename='../../data/mesno-ammonium/ordered/cis-%i.xyz' % ifile)
     total_energy = float(parser.data['comment'].split()[1])
     E = (total_energy - ammonium_e - mesno_e)*fftb.au_to_kcal
     QMEnergies.append(E)
@@ -83,9 +85,13 @@ for ifile in xrange(353):
     o = coordinates['O']*fftb.units.au_to_angst
     sn = get_bond(s, n)
     no = get_bond(n, o)
+    e_no = 733.7*(no - 1.1816)**2
+    e_sn = 80.5*(sn - 1.7798)**2
+    Eff = e_no + e_sn
     Eff = 0.
-    Eff += 733.74*(no - 1.1816)**2
-    Eff += 80.69*(sn - 1.7798)**2
+
+    no_k.append(e_no)
+    sn_k.append(e_sn)
     
     #print ammonium
     #print mesno
@@ -105,6 +111,8 @@ plt.plot(R, DFFEnergies, marker='s', lw=3, label='Distributed FF')
 plt.plot(R, QMEnergies, marker='s', lw=3, label='QM')
 plt.plot(R, elec, '--', label='electrostatic')
 plt.plot(R, lj, '--', label='Lennard Jones')
+plt.plot(R, no_k, '--', label='NO bond')
+plt.plot(R, sn_k, '--', label='SN bond')
 plt.legend(loc='lower right')
 plt.savefig('cis-mesno-ammonium-fitted-l-%i.pdf' % l)
 
