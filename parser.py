@@ -460,7 +460,7 @@ class Mol2(Parser):
 class XYZ(Parser):
 
     def __init__(self, filename=None, data=None, here=False):
-        Parser.__init__(self, filename=filename, data=data, dname='xyz', suffix='.xyz')
+        Parser.__init__(self, filename=filename, data=data, dname='xyz', suffix='.xyz', here=here)
         if filename or data:
             self.read_file(filename=self.filename)
 
