@@ -416,7 +416,8 @@ class Mol2(Parser):
             path2mol2 = '.'
         else:
             path2mol2 = '%s/data/mol2' % WORKDIR
-        num_bonds = len(molecule.bonds) + molecule.num_extra_sites
+        num_extra_sites = molecule.num_sites - molecule.num_atoms
+        num_bonds = len(molecule.bonds) + num_extra_sites
         s = '@<TRIPOS>MOLECULE\n%s\n%i %i 0 0 0\nSMALL\nUSER_CHARGES\n\n@<TRIPOS>ATOM\n' % (molecule.name, molecule.num_sites, num_bonds)
         try:
             molecules = molecule.molecules
