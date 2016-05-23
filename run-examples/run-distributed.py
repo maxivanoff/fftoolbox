@@ -8,13 +8,6 @@ lf = '%(levelname)s: %(funcName)s at %(filename)s +%(lineno)s\n%(message)s\n'
 logging.basicConfig(filename='./log', filemode='w', level=logging.DEBUG, format=lf)
 #logging.basicConfig(level=logging.DEBUG, format=lf)
 
-# CF3SH multipoles distribution
-distr = {
-        'C': (0, 0.5),
-        'F': (0, 0.5),
-        'S': (2, 0.5),
-        'H': (0, 0.5),
-        }
 # MeSNO multipoles distribution
 distr = {
         'H': (0, 0.5),
@@ -23,10 +16,27 @@ distr = {
         'N': (2, 0.5),
         'O': (2, 0.5),
         }
+# CF3SH multipoles distribution
+distr = {
+        'C': (0, 0.5),
+        'S': (1, 0.5),
+        'H': (0, 0.5),
+        }
+# CF3SH multipoles distribution
+distr = {
+        'C': (0, 0.5),
+        'F': (0, 0.5),
+        'S': (1, 0.5),
+        'H': (0, 0.5),
+        }
+distr = {
+        'O': (0, 0.5),
+        'H': (0, 0.5),
+        }
 
 data = {
-        'name': 'trans-mesno',
-        'theory': 'pbe_def2tzvppd',
+        'name': 'water',
+        'theory': 'b3lyp_augccpvdz',
         'representation': ('spherical', 2),
         'sphere params': distr,
         'symmetry': False,

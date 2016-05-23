@@ -16,6 +16,8 @@ logger = logging.getLogger(__name__)
 
 __author__ = "Maxim Ivanov"
 __email__ = "maxim.ivanov@marquette.edu"
+mdgx_templ = '&rule\n  ResidueName  3SH,\n  ExtraPoint   EP%i,\n  FrameStyle   8,\n  FrameAtom1   SH,\n  FrameAtom2   HS,\n  FrameAtom3    C,\n  VectorE1     %.4f,\n  VectorE2     %.4f,\n  VectorE3     %.4f,\n  Charge       %.4f,\n&end\n\n' 
+mdgx_templ = '&rule\n  ResidueName  WAT,\n  ExtraPoint   EP%i,\n  FrameStyle   7,\n  FrameAtom1   O,\n  FrameAtom2   H1,\n  FrameAtom3   H2,\n  VectorE1     %.4f,\n  VectorE2     %.4f,\n  VectorE3     %.4f,\n  Charge       %.4f,\n&end\n\n' 
 
 
 class LebedevSphere(GroupOfSites):
@@ -50,8 +52,8 @@ class LebedevSphere(GroupOfSites):
 
     def set_charges(self):
         self.free_sites()
+        charge = self.reference_multipoles['00']
         if self.rank == 0:
-            charge = self.reference_multipoles['00']
             s = FFSite(index=self.given_index, name=self.name, coordinates=self.origin_of_sphere, charge=charge, attachment=self)
             self.add_site(s)
         else:
@@ -68,7 +70,7 @@ class LebedevSphere(GroupOfSites):
                 # create site and compute charge
                 name = '%s-%i' % (self.name, i)
                 s = FFSite(index=self.given_index+i+1, element='EP', coordinates=xyz, attachment=self)
-                q = w*self.compute_charge(self.rank, s.r, s.theta, s.phi)
+                q = w*self.compute_charge(self.rank, s.r, s.theta, s.phi) 
                 s.set_charge(q)
                 s.set_r0(0.0)
                 s.set_epsilon(0.0)
@@ -114,19 +116,32 @@ class LebedevSphere(GroupOfSites):
         logger.info('Sphere %s was aligned with local frame and charges recomputed' % self.name)
 
     def align_with_frame_and_recompute(self):
+        charges = [s.charge for s in self.sites if s.charge > 0]
+        dq = min(charges)
+        s = ''
         for j, site in enumerate(self.sites):
             if j == 0:
+                #site.set_charge(dq*(self.num_sites-1))
                 continue
             i = j - 1
             original_local_xyz = site.coordinates - self.origin_of_sphere
             rotated_local_xyz = np.dot(self.frame.local_axes, original_local_xyz)
             site.set_coordinates(rotated_local_xyz)
             w = self.weights[i]
-            q = w*self.compute_charge(self.rank, site.r, site.theta, site.phi)
+            q = w*self.compute_charge(self.rank, site.r, site.theta, site.phi) #- dq
+            s += self.mdgx_input(j, original_local_xyz, q)
+            #print original_local_xyz, rotated_local_xyz, q
             site.set_charge(q)
             new_global_xyz = self.origin_of_sphere + site.coordinates
             site.set_coordinates(new_global_xyz)
+        with open('%s.xpt' % self.name, 'w') as f:
+            f.write(s)
         logger.info('Sphere %s was aligned with local frame and charges recomputed' % self.name)
+
+    def mdgx_input(self, j, xyz, q):
+        xyz *= au_to_angst
+        s = mdgx_templ % (j, xyz[0], xyz[1], xyz[2], q)
+        return s
 
     def compute_charge(self, n, r, theta, phi):
         q = 0.
@@ -147,7 +162,7 @@ class LebedevSphere(GroupOfSites):
                 except KeyError:
                     Q = 0.
                 q += k*Q*YY(abs(m), l, theta, phi).real
-        return q
+        return q 
 
     def get_basis(self, nodes=None, l=None):
         N = len(nodes)

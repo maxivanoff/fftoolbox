@@ -149,7 +149,7 @@ class Results(object):
             #for n in sorted(names):
             for n in names:
                 try:
-                    ss = '%.3f' % d[n]
+                    ss = '%.4f' % d[n]
                 except KeyError:
                     ss = '--'
                 except TypeError:

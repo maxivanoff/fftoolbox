@@ -487,8 +487,8 @@ class XYZ(Parser):
 
 class GDMA(Parser):
 
-    def __init__(self, filename=None, data=None, here=False):
-        Parser.__init__(self, filename=filename, data=data, here=here, dname='gdma', suffix='.out')
+    def __init__(self, filename=None, data=None, here=False, dname='gdma'):
+        Parser.__init__(self, filename=filename, data=data, here=here, dname=dname, suffix='.out')
         self.read_file(filename=self.filename)
 
     def read_file(self, filename):
