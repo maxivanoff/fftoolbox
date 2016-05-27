@@ -117,20 +117,17 @@ class LebedevSphere(GroupOfSites):
 
     def align_with_frame_and_recompute(self):
         charges = [s.charge for s in self.sites if s.charge > 0]
-        dq = min(charges)
         s = ''
         for j, site in enumerate(self.sites):
             if j == 0:
-                #site.set_charge(dq*(self.num_sites-1))
                 continue
             i = j - 1
             original_local_xyz = site.coordinates - self.origin_of_sphere
             rotated_local_xyz = np.dot(self.frame.local_axes, original_local_xyz)
             site.set_coordinates(rotated_local_xyz)
             w = self.weights[i]
-            q = w*self.compute_charge(self.rank, site.r, site.theta, site.phi) #- dq
-            s += self.mdgx_input(j, original_local_xyz, q)
-            #print original_local_xyz, rotated_local_xyz, q
+            q = w*self.compute_charge(self.rank, site.r, site.theta, site.phi) 
+            #s += self.mdgx_input(j, original_local_xyz, q)
             site.set_charge(q)
             new_global_xyz = self.origin_of_sphere + site.coordinates
             site.set_coordinates(new_global_xyz)
@@ -138,10 +135,6 @@ class LebedevSphere(GroupOfSites):
             f.write(s)
         logger.info('Sphere %s was aligned with local frame and charges recomputed' % self.name)
 
-    def mdgx_input(self, j, xyz, q):
-        xyz *= au_to_angst
-        s = mdgx_templ % (j, xyz[0], xyz[1], xyz[2], q)
-        return s
 
     def compute_charge(self, n, r, theta, phi):
         q = 0.
@@ -209,8 +202,12 @@ class LebedevMolecule(LebedevSphere, AtomsInMolecule, Multipole):
             frame = data['frame']
         except KeyError:
             frame = None
+        try:
+            origin = np.array(data['origin'])
+        except KeyError:
+            origin = np.zeros(3)
         AtomsInMolecule.__init__(self, name=name, atoms=atoms, sym=sym)
-        origin = self.center_of_mass()
+        #origin = self.center_of_mass()
         Multipole.__init__(self, name=name, origin=origin, representation=representation)
         LebedevSphere.__init__(self, name=name, rank=rank, radius=radius, \
                 origin=origin, ref_multipoles=data['multipoles'], frame=frame)
@@ -243,6 +240,16 @@ class LebedevMolecule(LebedevSphere, AtomsInMolecule, Multipole):
         file = open(filename, 'w')
         file.write(s)
         file.close()
+
+    def write_mdgx_in(self, res, frstyle, a, b, c, fname):
+        tmpl = '&rule\n  ResidueName  %s,\n  ExtraPoint   EP%%i,\n  FrameStyle   %i,\n  FrameAtom1   %s,\n  FrameAtom2   %s,\n  FrameAtom3   %s,\n  VectorE1     %%.4f,\n  VectorE2     %%.4f,\n  VectorE3     %%.4f,\n  Charge       %%.4f,\n&end\n\n' % (res, frstyle, a, b, c)
+        out = ''
+        for j, s in enumerate(self.sites):
+            xyz = s.coordinates
+            xyz *= au_to_angst
+            out += tmpl % (j, xyz[0], xyz[1], xyz[2], s.charge)
+        with open(fname, 'w') as f:
+            f.write(out)
 
 
 class DistributedLebedevMolecule(MoleculeWithFrames, Multipole):
@@ -312,6 +319,7 @@ class DistributedLebedevMolecule(MoleculeWithFrames, Multipole):
             for site in atom.sites:
                 sites.append(site)
         return len(sites)
+
     def __repr__(self):
         o = '%s\n' % self.name
         for s in self.sites:

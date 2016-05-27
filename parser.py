@@ -16,6 +16,10 @@ logger = logging.getLogger(__name__)
 WORKDIR = os.path.dirname(__file__)
 
 class Parser(object):
+    """
+    Initially planned as parser only. Now can write stuff to files.
+    Need to split into reader and writer.
+    """
 
     def __init__(self, filename=None, data=None, here=False, dname=None, suffix=None):
         if here == True:
@@ -239,13 +243,13 @@ class QChem(Parser):
 class Gaussian(Parser):
     atom_name = {1:'H', 6:'C', 7:'N', 8:'O', 9:'F', 17:'Cl', 0:'X', 16:'S', 35:'Br'}
 
-    def __init__(self, filename=None, data=None, here=False, orientation='standard'):
+    def __init__(self, filename=None, data=None, here=False, orientation='input'):
         self.energy = None
         self.multipoles = {}
         self.orientation=orientation
         Parser.__init__(self, filename=filename, data=data, dname='log', suffix='.log', here=here)
         if filename or data:
-            self.read_file(filename=self.filename)
+            self.read_file(filename=self.filename, orientation=orientation)
 
     def read_file(self, filename, orientation=None):
         Parser.read_file(self, filename)
@@ -527,7 +531,7 @@ class GDMA(Parser):
                         values = tmp[shift+2:][::3]
                         for key, value in zip(keys, values):
                             multipoles[key[1:]] = float(value)
-                m = re.search(r' *x = +0.0+, *y = +0.0+, *z = +0.0+', line)
+                m = re.search(r' *x = +0.0+, *y = +\d.+, *z = +0.0+', line)
                 if m:
                     total_multipoles = {}
                     while True:
