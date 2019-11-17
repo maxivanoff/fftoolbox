@@ -34,10 +34,10 @@ ff = fftb.ForceFieldXML()
 ff.write_file(molecule=molecule, here=True)
 #ff.load_forcefields(filename='%s_%s.xml' % (data['name'], data['theory']), molecule=molecule)
 
-print results
-print fftb.Report(data['name'], ls)
+print(results)
+print(fftb.Report(data['name'], ls))
 
 for at_i, at_grid in grid.atomic_grids.items():
     ls.update_grid(at_grid)
-    print fftb.Report('%s, atom %i %s' % (data['name'], at_i, at_grid.element), ls)
+    print(fftb.Report('%s, atom %i %s' % (data['name'], at_i, at_grid.element), ls))
 
