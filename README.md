@@ -3,6 +3,7 @@
 * fits atom-centered point charges to the reference electrostatic potential
 * reference grid has a form of thick van der Waals surface (Gaussian .cub file required) 
 * computes multipole moments for the derived charges (in spherical or cartesian representation)
+* written in Python 2.7
 
 Matrix of inversed distances is computed using Cython (see fast.pyx)
 
